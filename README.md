@@ -19,6 +19,7 @@
 ````Powershell
 
     Install-Module "GenXdev.Helpers" -Force
+    Import-Module "GenXdev.Helpers"
 
 ````
 
