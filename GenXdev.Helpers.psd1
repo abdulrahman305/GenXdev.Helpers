@@ -8,7 +8,7 @@
     RootModule = 'GenXdev.Helpers.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.0.5'
+    ModuleVersion     = '1.0.6'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -119,7 +119,7 @@
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    HelpInfoURI       = 'https://github.com/renevaessen/GenXdev.Helpers/blob/main/README.md#syntax'
+    HelpInfoURI       = 'https://github.com/renevaessen/GenXdev.Helpers/blob/master/README.md#syntax'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
