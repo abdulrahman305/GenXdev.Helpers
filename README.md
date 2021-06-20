@@ -18,7 +18,7 @@
 ## INSTALLATION
 ````Powershell
 
-    Install-Module "GenXdev.Console" -Force
+    Install-Module "GenXdev.Helpers" -Force
 
 ````
 
