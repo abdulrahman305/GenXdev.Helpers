@@ -40,8 +40,8 @@
 ### DESCRIPTION
     The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in
     JavaScript Object Notation (JSON) format - at full depth
-### PARAMETERS
-````Powershell
+### PARAMETERS\r
+````
     -object <Object>
         Object to serialize
 
@@ -107,8 +107,8 @@
 ### DESCRIPTION
     Removes any comment lines from a json file and return the result
 
-### PARAMETERS
-````Powershelll
+### PARAMETERS\r
+````l
     -Json <String[]>
         The json to filter for comments
 
