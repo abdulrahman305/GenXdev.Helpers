@@ -1,26 +1,26 @@
 <hr/>
 
-![](powershell.jpg)
+<img src="powershell.jpg" alt="drawing" width="50%"/>
 
 <hr/>
 
-## NAME
+### NAME
 
     GenXdev.Helpers
 
-## SYNOPSIS
+### SYNOPSIS
 
-    A collection of .Net libraries and cmdlets, mostly used by other GenXdev modules
+    A Windows PowerShell module with helpers mostly used by other GenXdev modules
+[![GenXdev.Helpers](https://img.shields.io/powershellgallery/v/GenXdev.Helpers.svg?style=flat-square&label=GenXdev.Helpers)](https://www.powershellgallery.com/packages/GenXdev.Helpers/)
 
-## TYPE
-    PowerShell Module
-
-## INSTALLATION
-````Powershell
-
-    Install-Module "GenXdev.Helpers" -Force
-    Import-Module "GenXdev.Helpers"
-
+### INSTALLATION
+````PowerShell
+Install-Module "GenXdev.Helpers" -Force
+Import-Module "GenXdev.Helpers"
+````
+### UPDATE
+````PowerShell
+Update-Module
 ````
 
 <br/><hr/><hr/><hr/><hr/><br/>
@@ -34,7 +34,7 @@
     Converts an object to a JSON-formatted string - at full depth
 
 ### SYNTAX
-````Powershell
+````PowerShell
     ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
 ### DESCRIPTION
@@ -69,7 +69,7 @@
         (https://go.microsoft.com/fwlink/?LinkID=113216).
 ````
 ### NOTES
-````Powershell
+````PowerShell
     -------------------------- EXAMPLE 1 --------------------------
 
     The `ConvertTo-JsonEx` cmdlet is implemented using Newtonsoft Json.NET
@@ -101,7 +101,7 @@
     Removes any comment lines from a json file and return the result
 
 ### SYNTAX
-````Powershell
+````PowerShell
     Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
 ````
 ### DESCRIPTION
