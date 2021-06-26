@@ -8,7 +8,7 @@
     RootModule = 'GenXdev.Helpers.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.6.0'
+    ModuleVersion     = '1.7.0'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -83,7 +83,7 @@
     ModuleList        = @("GenXdev.Helpers")
 
     # List of all files packaged with this module
-    FileList          = @("GenXdev.Helpers.psd1", "GenXdev.Helpers.psm1", "GenXdev.Helpers.dll", "INIFileParser.dll", "Newtonsoft.Json.dll", "OPENAI_API.dll", "BouncyCastle.Crypto.dll", "LICENSE", "license.txt", "README.md")
+    FileList          = @("GenXdev.Helpers.psd1", "GenXdev.Helpers.psm1", "GenXdev.Helpers.dll", "INIFileParser.dll", "Newtonsoft.Json.dll", "OPENAI_API.dll", "BouncyCastle.Crypto.dll", "LICENSE", "license.txt", "powershell.jpg", "README.md")
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData       = @{
