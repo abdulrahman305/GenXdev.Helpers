@@ -1,11 +1,3 @@
-## Features
-
-## Ideas
-
-## Issues
-
-## Todoos
-
 <hr/>
 
 <img src="powershell.jpg" alt="drawing" width="50%"/>
@@ -46,7 +38,7 @@ Update-Module
 
 ### SYNTAX
 ````PowerShell
-    ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
+ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
 ### DESCRIPTION
     The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in
@@ -81,7 +73,7 @@ Update-Module
 ````
 ### NOTES
 ````PowerShell
-    -------------------------- EXAMPLE 1 --------------------------
+-------------------------- EXAMPLE 1 --------------------------
 
     The `ConvertTo-JsonEx` cmdlet is implemented using Newtonsoft Json.NET
     (https://www.newtonsoft.com/json).
@@ -113,7 +105,7 @@ Update-Module
 
 ### SYNTAX
 ````PowerShell
-    Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
+Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
 ````
 ### DESCRIPTION
     Removes any comment lines from a json file and return the result

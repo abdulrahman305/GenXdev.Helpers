@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
 Converts an object to a JSON-formatted string - at full depth
 
@@ -69,3 +69,76 @@ function Remove-JSONComments {
         [GenXdev.Helpers.Serialization]::RemoveJSONComments($json)
     }
 }
+
+##############################################################################################################
+<#
+.SYNOPSIS
+    Proxy function dynamic parameter block for the Set-WindowPosition cmdlet
+.DESCRIPTION
+    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters, regardless of changes from version to version.
+#>
+function Copy-CommandParameters {
+
+    [System.Diagnostics.DebuggerStepThrough()]
+
+    param(
+        [parameter(Mandatory, Position = 0)]
+        [string] $CommandName,
+
+        [parameter(Mandatory = $false, Position = 1)]
+        [string[]] $ParametersToSkip = @()
+    )
+    # $base = Get-Command $CommandName
+    # $common = [System.Management.Automation.Internal.CommonParameters].GetProperties().name
+    # $dict = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
+    # if ($base -and $base.Parameters) {
+
+    #     $base.Parameters.GetEnumerator().foreach{
+    #         $val = $_.value
+    #         $key = $_.key
+    #         if ($key -notin $common -and $key -notin $ParametersToSkip) {
+    #             $param = [System.Management.Automation.RuntimeDefinedParameter]::new(
+    #                 $key, $val.parameterType, $val.attributes)
+    #             $dict.add($key, $param)
+    #         }
+    #     }
+    # }
+    # return $dict
+    try {
+
+        # the type of the command being proxied. Valid values include 'Cmdlet' or 'Function'.
+        [System.Management.Automation.CommandTypes] $CommandType = [System.Management.Automation.CommandTypes]::Function;
+
+        # look up the command being proxied.
+        $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand($CommandName, $CommandType)
+
+        # if the command was not found, throw an appropriate command not found exception.
+        if (-not $wrappedCmd) {
+
+            $PSCmdlet.ThrowCommandNotFoundError($CommandName, $PSCmdlet.MyInvocation.MyCommand.Name)
+        }
+
+        # lookup the command metadata.
+        $metadata = New-Object -TypeName System.Management.Automation.CommandMetadata -ArgumentList $wrappedCmd
+
+        # create dynamic parameters, one for each parameter on the command being proxied.
+        $dynamicDictionary = New-Object -TypeName System.Management.Automation.RuntimeDefinedParameterDictionary
+        foreach ($key in $metadata.Parameters.Keys) {
+
+            if ($ParametersToSkip -contains $key) { continue; }
+
+            $parameter = $metadata.Parameters[$key]
+            $dynamicParameter = New-Object -TypeName System.Management.Automation.RuntimeDefinedParameter -ArgumentList @(
+                $parameter.Name
+                $parameter.ParameterType
+                , $parameter.Attributes
+            )
+            $dynamicDictionary.Add($parameter.Name, $dynamicParameter)
+        }
+        $dynamicDictionary
+    }
+    catch {
+        $PSCmdlet.ThrowTerminatingError($_)
+    }
+}
+
