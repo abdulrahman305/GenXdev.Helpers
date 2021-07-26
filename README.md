@@ -41,7 +41,7 @@ Update-Module
 
 # Cmdlets
 
-## alignScript
+##	alignScript
 ````PowerShell
 alignScript
 ````
@@ -83,7 +83,7 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
 
 <br/><hr/><hr/><br/>
 
-## ConvertTo-JsonEx
+##	ConvertTo-JsonEx
 ````PowerShell
 ConvertTo-JsonEx
 ````
@@ -124,7 +124,7 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 
 <br/><hr/><hr/><br/>
 
-## Copy-CommandParameters
+##	Copy-CommandParameters
 ````PowerShell
 Copy-CommandParameters
 ````
@@ -164,7 +164,7 @@ Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip]
 
 <br/><hr/><hr/><br/>
 
-## Remove-JSONComments
+##	Remove-JSONComments
 ````PowerShell
 Remove-JSONComments
 ````
