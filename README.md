@@ -33,23 +33,32 @@ Update-Module
 | --- | --- | --- |
 | [alignScript](#alignScript) |  | Changes the indentation of a scriptblock string while respecting the original code-block identations |
 | [ConvertTo-JsonEx](#ConvertTo-JsonEx) |  | The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) format - at full depth |
-| [Copy-CommandParameters](#Copy-CommandParameters) |  | The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters, regardless of changes from version to version. |
+| [Copy-CommandParameters](#Copy-CommandParameters) |  | The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters . |
 | [Remove-JSONComments](#Remove-JSONComments) |  | Removes any comment lines from a json file and return the result |
 
 <br/><hr/><hr/><br/>
+
+
 # Cmdlets
-## alignScript
+
+## alignScript
 ````PowerShell
 alignScript
 ````
+
 ### SYNOPSIS
-    Returns a string (with altered indentation) of a provided scriptblock string
+    Returns a string (with altered indentation) of a provided scriptblock 
+    string
+
 ### SYNTAX
 ````PowerShell
 alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
 ````
+
 ### DESCRIPTION
-    Changes the indentation of a scriptblock string while respecting the original code-block identations
+    Changes the indentation of a scriptblock string while respecting the 
+    original code-block identations
+
 ### PARAMETERS
     -script <String>
         The scriptblock string
@@ -69,20 +78,28 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters 
+        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+
 <br/><hr/><hr/><br/>
-## ConvertTo-JsonEx
+
+## ConvertTo-JsonEx
 ````PowerShell
 ConvertTo-JsonEx
 ````
+
 ### SYNOPSIS
     Converts an object to a JSON-formatted string - at full depth
+
 ### SYNTAX
 ````PowerShell
 ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
+
 ### DESCRIPTION
-    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) format - at full depth
+    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in 
+    JavaScript Object Notation (JSON) format - at full depth
+
 ### PARAMETERS
     -object <Object>
         Object to serialize
@@ -102,20 +119,29 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters 
+        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+
 <br/><hr/><hr/><br/>
-## Copy-CommandParameters
+
+## Copy-CommandParameters
 ````PowerShell
 Copy-CommandParameters
 ````
+
 ### SYNOPSIS
     Proxy function dynamic parameter block for the Set-WindowPosition cmdlet
+
 ### SYNTAX
 ````PowerShell
-Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] [<CommonParameters>]
+Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] 
+<String[]>] [<CommonParameters>]
 ````
+
 ### DESCRIPTION
-    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters, regardless of changes from version to version.
+    The dynamic parameter block of a proxy function. This block can be used to 
+    copy a proxy function target's parameters .
+
 ### PARAMETERS
     -CommandName <String>
         Required?                    true
@@ -133,20 +159,27 @@ Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] 
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters 
+        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+
 <br/><hr/><hr/><br/>
-## Remove-JSONComments
+
+## Remove-JSONComments
 ````PowerShell
 Remove-JSONComments
 ````
+
 ### SYNOPSIS
     Removes any comment lines from a json file and return the result
+
 ### SYNTAX
 ````PowerShell
 Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
 ````
+
 ### DESCRIPTION
     Removes any comment lines from a json file and return the result
+
 ### PARAMETERS
     -Json <String[]>
         The json to filter for comments
@@ -159,5 +192,7 @@ Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters 
+        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+
 <br/><hr/><hr/><br/>

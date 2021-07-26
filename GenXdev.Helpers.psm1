@@ -32,6 +32,8 @@ Omits white space and indented formatting in the output string.
 #>
 function ConvertTo-JsonEx {
 
+    [CmdletBinding()]
+
     param(
 
         [parameter(Position = 0, Mandatory)]
@@ -59,6 +61,8 @@ The json to filter for comments
 #>
 function Remove-JSONComments {
 
+    [CmdletBinding()]
+
     param(
 
         [parameter(ValueFromPipeline = $true, Position = 0, Mandatory)]
@@ -71,12 +75,13 @@ function Remove-JSONComments {
     }
 }
 
-##############################################################################################################
+###############################################################################
+
 <#
 .SYNOPSIS
     Proxy function dynamic parameter block for the Set-WindowPosition cmdlet
 .DESCRIPTION
-    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters, regardless of changes from version to version.
+    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters .
 #>
 function Copy-CommandParameters {
 
@@ -141,7 +146,7 @@ function Copy-CommandParameters {
     }
 }
 
-################################################################################
+###############################################################################
 
 <#
 .SYNOPSIS
@@ -215,4 +220,4 @@ function alignScript([string] $script, [int] $spaces = 0) {
         }) -Join "`r`n"
 }
 
-################################################################################
+###############################################################################
