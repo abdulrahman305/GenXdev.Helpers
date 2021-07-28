@@ -7,7 +7,7 @@
     RootModule             = 'GenXdev.Helpers.psm1'
 
     # Version number of this module.
-    ModuleVersion          = '1.14.0'
+    ModuleVersion          = '1.20.0'
     # Supported PSEditions
     # CompatiblePSEditions = @()
 
@@ -65,7 +65,7 @@
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
     FunctionsToExport      = '*'
 
-    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no Cmdlets to export.
     CmdletsToExport        = '*'
 
     # Variables to export from this module
@@ -81,7 +81,7 @@
     ModuleList             = @("GenXdev.Helpers")
 
     # List of all files packaged with this module
-    FileList               = @("GenXdev.Helpers.psd1", "GenXdev.Helpers.psm1", "GenXdev.Helpers.dll", "INIFileParser.dll", "Newtonsoft.Json.dll", "OPENAI_API.dll", "BouncyCastle.Crypto.dll", "LICENSE", "license.txt", "powershell.jpg", "README.md")
+    FileList               = @("BigInteger.dll", "BouncyCastle.Crypto.dll", "GenXdev.Helpers.dll", "GenXdev.Helpers.psd1", "GenXdev.Helpers.psm1", "INIFileParser.dll", "LICENSE", "license.txt", "Newtonsoft.Json.dll", "OpenAI_API.dll", "powershell.jpg", "README.md")
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData            = @{
@@ -117,7 +117,7 @@
     } # End of PrivateData hashtable
 
     # HelpInfo URI of this module
-    HelpInfoURI            = 'https://github.com/renevaessen/GenXdev.Helpers/blob/master/README.md#syntax'
+    HelpInfoURI            = 'https://github.com/renevaessen/GenXdev.Helpers/blob/master/README.md#cmdlet-index'
 
     # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
     # DefaultCommandPrefix = ''
