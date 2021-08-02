@@ -59,8 +59,8 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in 
-    JavaScript Object Notation (JSON) format - at full depth
+    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) format - 
+    at full depth
 
 ### PARAMETERS
     -object <Object>
@@ -81,8 +81,7 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters 
-        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
 
 <br/><hr/><hr/><br/>
 
@@ -114,8 +113,7 @@ Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters 
-        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
 
 <br/><hr/><hr/><br/>
 
@@ -129,13 +127,12 @@ Copy-CommandParameters
 
 ### SYNTAX
 ````PowerShell
-Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] 
-<String[]>] [<CommonParameters>]
+Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The dynamic parameter block of a proxy function. This block can be used to 
-    copy a proxy function target's parameters .
+    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's 
+    parameters .
 
 ### PARAMETERS
     -CommandName <String>
@@ -154,8 +151,7 @@ Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters 
-        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
 
 <br/><hr/><hr/><br/>
 
@@ -165,8 +161,7 @@ alignScript
 ````
 
 ### SYNOPSIS
-    Returns a string (with altered indentation) of a provided scriptblock 
-    string
+    Returns a string (with altered indentation) of a provided scriptblock string
 
 ### SYNTAX
 ````PowerShell
@@ -174,8 +169,7 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    Changes the indentation of a scriptblock string while respecting the 
-    original code-block identations
+    Changes the indentation of a scriptblock string while respecting the original code-block identations
 
 ### PARAMETERS
     -script <String>
@@ -196,7 +190,6 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
         This cmdlet supports the common parameters: Verbose, Debug,
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
-        about_CommonParameters 
-        (https://go.microsoft.com/fwlink/?LinkID=113216). 
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
 
 <br/><hr/><hr/><br/>
