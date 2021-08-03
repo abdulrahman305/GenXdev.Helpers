@@ -7,7 +7,7 @@
     RootModule             = 'GenXdev.Helpers.psm1'
 
     # Version number of this module.
-    ModuleVersion          = '1.28.2021'
+    ModuleVersion          = '1.29.2021'
     # Supported PSEditions
     # CompatiblePSEditions = @()
 
@@ -48,7 +48,7 @@
     # RequiredModules = @()
 
     # Assemblies that must be loaded prior to importing this module
-    RequiredAssemblies     = @("INIFileParser.dll", "Swan.Lite.dll", e"Newtonsoft.Json.dll", "WebSocket4Net.dll", "OPENAI_API.dll", "BouncyCastle.Crypto.dll", "GenXdev.Helpers.dll")
+    RequiredAssemblies     = @("INIFileParser.dll", "Swan.Lite.dll", "Newtonsoft.Json.dll", "WebSocket4Net.dll", "OPENAI_API.dll", "BouncyCastle.Crypto.dll", "GenXdev.Helpers.dll")
 
     # Script files (.ps1) that are run in the caller's environment prior to importing this module.
     # ScriptsToProcess = @("SerializationHelpers.ps1")
