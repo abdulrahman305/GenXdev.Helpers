@@ -94,40 +94,40 @@ function Copy-CommandParameters {
         [parameter(Mandatory = $false, Position = 1)]
         [string[]] $ParametersToSkip = @()
     )
-    # $base = Get-Command $CommandName
-    # $common = [System.Management.Automation.Internal.CommonParameters].GetProperties().name
-    # $dict = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
-    # if ($base -and $base.Parameters) {
+    # $base = Get-Command $CommandName
+    # $common = [System.Management.Automation.Internal.CommonParameters].GetProperties().name
+    # $dict = [System.Management.Automation.RuntimeDefinedParameterDictionary]::new()
+    # if ($base -and $base.Parameters) {
 
-    #     $base.Parameters.GetEnumerator().foreach{
-    #         $val = $_.value
-    #         $key = $_.key
-    #         if ($key -notin $common -and $key -notin $ParametersToSkip) {
-    #             $param = [System.Management.Automation.RuntimeDefinedParameter]::new(
-    #                 $key, $val.parameterType, $val.attributes)
-    #             $dict.add($key, $param)
-    #         }
-    #     }
+    #     $base.Parameters.GetEnumerator().foreach{
+    #         $val = $_.value
+    #         $key = $_.key
+    #         if ($key -notin $common -and $key -notin $ParametersToSkip) {
+    #             $param = [System.Management.Automation.RuntimeDefinedParameter]::new(
+    #                 $key, $val.parameterType, $val.attributes)
+    #             $dict.add($key, $param)
+    #         }
+    #     }
     # }
-    # return $dict
+    # return $dict
     try {
 
-        # the type of the command being proxied. Valid values include 'Cmdlet' or 'Function'.
+        # the type of the command being proxied. Valid values include 'Cmdlet' or 'Function'.
         [System.Management.Automation.CommandTypes] $CommandType = [System.Management.Automation.CommandTypes]::Function;
 
-        # look up the command being proxied.
+        # look up the command being proxied.
         $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand($CommandName, $CommandType)
 
-        # if the command was not found, throw an appropriate command not found exception.
+        # if the command was not found, throw an appropriate command not found exception.
         if (-not $wrappedCmd) {
 
             $PSCmdlet.ThrowCommandNotFoundError($CommandName, $PSCmdlet.MyInvocation.MyCommand.Name)
         }
 
-        # lookup the command metadata.
+        # lookup the command metadata.
         $metadata = New-Object -TypeName System.Management.Automation.CommandMetadata -ArgumentList $wrappedCmd
 
-        # create dynamic parameters, one for each parameter on the command being proxied.
+        # create dynamic parameters, one for each parameter on the command being proxied.
         $dynamicDictionary = New-Object -TypeName System.Management.Automation.RuntimeDefinedParameterDictionary
         foreach ($key in $metadata.Parameters.Keys) {
 
