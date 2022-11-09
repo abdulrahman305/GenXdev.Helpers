@@ -59,8 +59,8 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) 
-    format - at full depth
+    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) format - at 
+    full depth
 
 ### PARAMETERS
     -object <Object>
@@ -131,8 +131,8 @@ Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] 
 ````
 
 ### DESCRIPTION
-    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's 
-    parameters .
+    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters 
+    .
 
 ### PARAMETERS
     -CommandName <String>
