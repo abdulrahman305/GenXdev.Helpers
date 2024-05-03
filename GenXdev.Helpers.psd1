@@ -95,8 +95,6 @@
             "GenXdev.Helpers.pdb",
             "GenXdev.Helpers.psd1",
             "GenXdev.Helpers.psm1",
-            "GenXdev.HelpersCore.deps.json",
-            "GenXdev.HelpersCore.pdb",
             "LICENSE",
             "license.txt",
             "Microsoft.Bcl.AsyncInterfaces.dll",
@@ -109,7 +107,6 @@
             "SpotifyAPI.Web.dll",
             "SuperSocket.ClientEngine.dll",
             "Swan.Lite.dll",
-            "System.Drawing.Common.dll",
             "WebSocket4Net.dll",
             "WinRT.Runtime.dll"
     )
