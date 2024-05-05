@@ -15,34 +15,28 @@
     GUID                   = '2f62080f-0483-4421-8497-b3d433b65173'
 
     # Author of this module
-    Author                 = 'René Vaessen'
+    Author                 = 'GenXdev'
 
     # Company or vendor of this module
     CompanyName            = 'GenXdev'
 
     # Copyright statement for this module
-    Copyright              = 'Copyright (c) 2021 René Vaessen'
+    Copyright              = 'Copyright (c) 2021 GenXdev'
 
     # Description of the functionality provided by this module
     Description            = 'A Windows PowerShell module with helpers mostly used by other GenXdev modules'
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion      = '5.1.19041.906'
+    PowerShellVersion      = '7.5.0'
 
-    # Name of the PowerShell host required by this module
-    # PowerShellHostName = ''
+    # # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+    DotNetFrameworkVersion = '7.0.408'
 
-    # Minimum version of the PowerShell host required by this module
-    # PowerShellHostVersion = ''
-
-    # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-    DotNetFrameworkVersion = '4.6.1'
-
-    # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-    ClrVersion             = '4.0.0'
+    # # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+    ClrVersion             = '9.0.0'
 
     # Processor architecture (None, X86, Amd64) required by this module
-    # ProcessorArchitecture = ''
+    ProcessorArchitecture = 'Amd64'
 
     # Modules that must be imported into the global environment prior to importing this module
     RequiredModules        = @(
@@ -122,7 +116,7 @@
             "System.Diagnostics.DiagnosticSource.dll",
             "WebSocket4Net.dll",
             "WinRT.Runtime.dll"
-    )
+              )
 
     # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
     PrivateData            = @{
