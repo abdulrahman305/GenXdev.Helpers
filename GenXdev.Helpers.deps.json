@@ -13,7 +13,6 @@
           "EmbedIO": "3.5.2",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.3.24172.9",
           "Microsoft.Extensions.Http": "9.0.0-preview.3.24172.9",
-          "Microsoft.PowerShell.SDK": "7.5.0-preview.2",
           "Newtonsoft.Json": "13.0.3",
           "OpenAI": "1.11.0",
           "SpotifyAPI.Web": "7.1.1",
@@ -222,7 +221,6 @@
       },
       "Microsoft.NETCore.Platforms/1.1.1": {},
       "Microsoft.NETCore.Targets/1.1.3": {},
-      "Microsoft.PowerShell.SDK/7.5.0-preview.2": {},
       "Microsoft.Win32.Primitives/4.3.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.1.1",
@@ -1099,13 +1097,6 @@
       "sha512": "sha512-3Wrmi0kJDzClwAC+iBdUBpEKmEle8FQNsCs77fkiOIw/9oYA07bL1EZNX0kQ2OMN3xpwvl0vAtOCYY3ndDNlhQ==",
       "path": "microsoft.netcore.targets/1.1.3",
       "hashPath": "microsoft.netcore.targets.1.1.3.nupkg.sha512"
-    },
-    "Microsoft.PowerShell.SDK/7.5.0-preview.2": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-bzGlgpqODZzInsQQPsFDOp+q2zlbFB+n3EkMdFN/DZJbd1fLCv/tmXiUHwAohVTpqhufR6uAuf7Kk4kVgNneKQ==",
-      "path": "microsoft.powershell.sdk/7.5.0-preview.2",
-      "hashPath": "microsoft.powershell.sdk.7.5.0-preview.2.nupkg.sha512"
     },
     "Microsoft.Win32.Primitives/4.3.0": {
       "type": "package",
