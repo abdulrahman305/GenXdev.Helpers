@@ -212,8 +212,8 @@ Out-Serial
 
 ### SYNTAX
 ````PowerShell
-Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] 
-[[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]
+Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] 
+[[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
