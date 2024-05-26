@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title></title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <style>
+        body {
+            text-align: center;
+            color: white;
+            margin: 0;
+            background: #111;
+            min-width: 960px;
+        }
+    </style>
+    <script>
+        function getUrlParams(hash, start) {
+            const hashes = hash.slice(hash.indexOf(start) + 1).split("&");
+
+            if (!hashes || hashes.length === 0 || hashes[0] === "") {
+                return undefined;
+            }
+
+            const params = {};
+            hashes.map((hash) => {
+                const [key, val] = hash.split("=");
+                params[key] = decodeURIComponent(val);
+            });
+            return params;
+        }
+
+        function handleImplicitGrant() {
+            let params = getUrlParams(window.location.hash, "#");
+            if (!params) {
+                return;
+            }
+            params = {
+                code: params["access_token"],
+                request_type: "code"
+            }
+            console.log("Sent request_type token to server", params);
+            fetch("/callback?" + new URLSearchParams(params).toString(), {
+                method: "POST",
+            });
+        }
+
+        handleImplicitGrant();
+
+        setTimeout(() => {
+            handleImplicitGrant();
+            setTimeout(() => {
+                handleImplicitGrant();
+                window.close();
+            }, 6000);
+        }, 3000);
+    </script>
+</head>
+
+<body>
+    <h1>
+        Authentication successful
+    </h1>
+</body>
+
+</html>

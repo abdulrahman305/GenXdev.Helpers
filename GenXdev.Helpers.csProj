@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <PackageLicenseFile>license.txt</PackageLicenseFile>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <NeutralLanguage>en</NeutralLanguage>
+        <AssemblyVersion>1.36.2024</AssemblyVersion>
+        <FileVersion>1.36.2024</FileVersion>
+        <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
+        <Copyright>Copyright (c) 2024 GenXdev</Copyright>
+        <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>
+        <PackageIcon>powershell.jpg</PackageIcon>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/genXdev/GenXdev.Helpers</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>GenXdev, PowerShell, Windows</PackageTags>
+        <UseWindowsForms>true</UseWindowsForms>
+        <AssemblyName>GenXdev.Helpers</AssemblyName>
+        <RootNamespace>GenXdev.Helpers</RootNamespace>
+        <OutputPath>./bin/</OutputPath>
+        <IntermediateOutputPath>./obj/</IntermediateOutputPath>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="System.Management.Automation" Version="7.5.0-preview.2" />
+        <PackageReference Include="BouncyCastle.Cryptography" Version="2.3.0" />
+        <PackageReference Include="EmbedIO" Version="3.5.2" />
+        <PackageReference Include="System.Speech" Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="WebSocket4Net" Version="0.15.2" />
+        <PackageReference Include="OpenAI" Version="1.11.0" />
+        <PackageReference Include="SpotifyAPI.Web.Auth" Version="7.1.1" />
+        <PackageReference Include="SpotifyAPI.Web" Version="7.1.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0-preview.3.24172.9" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+    <ItemGroup>
+        <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="auth_assets\logo.svg" />
+        <EmbeddedResource Include="auth_assets\main.css" />
+        <EmbeddedResource Include="auth_assets\main.js" />
+        <EmbeddedResource Include="custom_site\index.html" />
+        <EmbeddedResource Include="default_site\index.html" />
+    </ItemGroup>
+    <ItemGroup>
+        <None Update="LICENSE">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="license.txt">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="powershell.jpg">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+        <None Update="README.md">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
+    </ItemGroup>
+</Project>
