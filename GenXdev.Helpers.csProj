@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <TargetFramework>net8.0-windows</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
@@ -21,8 +22,10 @@
         <RootNamespace>GenXdev.Helpers</RootNamespace>
         <OutputPath>../bin/</OutputPath>
         <IntermediateOutputPath>./obj/</IntermediateOutputPath>
+        <BaseOutputPath>..\bin</BaseOutputPath>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="SuperSocket" Version="2.0.0-beta.23" />
         <PackageReference Include="System.Management.Automation" Version="7.4.2" />
         <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
         <PackageReference Include="EmbedIO" Version="3.5.2" />
@@ -34,7 +37,6 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="SuperSocket.ClientEngine" Version="0.10.0" />
         <PackageReference Include="Unosquare.Swan.Lite" Version="3.1.0" />
     </ItemGroup>
     <ItemGroup>
