@@ -7,7 +7,7 @@
     RootModule            = 'GenXdev.Helpers.psm1'
 
     # Version number of this module.
-    ModuleVersion         = '1.38.2024'
+    ModuleVersion         = '1.40.2024'
     # Supported PSEditions
     # CompatiblePSEditions = @()
 
@@ -27,13 +27,13 @@
     Description           = 'A Windows PowerShell module with helpers mostly used by other GenXdev modules'
 
     # Minimum version of the PowerShell engine required by this module
-    PowerShellVersion     = '7.5.0'
+    PowerShellVersion     = '7.4.2'
 
     # # Intended for PowerShell Core
     CompatiblePSEditions  = 'Core'
 
     # # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-    ClrVersion            = '9.0.0'
+    ClrVersion            = '8.0.4'
 
     # Processor architecture (None, X86, Amd64) required by this module
     ProcessorArchitecture = 'Amd64'
@@ -157,8 +157,8 @@
 # SIG # Begin signature block
 # MIIbzgYJKoZIhvcNAQcCoIIbvzCCG7sCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCWtajz6QBNHkrW
-# wmv9Bbb5QWkaqO1bZt5xAMdRbKRpB6CCFhswggMOMIIB9qADAgECAhBwxOfTiuon
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCCeZ8T2cZr57XOI
+# CrsN6GKaprJOfjM2xvRPRbwjz38/CaCCFhswggMOMIIB9qADAgECAhBwxOfTiuon
 # hU3SZf3YwpWAMA0GCSqGSIb3DQEBCwUAMB8xHTAbBgNVBAMMFEdlblhkZXYgQXV0
 # aGVudGljb2RlMB4XDTI0MDUwNTIwMzEzOFoXDTM0MDUwNTE4NDEzOFowHzEdMBsG
 # A1UEAwwUR2VuWGRldiBBdXRoZW50aWNvZGUwggEiMA0GCSqGSIb3DQEBAQUAA4IB
@@ -280,28 +280,28 @@
 # ZW5YZGV2IEF1dGhlbnRpY29kZQIQcMTn04rqJ4VN0mX92MKVgDANBglghkgBZQME
 # AgEFAKCBhDAYBgorBgEEAYI3AgEMMQowCKACgAChAoAAMBkGCSqGSIb3DQEJAzEM
 # BgorBgEEAYI3AgEEMBwGCisGAQQBgjcCAQsxDjAMBgorBgEEAYI3AgEVMC8GCSqG
-# SIb3DQEJBDEiBCC1MQfPrHLl9QVNJYyibkFKDs739N8O2mKSEizf5JbdyjANBgkq
-# hkiG9w0BAQEFAASCAQB3NBvIZcls0ZNnwxXYjYV/72hAcwSzzrpkybto/jcuiHhg
-# Ewz/AkInMq3So4rv9Sbiky4JruwkNn07ZA6cbKlySHL2b8GFtvOkofXsftwIVvwr
-# K51yKS/Wty/Lz9CpUpM6Z9X6JIC5h5a8UUpZ9tHD1d2PQJjxBPV3+ssvIHbj6T8N
-# kqR6vJPbUzU+WqyvGowKX9fwlY+a8QoR2Laj+zebpJUg/jZ9MSaf4mGjTc7qzN5a
-# ev3ETL4xJ3vGsLDUHShiCjcrkZZrVr00cwIOX39KwT+G6VjrxLfeGMh15sN2Wjcn
-# EjStPvB/0tIespgKqI02+DR1WuUbayf33WYK4bS0oYIDIDCCAxwGCSqGSIb3DQEJ
+# SIb3DQEJBDEiBCA7hToSUhtHD+Fae/2P9Tt1JU4HbSCxesh2hkxfOJCACjANBgkq
+# hkiG9w0BAQEFAASCAQC27N/mmUFFjoXAWxl/ZzqNge4L2A1ZUPILHvTAQ/GBZKlE
+# vppNenmeVnwr+CIh0Xj0oH/JOqeqWDpbEEhfQqwvgTY7q0K02DGxNLOOVk/GJZSE
+# XQdFIVO96CI06KLRU5wuOEaT+WCyELiIyc/uDuJ3oueBtHjhBWZynv5qqugTgyoz
+# jH2t8hECtnvWBIgmusihzv2yZj3eSQQU3nLElxK8sBN5Ei0oi1Vtm3SJONkiWeCB
+# lMySab9DHJebdkNFrSnfknGSNR/7z0e3s4qjiqzT1i1H1HDQgx6mKL7/GJhIyC3p
+# 5+hbEaM7P9oScyCJsj2MXckm8etfGIF09kYj182soYIDIDCCAxwGCSqGSIb3DQEJ
 # BjGCAw0wggMJAgEBMHcwYzELMAkGA1UEBhMCVVMxFzAVBgNVBAoTDkRpZ2lDZXJ0
 # LCBJbmMuMTswOQYDVQQDEzJEaWdpQ2VydCBUcnVzdGVkIEc0IFJTQTQwOTYgU0hB
 # MjU2IFRpbWVTdGFtcGluZyBDQQIQBUSv85SdCDmmv9s/X+VhFjANBglghkgBZQME
 # AgEFAKBpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8X
-# DTI0MDUyNjE3MDcxN1owLwYJKoZIhvcNAQkEMSIEIHyBjVebR8TaZswCp7udpsrY
-# Krkjo22Qbk0ji7oh7JXcMA0GCSqGSIb3DQEBAQUABIICAFX8hFzyXBpPOhgAMMCY
-# Udv8lQCADc8zZ012b7zEXZIPeYbDWK6Sqm8pigM4m2ipMKhI3IcO5e55UmIX719O
-# PM0+L5LiPZNYb5U4IX8/NrEOQtZnMM8DkCZk0yJT83gneXamSEgYvEt0pncSCBLu
-# AGjoMGhwFmyfxJJc8YqY4zHxE+eIR2Y8guK+F9kCc6xJIugZqshrKnzsRVaZfyhi
-# sco4v8XBh4y3LR9I5U++wif6yHAnkcDV6cyzZAZFedYgmJ8M0XtJQX3f00mSGT5t
-# msgapw5GTQcviMjBnsBUerbCqVddFkO85RQ4k3BSdHmBHLvXXPozJuTFxHQ5wB4p
-# hgf3q9YV88ocyMTIv9PH1ck/I/tYNB5/nIxA08qwAYkt/thejOfpoWmfoNBIp0wq
-# ogidKbNDMQXlu0UkO2KQIDBXoFg4EgwbDn11kIdiVR3AmgUxf1AVLom8Scth6UqA
-# nCUxTZWf3zslvHHqaTRczngiECLQw/B9nO166b8+IJWma5hxGXnzRyziKdCfBl/y
-# m7G6srTvlm7er/LgME7+LCWuqGKzeSUtPcsD1B1Q+UCk0kVqoju2JP51vmiGt/zp
-# agKKCpBGHzob3iJhH8xiyaJwZ/DHdi5stcOoiBg++7dh24HFw4/wd4iZgxVrzwvj
-# wK3AxKeYX6LQDc8kAUwUN07V
+# DTI0MDYwNzA5MTUzM1owLwYJKoZIhvcNAQkEMSIEIOBvqibVECRe4cmaf8GdXqif
+# SgMAEY6haj+FGuW8PuK2MA0GCSqGSIb3DQEBAQUABIICAFObqsfbic0e1VUDOmX5
+# SiCi6Avq0mUplgOWoSdvsumFoHTguuS8TTYN9FcwiAJBUO3sOSNxf+M2QVi1gI1g
+# kkEZmCnSNbXjf6/ebVo41VyMuXg5ANAUUFt4f6OQV/S5pY8ldie3lWvLeVXqA4Jg
+# FFpn5KJlAXSjwQj68Ciy0UrrFmtGfS/60nGKwdLlNoEt/jOlUNOGuTscrcYnNRtD
+# l58Rc1iuy8UgCoFDZqCvb2ESXqkIdjQHSZ2TAMMZmnEFpSDZa2nq1r6aKc5K11Ne
+# 8Ek64wgfIP4I0bt6MHcGgVAhnmJHz2HXgid6zkMYJQ6MN+Wmk0hUC1QN8IN1RISf
+# YmdbgVB7ejAEPFyUoKuETEaqHpep3VE7LyFjLbId51jqPQMGZOzz6irWEDNoVHDh
+# IgczllJjZxX2MopsOcLphkV5zE+/mxZvWViLVB44rlw0woZ4x8lRSK0YkooP2isS
+# AU8nwnhkN/d9/HiXz3nLlMvxFfFUX7KdSKewCCM/BahDFLCNgwbRxpzbJ3ADrs2v
+# t2YdLrBhVpAiHI1FDijV1KA3z9Ieh3XAMXtfXG8ccnxsvjT4pyt12UhZZjZ4bkiv
+# WI3VV4a5b1mdk9vfgIDxRInCIn1p+/hDqPqvqz0MS7pHPc+Fm+PmqFG8vwYt5rso
+# X2adbltI5z7jFn05DJMfd1nw
 # SIG # End signature block
