@@ -7,7 +7,7 @@
     RootModule            = 'GenXdev.Helpers.psm1'
 
     # Version number of this module.
-    ModuleVersion         = '1.44.2024'
+    ModuleVersion         = '1.45.2024'
     # Supported PSEditions
     # CompatiblePSEditions = @()
 
@@ -41,12 +41,15 @@
     # Assemblies that must be loaded prior to importing this module
     RequiredAssemblies    = @(
 
+        "Azure.Core.dll",
         "BouncyCastle.Cryptography.dll",
         "EmbedIO.dll",
         "GenXdev.Helpers.dll",
+        "Maincotech.Azure.WindowsVirtualDesktop.dll",
         "Microsoft.ApplicationInsights.dll",
         "Microsoft.Bcl.AsyncInterfaces.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
         "Newtonsoft.Json.dll",
         "OpenAI_API.dll",
         "SpotifyAPI.Web.Auth.dll",
@@ -104,14 +107,25 @@
         "GenXdev.Helpers.psm1",
         "LICENSE",
         "license.txt",
+        "NuGet.config",
+        "powershell.jpg",
+        "README.md",
+        "auth_assets\logo.svg",
+        "auth_assets\main.css",
+        "auth_assets\main.js",
+        "custom_site\index.html",
+        "default_site\index.html",
+        "Azure.Core.dll",
+        "BouncyCastle.Cryptography.dll",
+        "EmbedIO.dll",
+        "GenXdev.Helpers.dll",
+        "Maincotech.Azure.WindowsVirtualDesktop.dll",
         "Microsoft.ApplicationInsights.dll",
         "Microsoft.Bcl.AsyncInterfaces.dll",
         "Microsoft.Extensions.DependencyInjection.Abstractions.dll",
+        "Microsoft.IdentityModel.Clients.ActiveDirectory.dll",
         "Newtonsoft.Json.dll",
-        "NuGet.config",
         "OpenAI_API.dll",
-        "powershell.jpg",
-        "README.md",
         "SpotifyAPI.Web.Auth.dll",
         "SpotifyAPI.Web.dll",
         "SuperSocket.ClientEngine.dll",
@@ -124,12 +138,7 @@
         "Swan.Lite.dll",
         "System.Management.dll",
         "System.Speech.dll",
-        "WebSocket4Net.dll",
-        "auth_assets\logo.svg",
-        "auth_assets\main.css",
-        "auth_assets\main.js",
-        "custom_site\index.html",
-        "default_site\index.html"
+        "WebSocket4Net.dll"
     )
 
 
