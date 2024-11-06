@@ -62,8 +62,7 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object 
-    Notation (JSON) format - at full depth
+    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) format - at full depth
 
 ### PARAMETERS
     -object <Object>
@@ -130,13 +129,11 @@ Copy-CommandParameters
 
 ### SYNTAX
 ````PowerShell
-Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] 
-[<CommonParameters>]
+Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The dynamic parameter block of a proxy function. This block can be used to copy a proxy 
-    function target's parameters .
+    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters .
 
 ### PARAMETERS
     -CommandName <String>
@@ -173,8 +170,7 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    Changes the indentation of a scriptblock string while respecting the original code-block 
-    identations
+    Changes the indentation of a scriptblock string while respecting the original code-block identations
 
 ### PARAMETERS
     -script <String>
@@ -209,9 +205,8 @@ Out-Serial
 
 ### SYNTAX
 ````PowerShell
-Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] 
-[[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] 
-<Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]
+Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] 
+[[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
