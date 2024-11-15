@@ -39,6 +39,7 @@ Update-Module
 | [Copy-CommandParameters](#Copy-CommandParameters) |  | The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters . |
 | [alignScript](#alignScript) |  | Changes the indentation of a scriptblock string while respecting the original code-block identations |
 | [Out-Serial](#Out-Serial) |  | Allows you to send a string to a serial communication port |
+| [Get-ImageGeolocation](#Get-ImageGeolocation) |  |  |
 
 <br/><hr/><hr/><br/>
 
@@ -62,7 +63,8 @@ ConvertTo-JsonEx [-object] <Object> [-Compress] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object Notation (JSON) format - at full depth
+    The `ConvertTo-JsonEx` cmdlet converts any .NET object to a string in JavaScript Object 
+    Notation (JSON) format - at full depth
 
 ### PARAMETERS
     -object <Object>
@@ -129,11 +131,13 @@ Copy-CommandParameters
 
 ### SYNTAX
 ````PowerShell
-Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] [<CommonParameters>]
+Copy-CommandParameters [-CommandName] <String> [[-ParametersToSkip] <String[]>] 
+[<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    The dynamic parameter block of a proxy function. This block can be used to copy a proxy function target's parameters .
+    The dynamic parameter block of a proxy function. This block can be used to copy a proxy 
+    function target's parameters .
 
 ### PARAMETERS
     -CommandName <String>
@@ -170,7 +174,8 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
-    Changes the indentation of a scriptblock string while respecting the original code-block identations
+    Changes the indentation of a scriptblock string while respecting the original code-block 
+    identations
 
 ### PARAMETERS
     -script <String>
@@ -205,8 +210,9 @@ Out-Serial
 
 ### SYNTAX
 ````PowerShell
-Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] 
-[[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]
+Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] 
+[[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] 
+<Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]
 ````
 
 ### DESCRIPTION
@@ -282,6 +288,33 @@ Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt
         Position?                    named
         Default value                False
         Accept pipeline input?       false
+        Accept wildcard characters?  false
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
+
+<br/><hr/><hr/><br/>
+
+##	Get-ImageGeolocation
+````PowerShell
+Get-ImageGeolocation
+````
+
+### SYNTAX
+````PowerShell
+Get-ImageGeolocation [-ImagePath] <string> [<CommonParameters>]
+````
+
+### PARAMETERS
+    -ImagePath <string>
+        Required?                    true
+        Position?                    0
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
         Accept wildcard characters?  false
     <CommonParameters>
         This cmdlet supports the common parameters: Verbose, Debug,
