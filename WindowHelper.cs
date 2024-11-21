@@ -30,9 +30,10 @@ namespace GenXdev.Helpers
         public static float getScalingFactor(int monitor)
         {
             Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            var AllScreens = (from q in WpfScreenHelper.Screen.AllScreens select q).ToArray();
             IntPtr desktop = CreateDC(
-                System.Windows.Forms.Screen.AllScreens[monitor].DeviceName, 
-                System.Windows.Forms.Screen.AllScreens[monitor].DeviceName, 
+                AllScreens[monitor].DeviceName,
+                AllScreens[monitor].DeviceName,
                 IntPtr.Zero,
                 IntPtr.Zero
             );
@@ -112,7 +113,7 @@ namespace GenXdev.Helpers
         private const int MonitorTurnOn = -1;
         private const int MonitorShutoff = 2;
 
-        
+
         public static void WakeMonitor()
         {
             //Turn them on
@@ -124,7 +125,7 @@ namespace GenXdev.Helpers
         }
         public static void SleepMonitor()
         {
-            
+
             //Turn them off
             PostMessage((IntPtr)0xffff, WM_SYSCOMMAND, SC_MONITORPOWER, MonitorShutoff);
         }
@@ -199,7 +200,7 @@ namespace GenXdev.Helpers
         {
             var sb = new StringBuilder();
             var handle = GetForegroundWindow();
-            
+
             return new WindowObj(handle, GetWindowTitle(handle));
         }
 

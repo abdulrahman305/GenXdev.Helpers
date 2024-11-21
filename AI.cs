@@ -22,7 +22,6 @@ using System.Linq.Expressions;
 
 namespace GenXdev.Helpers
 {
-
     [Cmdlet(VerbsCommon.Get, "SpeechToText")]
     public class GetSpeechToText : Cmdlet
     {
@@ -149,8 +148,8 @@ namespace GenXdev.Helpers
                 }
                 else
                 {
-                    using (var stream = File.OpenRead(WaveFile))
-                        processor.Process(stream);
+                    using var stream = File.OpenRead(WaveFile);
+                    processor.Process(stream);
                 }
             }).Wait();
 

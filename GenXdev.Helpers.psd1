@@ -7,7 +7,7 @@
   RootModule            = 'GenXdev.Helpers.psm1'
 
   # Version number of this module.
-  ModuleVersion         = '1.56.2024'
+  ModuleVersion         = '1.58.2024'
   # Supported PSEditions
   # CompatiblePSEditions = @()
 
@@ -65,6 +65,7 @@
     ".\\dependencies\\SuperSocket.ProtoBase.dll",
     ".\\dependencies\\SuperSocket.Server.Abstractions.dll",
     ".\\dependencies\\Whisper.net.dll",
+    ".\\dependencies\\WpfScreenHelper.dll",
     ".\\dependencies\\GenXdev.Helpers.dll"
   )
 
@@ -558,6 +559,7 @@
   ".\\dependencies\\WindowsBase.dll",
   ".\\dependencies\\WindowsFormsIntegration.dll",
   ".\\dependencies\\wpfgfx_cor3.dll",
+  ".\\dependencies\\WpfScreenHelper.dll",
   ".\\dependencies\\cs\\Microsoft.VisualBasic.Forms.resources.dll",
   ".\\dependencies\\cs\\PresentationCore.resources.dll",
   ".\\dependencies\\cs\\PresentationFramework.resources.dll",

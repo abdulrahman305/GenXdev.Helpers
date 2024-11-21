@@ -29,6 +29,7 @@
           "WebSocket4Net": "0.15.2",
           "Whisper.net": "1.7.2",
           "Whisper.net.Runtime": "1.7.2",
+          "WpfScreenHelper": "2.1.1",
           "runtimepack.Microsoft.NETCore.App.Runtime.win-x64": "8.0.11",
           "runtimepack.Microsoft.WindowsDesktop.App.Runtime.win-x64": "8.0.11",
           "runtimepack.Microsoft.AspNetCore.App.Runtime.win-x64": "8.0.11"
@@ -2826,7 +2827,15 @@
           }
         }
       },
-      "Whisper.net.Runtime/1.7.2": {}
+      "Whisper.net.Runtime/1.7.2": {},
+      "WpfScreenHelper/2.1.1": {
+        "runtime": {
+          "lib/net8.0-windows7.0/WpfScreenHelper.dll": {
+            "assemblyVersion": "2.1.1.0",
+            "fileVersion": "2.1.1.0"
+          }
+        }
+      }
     }
   },
   "libraries": {
@@ -4025,6 +4034,13 @@
       "sha512": "sha512-a4NZTZuoZ+7SX4misMesqOKE3cGhGP5La75cHUEv+z8CP5LLsTR8yrnBYhHbqdWDajvbhwLL6UkSZ1MNZBy5gA==",
       "path": "whisper.net.runtime/1.7.2",
       "hashPath": "whisper.net.runtime.1.7.2.nupkg.sha512"
+    },
+    "WpfScreenHelper/2.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xNgiwHaLXOYE4jYYIQ7ddDtsN8diUnjl9t07INUA2pN6Bi/czRjbNwDYyljmixOnLjTv4NU8beDUe+wp1PMi4g==",
+      "path": "wpfscreenhelper/2.1.1",
+      "hashPath": "wpfscreenhelper.2.1.1.nupkg.sha512"
     }
   },
   "runtimes": {

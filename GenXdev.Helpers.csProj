@@ -11,8 +11,8 @@
         <PackageLicenseFile>license.txt</PackageLicenseFile>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <NeutralLanguage>en</NeutralLanguage>
-        <AssemblyVersion>1.56.2024</AssemblyVersion>
-        <FileVersion>1.56.2024</FileVersion>
+        <AssemblyVersion>1.58.2024</AssemblyVersion>
+        <FileVersion>1.58.2024</FileVersion>
         <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
         <Copyright>Copyright (c) 2024 GenXdev</Copyright>
         <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>
@@ -50,6 +50,7 @@
         <PackageReference Include="Unosquare.Swan.Lite" Version="3.1.0" />
         <PackageReference Include="Whisper.net" Version="1.7.2" />
         <PackageReference Include="Whisper.net.Runtime" Version="1.7.2" />
+        <PackageReference Include="WpfScreenHelper" Version="2.1.1" />
     </ItemGroup>
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" />
