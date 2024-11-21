@@ -17,7 +17,6 @@ namespace GenXdev.Helpers
                 return GetAssemblyRootDirectory();
 
             return Path.GetDirectoryName(callingAssembly.Location)!;
-
         }
 
         public static String GetAssemblyRootDirectory()
