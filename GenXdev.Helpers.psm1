@@ -388,4 +388,4 @@ function Get-ImageGeolocation {
 ################################################################################
 ################################################################################
 
-Import-Module "$PSScriptRoot\dependencies\GenXdev.Helpers.dll"
+Import-Module "$PSScriptRoot\lib\GenXdev.Helpers.dll"
