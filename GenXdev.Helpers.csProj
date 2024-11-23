@@ -11,8 +11,8 @@
         <PackageLicenseFile>license.txt</PackageLicenseFile>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <NeutralLanguage>en</NeutralLanguage>
-        <AssemblyVersion>1.60.2024</AssemblyVersion>
-        <FileVersion>1.60.2024</FileVersion>
+        <AssemblyVersion>1.62.2024</AssemblyVersion>
+        <FileVersion>1.62.2024</FileVersion>
         <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
         <Copyright>Copyright (c) 2024 GenXdev</Copyright>
         <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>

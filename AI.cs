@@ -34,6 +34,9 @@ namespace GenXdev.Helpers
         [Parameter(Position = 2, Mandatory = false, HelpMessage = "Sets the language to detect, defaults to 'auto'")]
         public string Language { get; set; } = "auto";
 
+        [Parameter(Position = 3, Mandatory = false, HelpMessage = "Returns objects instead of strings")]
+        public SwitchParameter Passthru { get; set; }
+
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
@@ -45,6 +48,7 @@ namespace GenXdev.Helpers
             base.ProcessRecord();
 
             var results = new StringBuilder();
+            var objects = new List<object>();
 
             int physicalCoreCount = 0;
             var searcher = new ManagementObjectSearcher("select NumberOfCores from Win32_Processor");
@@ -71,12 +75,14 @@ namespace GenXdev.Helpers
                 // This section creates the processor object which is used to process the audio data sampled from the default microphone, it uses language `auto` to detect the language of the audio.
                 using var processor = whisperFactory.CreateBuilder()
                     .WithLanguage(Language)
-                    .WithThreads(physicalCoreCount)
                     .WithSegmentEventHandler((segment) =>
                      {
                          // Do whetever you want with your segment here.
                          lock (results)
+                         {
                              results.Append($"{segment.Text} ");
+                             objects.Add(segment);
+                         }
                      })
                     .Build();
 
@@ -115,7 +121,27 @@ namespace GenXdev.Helpers
 
                     // This section waits for the user to press any key to stop recording
                     Console.WriteLine("Press any key to stop recording...");
-                    Console.ReadKey();
+                    while (Console.KeyAvailable) { Console.ReadKey(); }
+
+                    while (!Console.KeyAvailable)
+                    {
+                        System.Threading.Thread.Sleep(100);
+
+                        if (Passthru)
+                        {
+                            lock (results)
+                            {
+                                foreach (var segment in objects)
+                                {
+                                    WriteObject(segment);
+                                }
+                                objects.Clear();
+                                results.Clear();
+                            }
+                        }
+                    }
+
+                    while (Console.KeyAvailable) { Console.ReadKey(); }
 
                     try
                     {
@@ -152,6 +178,15 @@ namespace GenXdev.Helpers
                     processor.Process(stream);
                 }
             }).Wait();
+
+            if (Passthru)
+            {
+                foreach (var o in objects)
+                {
+                    WriteObject(o);
+                }
+                return;
+            }
 
             WriteObject(results.ToString());
         }
