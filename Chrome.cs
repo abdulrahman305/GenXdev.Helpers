@@ -23,14 +23,15 @@ namespace GenXdev.Helpers
 
         public TRes SendRequest<TRes>()
         {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(remoteDebuggingUri + JsonPostfix);
-            var resp = req.GetResponse();
-            var respStream = resp.GetResponseStream();
-
-            StreamReader sr = new StreamReader(respStream);
-            var s = sr.ReadToEnd();
-            resp.Dispose();
-            return Deserialise<TRes>(s);
+            using (HttpClient client = new HttpClient())
+            {
+                return (Task.Run(async () =>
+                {
+                    string url = remoteDebuggingUri + JsonPostfix;
+                    var response = await client.GetStringAsync(url);
+                    return Deserialise<TRes>(response);
+                }).Result);
+            }
         }
 
         public List<RemoteSessionsResponse> GetAvailableSessions()

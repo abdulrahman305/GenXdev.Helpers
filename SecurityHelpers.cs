@@ -1,9 +1,9 @@
-﻿using System.Net;
+using System.Net;
 using System.Text;
 
 namespace GenXdev.Helpers
 {
-    public static class Security
+    public static class SecurityHelper
     {
         public static string SanitizeFileName(string name, bool giveUniqueSuffix = false)
         {

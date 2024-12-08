@@ -17,9 +17,13 @@ namespace GenXdev.Helpers
             {
                 string uri = "https://api.ipify.org";
 
-                using (var client = new TimedWebClient(TimeSpan.FromSeconds(20)))
+                using (var client = new HttpClient())
                 {
-                    return client.DownloadString(uri).Trim();
+                    var response = client.GetAsync(uri).Result;
+                    response.EnsureSuccessStatusCode();
+                    var result = response.Content.ReadAsStringAsync().Result;
+
+                    return result.Trim();
                 }
             }
             catch { }
@@ -32,9 +36,13 @@ namespace GenXdev.Helpers
             {
                 string uri = "https://api.ipify.org";
 
-                using (var client = new TimedWebClient(TimeSpan.FromSeconds(20)))
+                using (var client = new HttpClient())
                 {
-                    return client.DownloadString(uri).Trim();                                        
+                    var response = client.GetAsync(uri).Result;
+                    response.EnsureSuccessStatusCode();
+                    var result = response.Content.ReadAsStringAsync().Result;
+
+                    return result.Trim();
                 }
             }
             catch { }
@@ -47,9 +55,13 @@ namespace GenXdev.Helpers
             {
                 string uri = "http://ipinfo.io/ip";
 
-                using (var client = new TimedWebClient(TimeSpan.FromSeconds(20)))
+                using (var client = new HttpClient())
                 {
-                    return client.DownloadString(uri).Trim();
+                    var response = client.GetAsync(uri).Result;
+                    response.EnsureSuccessStatusCode();
+                    var result = response.Content.ReadAsStringAsync().Result;
+
+                    return result.Trim();
                 }
             }
             catch { }
@@ -62,11 +74,13 @@ namespace GenXdev.Helpers
             {
                 string uri = "http://checkip.dyndns.org/";
 
-                using (var client = new TimedWebClient(TimeSpan.FromSeconds(20)))
+                using (var client = new HttpClient())
                 {
-                    var result = client.DownloadString(uri);
+                    var response = client.GetAsync(uri).Result;
+                    response.EnsureSuccessStatusCode();
+                    var result = response.Content.ReadAsStringAsync().Result;
 
-                    return result.Split(':')[1].Split('<')[0].Trim();
+                    return result.Trim().Split(':')[1].Split('<')[0].Trim();
                 }
             }
             catch { }

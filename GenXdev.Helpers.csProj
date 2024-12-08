@@ -11,8 +11,8 @@
         <PackageLicenseFile>license.txt</PackageLicenseFile>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <NeutralLanguage>en</NeutralLanguage>
-        <AssemblyVersion>1.76.2024</AssemblyVersion>
-        <FileVersion>1.76.2024</FileVersion>
+        <AssemblyVersion>1.78.2024</AssemblyVersion>
+        <FileVersion>1.78.2024</FileVersion>
         <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
         <Copyright>Copyright (c) 2024 GenXdev</Copyright>
         <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>
@@ -28,9 +28,15 @@
         <IntermediateOutputPath>./obj/</IntermediateOutputPath>
         <BaseOutputPath>.\bin\</BaseOutputPath>
         <PlatformTarget>AnyCPU</PlatformTarget>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <UserSecretsId>859ba72c-3594-4ef3-8c11-a6cf3bd8f7fd</UserSecretsId>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="ini-parser" Version="2.5.2" />
+        <PackageReference Include="Ionic.Zlib.Core" Version="1.0.0" />
+        <PackageReference Include="JWT" Version="11.0.0" />
         <PackageReference Include="NAudio" Version="2.2.1" />
+        <PackageReference Include="Ninject" Version="3.3.6" />
         <PackageReference Include="OpenAI" Version="2.0.0" />
         <PackageReference Include="SuperSocket" Version="2.0.0-beta.28" />
         <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
@@ -38,6 +44,7 @@
         <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
         <PackageReference Include="EmbedIO" Version="3.5.2" />
         <PackageReference Include="System.Net.Security" Version="4.3.2" />
+        <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />
         <PackageReference Include="System.Speech" Version="8.0.0" />
         <PackageReference Include="System.Text.Json" Version="8.0.5" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />

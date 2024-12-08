@@ -14,8 +14,6 @@ Omits white space and indented formatting in the output string.
 .EXAMPLE
  The `ConvertTo-JsonEx` cmdlet is implemented using Newtonsoft Json.NET (https://www.newtonsoft.com/json).
 
-    -------------------------- Example 1 --------------------------
-
     (Get-UICulture).Calendar | ConvertTo-JsonEx
 
     {
@@ -121,7 +119,17 @@ function Copy-CommandParameters {
         # if the command was not found, throw an appropriate command not found exception.
         if (-not $wrappedCmd) {
 
-            $PSCmdlet.ThrowCommandNotFoundError($CommandName, $PSCmdlet.MyInvocation.MyCommand.Name)
+            # the type of the command being proxied. Valid values include 'Cmdlet' or 'Function'.
+            $CommandType = [System.Management.Automation.CommandTypes]::Cmdlet;
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand($CommandName, $CommandType)
+
+            if (-not $wrappedCmd) {
+
+                # look up the command being proxied.
+                $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand($CommandName, $CommandType)
+
+                $PSCmdlet.ThrowTerminatingError((New-Object System.Management.Automation.ErrorRecord((New-Object System.Exception "Command not found"), 'CommandNotFound', [System.Management.Automation.ErrorCategory]::ObjectNotFound, $CommandName)))
+            }
         }
 
         # lookup the command metadata.
@@ -134,11 +142,83 @@ function Copy-CommandParameters {
             if ($ParametersToSkip -contains $key) { continue; }
 
             $parameter = $metadata.Parameters[$key]
+
+            if ($dynamicDictionary.ContainsKey($parameter.Name)) { continue; }
+
             $dynamicParameter = New-Object -TypeName System.Management.Automation.RuntimeDefinedParameter -ArgumentList @(
+
                 $parameter.Name, $parameter.ParameterType, $parameter.Attributes
             )
+
             $dynamicDictionary.Add($parameter.Name, $dynamicParameter)
         }
+
+        $a = $wrappedCmd.ScriptBlock;
+
+        if (($null -ne $a) -and (-not [string]::IsNullOrWhiteSpace($a.ToString()))) {
+
+            $a = $a.ToString();
+            $i = "$a".ToLowerInvariant().indexOf("dynamicparam");
+
+            if ($i -ge 0) {
+
+                $j = $a.indexOf("{", $i);
+                $k = $a.indexOf("}", $j);
+
+                if (($j -ge 0) -and ($k -ge 0)) {
+
+                    $script = $a.substring($j + 1, $k - $j - 1);
+
+                    $s = "Copy-CommandParameters -CommandName `"";
+                    $i = $script.indexOf($s);
+                    if ($i -ge 0) {
+
+                        $i += $s.Length;
+                        $script = $script.substring($i);
+                        $j = $script.indexOf("`"");
+                        $name = $script.substring(0, $j);
+                        $script = $script.substring($j);
+                        $ParametersToSkip = @()
+                        $s = "-ParametersToSkip "
+                        $i = $script.indexOf($s);
+
+                        if ($i -ge 0) {
+
+                            $i += $s.Length;
+                            $script = $script.substring($i);
+                            $j = $script.indexOf("`r`n");
+                            if ($j -lt 0) { $j = $script.indexOf("`n"); }
+                            if ($j -lt 0) { $j = $script.indexOf("`r"); }
+
+                            $skips = $script;
+
+                            if ($j -lt 0) {
+
+                                $skips = $skips.substring(0, $j);
+                            }
+
+                            $ParametersToSkip = Invoke-Expression "@($skips)";
+                        }
+
+                        Copy-CommandParameters -CommandName $name -ParametersToSkip $ParametersToSkip | ForEach-Object {
+
+                            $lib = $PSItem
+                            $lib.Keys | ForEach-Object {
+
+                                $p = $lib[$PSItem]
+
+                                if (-not $dynamicDictionary.ContainsKey($p.Name)) {
+
+                                    $p
+                                    $dynamicDictionary.Add($p.Name, $p)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         $dynamicDictionary
     }
     catch {
@@ -351,7 +431,7 @@ function Out-Serial {
 
 function Get-ImageGeolocation {
     param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         [string]$ImagePath
     )
 
@@ -373,19 +453,41 @@ function Get-ImageGeolocation {
             $lat = [BitConverter]::ToUInt32($latitude.Value, 0) / [BitConverter]::ToUInt32($latitude.Value, 4)
             $lon = [BitConverter]::ToUInt32($longitude.Value, 0) / [BitConverter]::ToUInt32($longitude.Value, 4)
 
-            if ($latitudeRef.Value -eq [byte][char]'S') { $lat = -$lat }
-            if ($longitudeRef.Value -eq [byte][char]'W') { $lon = -$lon }
+            if ($latitudeRef.Value -eq [byte][char]'S') { $lat = - $lat }
+            if ($longitudeRef.Value -eq [byte][char]'W') { $lon = - $lon }
 
             return @{
-                Latitude = $lat
+                Latitude  = $lat
                 Longitude = $lon
             }
         }
-    } catch {
+    }
+    catch {
     }
 }
 
 ################################################################################
+
+function AssurePester {
+
+    # Check if Pester is installed
+    if (-not (Get-Module -Name Pester -ErrorAction SilentlyContinue)) {
+
+        Write-Host "Pester not found. Installing Pester..."
+
+        # Install Pester from the PowerShell Gallery
+        try {
+            Install-Module -Name Pester -Force -SkipPublisherCheck | Out-Null
+            Import-Module -Name Pester -Force | Out-Null
+            Write-Host "Pester installed successfully."
+        }
+        catch {
+
+            Write-Error "Failed to install Pester. Error: $_"
+        }
+    }
+}
+
 ################################################################################
 
 Import-Module "$PSScriptRoot\lib\GenXdev.Helpers.dll"

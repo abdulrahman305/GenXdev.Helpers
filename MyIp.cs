@@ -1,4 +1,4 @@
-﻿namespace GenXdev.Helpers
+namespace GenXdev.Helpers
 {
     public class MyIp
     {
