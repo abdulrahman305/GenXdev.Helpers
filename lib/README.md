@@ -40,6 +40,7 @@ Update-Module
 | [alignScript](#alignScript) |  | Changes the indentation of a scriptblock string while respecting the original code-block identations |
 | [Out-Serial](#Out-Serial) |  | Allows you to send a string to a serial communication port |
 | [Get-ImageGeolocation](#Get-ImageGeolocation) |  |  |
+| [AssurePester](#AssurePester) |  |  |
 
 <br/><hr/><hr/><br/>
 
@@ -321,5 +322,20 @@ Get-ImageGeolocation [-ImagePath] <string> [<CommonParameters>]
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,
         OutBuffer, PipelineVariable, and OutVariable. For more information, see
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216). 
+
+<br/><hr/><hr/><br/>
+
+##	AssurePester
+````PowerShell
+AssurePester
+````
+
+### SYNTAX
+````PowerShell
+AssurePester 
+````
+
+### PARAMETERS
+    None
 
 <br/><hr/><hr/><br/>

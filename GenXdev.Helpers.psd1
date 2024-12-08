@@ -7,7 +7,7 @@
   RootModule           = 'GenXdev.Helpers.psm1'
 
   # Version number of this module.
-  ModuleVersion        = '1.78.2024'
+  ModuleVersion        = '1.80.2024'
   # Supported PSEditions
   # CompatiblePSEditions = @()
 
