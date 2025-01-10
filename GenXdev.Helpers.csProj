@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
         <TargetFramework>net8.0-windows</TargetFramework>
@@ -11,8 +11,8 @@
         <PackageLicenseFile>license.txt</PackageLicenseFile>
         <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
         <NeutralLanguage>en</NeutralLanguage>
-        <AssemblyVersion>1.82.2024</AssemblyVersion>
-        <FileVersion>1.82.2024</FileVersion>
+        <AssemblyVersion>1.84.2025</AssemblyVersion>
+        <FileVersion>1.84.2025</FileVersion>
         <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
         <Copyright>Copyright (c) 2024 GenXdev</Copyright>
         <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>
