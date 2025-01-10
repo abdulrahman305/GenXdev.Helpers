@@ -63,7 +63,7 @@ function Remove-JSONComments {
 
     param(
 
-        [parameter(ValueFromPipeline = $true, Position = 0, Mandatory)]
+        [parameter(ValueFromPipeline, Position = 0, Mandatory)]
         [string[]] $Json
     )
 
@@ -98,8 +98,8 @@ function Copy-CommandParameters {
     # if ($base -and $base.Parameters) {
 
     #     $base.Parameters.GetEnumerator().foreach{
-    #         $val = $_.value
-    #         $key = $_.key
+    #         $val = $PSItem.value
+    #         $key = $PSItem.key
     #         if ($key -notin $common -and $key -notin $ParametersToSkip) {
     #             $param = [System.Management.Automation.RuntimeDefinedParameter]::new(
     #                 $key, $val.parameterType, $val.attributes)
@@ -209,7 +209,6 @@ function Copy-CommandParameters {
 
                                 if (-not $dynamicDictionary.ContainsKey($p.Name)) {
 
-                                    $p
                                     $dynamicDictionary.Add($p.Name, $p)
                                 }
                             }
@@ -222,7 +221,7 @@ function Copy-CommandParameters {
         $dynamicDictionary
     }
     catch {
-        $PSCmdlet.ThrowTerminatingError($_)
+        $PSCmdlet.ThrowTerminatingError($PSItem)
     }
 }
 
@@ -375,7 +374,7 @@ function Out-Serial {
             HelpMessage = "One of the System.IO.Ports.SerialPort.StopBits values.")]
         [string]$StopBits = 'One',
 
-        [Parameter(Mandatory = $true, ValueFromPipeline = $true,
+        [Parameter(Mandatory, ValueFromPipeline,
             HelpMessage = "Text to sent to serial port.")]
         [object]$Text,
 
@@ -419,7 +418,7 @@ function Out-Serial {
             }
         }
         catch {
-            Write-Verbose "Error occured: $_"
+            Write-Verbose "Error occured: $PSItem"
         }
     }
     end {
@@ -431,7 +430,7 @@ function Out-Serial {
 
 function Get-ImageGeolocation {
     param (
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory)]
         [string]$ImagePath
     )
 
@@ -444,10 +443,10 @@ function Get-ImageGeolocation {
         $image = [System.Drawing.Image]::FromFile($ImagePath)
         $propertyItems = $image.PropertyItems
 
-        $latitudeRef = $propertyItems | Where-Object { $_.Id -eq 0x0001 }
-        $latitude = $propertyItems | Where-Object { $_.Id -eq 0x0002 }
-        $longitudeRef = $propertyItems | Where-Object { $_.Id -eq 0x0003 }
-        $longitude = $propertyItems | Where-Object { $_.Id -eq 0x0004 }
+        $latitudeRef = $propertyItems | Where-Object { $PSItem.Id -eq 0x0001 }
+        $latitude = $propertyItems | Where-Object { $PSItem.Id -eq 0x0002 }
+        $longitudeRef = $propertyItems | Where-Object { $PSItem.Id -eq 0x0003 }
+        $longitude = $propertyItems | Where-Object { $PSItem.Id -eq 0x0004 }
 
         if ($latitude -and $longitude -and $latitudeRef -and $longitudeRef) {
             $lat = [BitConverter]::ToUInt32($latitude.Value, 0) / [BitConverter]::ToUInt32($latitude.Value, 4)
@@ -483,7 +482,7 @@ function AssurePester {
         }
         catch {
 
-            Write-Error "Failed to install Pester. Error: $_"
+            Write-Error "Failed to install Pester. Error: $PSItem"
         }
     }
 }

@@ -40,7 +40,7 @@
                 code: params["access_token"],
                 request_type: "code"
             }
-            console.log("Sent request_type token to server", params);
+            // Console.log("Sent request_type token to server", params);
             fetch("/callback?" + new URLSearchParams(params).toString(), {
                 method: "POST",
             });
