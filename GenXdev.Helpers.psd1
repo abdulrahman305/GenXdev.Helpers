@@ -7,7 +7,7 @@
   RootModule           = 'GenXdev.Helpers.psm1'
 
   # Version number of this module.
-  ModuleVersion        = '1.94.2025'
+  ModuleVersion        = '1.98.2025'
   # Supported PSEditions
   # CompatiblePSEditions = @()
 
@@ -29,10 +29,10 @@
   # Minimum version of the PowerShell engine required by this module
   PowerShellVersion    = '7.5.0'
 
-  # # Intended for PowerShell Core
+  # Intended for PowerShell Core
   CompatiblePSEditions = 'Core'
 
-  # # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+  # Minimum version of the common language runtime (CLR) required by this module
   ClrVersion           = '9.0.1'
 
   # Processor architecture (None, X86, Amd64) required by this module
@@ -41,10 +41,10 @@
   # Assemblies that must be loaded prior to importing this module
   RequiredAssemblies   = @(
 
+    ".\\lib\\GenXdev.CoreHelpers.dll",
+    ".\\lib\\GenXdev.Helpers.dll",
     ".\\lib\\BouncyCastle.Cryptography.dll",
     ".\\lib\\EmbedIO.dll",
-    ".\\lib\\GenXdev.Helpers.dll",
-    ".\\lib\\GenXdev.CoreHelpers.dll",
     ".\\lib\\JWT.dll",
     ".\\lib\\NAudio.dll",
     ".\\lib\\Ninject.dll",
@@ -67,14 +67,13 @@
   # FormatsToProcess = @()
 
   # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-  # NestedModules = @("GenXdev.Helpers.dll")
+  NestedModules = @(".\\lib\\GenXdev.Helpers.dll")
 
   # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
   FunctionsToExport    = '*'
 
   # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no Cmdlets to export.
-  # CmdletsToExport       = '*'
-  CmdletsToExport      = '*'
+  CmdletsToExport      = @('Get-SpeechToText')
 
   # Variables to export from this module
   VariablesToExport    = '*'
@@ -461,6 +460,7 @@
   ".\\lib\\license.txt",
   ".\\lib\\Microsoft.ApplicationInsights.dll",
   ".\\lib\\Microsoft.Bcl.AsyncInterfaces.dll",
+  ".\\lib\\Microsoft.Bcl.Cryptography.dll",
   ".\\lib\\Microsoft.Data.SqlClient.dll",
   ".\\lib\\Microsoft.Data.SqlClient.SNI.dll",
   ".\\lib\\Microsoft.Extensions.Configuration.Abstractions.dll",
@@ -500,6 +500,7 @@
   ".\\lib\\Microsoft.TestPlatform.CoreUtilities.dll",
   ".\\lib\\Microsoft.TestPlatform.PlatformAbstractions.dll",
   ".\\lib\\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll",
+  ".\\lib\\Microsoft.Win32.Registry.AccessControl.dll",
   ".\\lib\\Microsoft.Windows.SDK.NET.dll",
   ".\\lib\\NAudio.Asio.dll",
   ".\\lib\\NAudio.Core.dll",
@@ -522,20 +523,29 @@
   ".\\lib\\SQLite.Interop.dll",
   ".\\lib\\Swan.Lite.dll",
   ".\\lib\\System.ClientModel.dll",
+  ".\\lib\\System.CodeDom.dll",
+  ".\\lib\\System.Configuration.ConfigurationManager.dll",
   ".\\lib\\System.Data.SQLite.dll",
+  ".\\lib\\System.Diagnostics.DiagnosticSource.dll",
+  ".\\lib\\System.Diagnostics.EventLog.dll",
+  ".\\lib\\System.DirectoryServices.dll",
   ".\\lib\\System.Formats.Asn1.dll",
   ".\\lib\\System.IdentityModel.Tokens.Jwt.dll",
   ".\\lib\\System.Management.Automation.dll",
   ".\\lib\\System.Management.dll",
   ".\\lib\\System.Memory.Data.dll",
   ".\\lib\\System.Private.ServiceModel.dll",
-  ".\\lib\\System.Runtime.Caching.dll",
+  ".\\lib\\System.Security.Cryptography.Pkcs.dll",
+  ".\\lib\\System.Security.Cryptography.ProtectedData.dll",
+  ".\\lib\\System.Security.Permissions.dll",
   ".\\lib\\System.ServiceModel.dll",
   ".\\lib\\System.ServiceModel.Duplex.dll",
   ".\\lib\\System.ServiceModel.Primitives.dll",
   ".\\lib\\System.ServiceModel.Security.dll",
   ".\\lib\\System.Speech.dll",
+  ".\\lib\\System.Text.Encoding.CodePages.dll",
   ".\\lib\\System.Text.Json.dll",
+  ".\\lib\\System.Windows.Extensions.dll",
   ".\\lib\\Whisper.net.dll",
   ".\\lib\\WinRT.Runtime.dll",
   ".\\lib\\WpfScreenHelper.dll",
