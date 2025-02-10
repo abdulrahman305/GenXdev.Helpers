@@ -7,7 +7,7 @@
   RootModule           = 'GenXdev.Helpers.psm1'
 
   # Version number of this module.
-  ModuleVersion        = '1.104.2025'
+  ModuleVersion        = '1.106.2025'
   # Supported PSEditions
   # CompatiblePSEditions = @()
 
@@ -96,6 +96,7 @@
   ".\\custom_site\\index.html",
   ".\\default_site\\index.html",
   ".\\Functions\\GenXdev.Helpers\\alignScript.ps1",
+  ".\\Functions\\GenXdev.Helpers\\ConvertTo-HashTable.ps1",
   ".\\Functions\\GenXdev.Helpers\\ConvertTo-JsonEx.ps1",
   ".\\Functions\\GenXdev.Helpers\\Get-ImageGeolocation.ps1",
   ".\\Functions\\GenXdev.Helpers\\Out-Serial.ps1",
@@ -550,6 +551,8 @@
   ".\\lib\\WpfScreenHelper.dll",
   ".\\Properties\\PublishProfiles\\FolderProfile.pubxml",
   ".\\Properties\\PublishProfiles\\FolderProfile.pubxml.user",
+  ".\\Tests\\GenXdev.Helpers\\ConvertTo-HashTable.Tests.ps1",
+  ".\\Tests\\TestResults.xml",
   ".\\GenXdev.Helpers.psd1",
   ".\\GenXdev.Helpers.psm1",
   ".\\LICENSE",
