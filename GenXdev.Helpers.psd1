@@ -7,7 +7,7 @@
   RootModule           = 'GenXdev.Helpers.psm1'
 
   # Version number of this module.
-  ModuleVersion        = '1.106.2025'
+  ModuleVersion        = '1.110.2025'
   # Supported PSEditions
   # CompatiblePSEditions = @()
 
@@ -98,6 +98,7 @@
   ".\\Functions\\GenXdev.Helpers\\alignScript.ps1",
   ".\\Functions\\GenXdev.Helpers\\ConvertTo-HashTable.ps1",
   ".\\Functions\\GenXdev.Helpers\\ConvertTo-JsonEx.ps1",
+  ".\\Functions\\GenXdev.Helpers\\Copy-IdenticalParamValues.ps1",
   ".\\Functions\\GenXdev.Helpers\\Get-ImageGeolocation.ps1",
   ".\\Functions\\GenXdev.Helpers\\Out-Serial.ps1",
   ".\\Functions\\GenXdev.Helpers\\Remove-JSONComments.ps1",
