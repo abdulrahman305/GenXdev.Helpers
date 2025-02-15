@@ -51,14 +51,64 @@ function Copy-IdenticalParamValues {
             HelpMessage = "Target function name to filter parameters"
         )]
         [ValidateNotNullOrEmpty()]
-        [string] $FunctionName
+        [string] $FunctionName,
+        ########################################################################
+        [Parameter(
+            Mandatory = $false,
+            Position = 2,
+            HelpMessage = "Default values for parameters"
+        )]
+        [System.Management.Automation.PSVariable[]] $DefaultValues = @()
         ########################################################################
     )
 
     begin {
 
+        $filter = @(
+            "input",
+            "MyInvocation",
+            "null",
+            "PSBoundParameters",
+            "PSCmdlet",
+            "PSCommandPath",
+            "PSScriptRoot",
+            "Verbose",
+            "Debug",
+            "ErrorAction",
+            "ErrorVariable",
+            "WarningAction",
+            "WarningVariable",
+            "InformationAction",
+            "InformationVariable",
+            "OutVariable",
+            "OutBuffer",
+            "PipelineVariable",
+            "WhatIf",
+            "Confirm",
+            "OutVariable",
+            "ProgressAction",
+            "ErrorVariable"
+        )
         # initialize results hashtable
         [hashtable] $results = @{}
+        [hashtable] $defaults = (& {
+                $asda2 = @{};
+                $DefaultValues |
+                Where-Object -Property Options -EQ "None" |
+                ForEach-Object {
+                    if ($filter.IndexOf($_.Name) -lt 0) {
+
+                        if (-not ($_.Value -is [string] -and [string]::IsNullOrWhiteSpace($_.Value))) {
+
+                            if ($null -ne $_.Value) {
+
+                                $asda2."$($_.Name)" = $_.Value
+                            }
+                        }
+                    }
+                }
+                $asda2
+            });
 
         # get function info for parameter validation
         Write-Verbose "Getting command info for function '$FunctionName'"
@@ -88,6 +138,17 @@ function Copy-IdenticalParamValues {
                 Write-Verbose "Copying value for parameter '$paramName'"
                 $value = $BoundParameters[0].GetEnumerator() | Where-Object -Property Key -EQ $paramName | Select-Object -Property "Value"
                 $results."$paramName" = $value.Value
+            }
+            else {
+
+                $defaultValue = $defaults."$paramName"
+
+                if ($null -ne $defaultValue) {
+
+                    $results."$paramName" = $defaultValue
+
+                    Write-Verbose "Using default value $(($defaultValue | ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))"
+                }
             }
         }
     }
