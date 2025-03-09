@@ -23,6 +23,7 @@ $data | ConvertTo-JsonEx -Compress
 function ConvertTo-JsonEx {
 
     [CmdletBinding()]
+    [OutputType([System.String])]
     [Alias("tojsonex")]
 
     param(

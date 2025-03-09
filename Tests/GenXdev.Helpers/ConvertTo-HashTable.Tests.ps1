@@ -1,14 +1,13 @@
 Describe "ConvertTo-HashTable function tests" {
 
     BeforeAll {
-        # import required module
-        Import-Module GenXdev.Helpers -Force
 
         $testObject = @(
             @{
                 Name  = "Test"
                 Value = 123
                 Sub   = @{
+
                     Name  = "SubTest"
                     Value = 456
                 }
@@ -17,14 +16,43 @@ Describe "ConvertTo-HashTable function tests" {
 
         $testArray = @(
             @{
+
                 Name  = "Item1"
                 Value = 1
             },
             @{
+
                 Name  = "Item2"
                 Value = 2
             }
         ) | ConvertTo-Json -Compress | ConvertFrom-Json
+    }
+
+    It "should pass PSScriptAnalyzer rules" {
+
+        # get the script path for analysis
+        $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\ConvertTo-HashTable.ps1"
+
+        # run analyzer with explicit settings
+        $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
+            -Path $scriptPath
+
+        [string] $message = ""
+        $analyzerResults | ForEach-Object {
+
+            $message = $message + @"
+--------------------------------------------------
+Rule: $($_.RuleName)`
+Description: $($_.Description)
+Message: $($_.Message)
+`r`n
+"@
+        }
+
+        $analyzerResults.Count | Should -Be 0 -Because @"
+The following PSScriptAnalyzer rules are being violated:
+$message
+"@;
     }
 
     Context "Basic functionality" {

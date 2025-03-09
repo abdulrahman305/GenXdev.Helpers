@@ -11,6 +11,11 @@ data.
 .PARAMETER ImagePath
 The full path to the image file to analyze.
 
+.OUTPUTS
+System.Collections.Hashtable
+Returns a hashtable containing Latitude and Longitude if GPS data is found,
+otherwise returns $null.
+
 .EXAMPLE
 Get-ImageGeolocation -ImagePath "C:\Photos\vacation.jpg"
 
@@ -20,6 +25,7 @@ Get-ImageGeolocation -ImagePath "C:\Photos\vacation.jpg"
 function Get-ImageGeolocation {
 
     [CmdletBinding()]
+    [OutputType([System.Collections.Hashtable])]
     param (
         ########################################################################
         [Parameter(
@@ -35,7 +41,6 @@ function Get-ImageGeolocation {
     )
 
     begin {
-
         # check if image path exists
         if (-not (Test-Path $ImagePath)) {
             Write-Error "The specified image path '$ImagePath' does not exist."
@@ -57,29 +62,29 @@ function Get-ImageGeolocation {
             # extract gps metadata properties
             Write-Verbose "Extracting GPS metadata"
             $latitudeRef = $propertyItems |
-                Where-Object { $PSItem.Id -eq 0x0001 }
+            Where-Object { $PSItem.Id -eq 0x0001 }
             $latitude = $propertyItems |
-                Where-Object { $PSItem.Id -eq 0x0002 }
+            Where-Object { $PSItem.Id -eq 0x0002 }
             $longitudeRef = $propertyItems |
-                Where-Object { $PSItem.Id -eq 0x0003 }
+            Where-Object { $PSItem.Id -eq 0x0003 }
             $longitude = $propertyItems |
-                Where-Object { $PSItem.Id -eq 0x0004 }
+            Where-Object { $PSItem.Id -eq 0x0004 }
 
             # check if gps data exists
             if ($latitude -and $longitude -and $latitudeRef -and $longitudeRef) {
 
                 # calculate actual latitude and longitude values
                 $lat = [BitConverter]::ToUInt32($latitude.Value, 0) /
-                    [BitConverter]::ToUInt32($latitude.Value, 4)
+                [BitConverter]::ToUInt32($latitude.Value, 4)
                 $lon = [BitConverter]::ToUInt32($longitude.Value, 0) /
-                    [BitConverter]::ToUInt32($longitude.Value, 4)
+                [BitConverter]::ToUInt32($longitude.Value, 4)
 
                 # adjust for south and west hemispheres
                 if ($latitudeRef.Value -eq [byte][char]'S') {
-                    $lat = -$lat
+                    $lat = - $lat
                 }
                 if ($longitudeRef.Value -eq [byte][char]'W') {
-                    $lon = -$lon
+                    $lon = - $lon
                 }
 
                 Write-Verbose "GPS coordinates found: $lat, $lon"

@@ -23,14 +23,15 @@ $hashTable = ConvertTo-HashTable -InputObject $object
 #>
 function ConvertTo-HashTable {
 
-    [CmdletBinding()]
-    [OutputType([hashtable[]])]
+    [CmdletBinding(DefaultParameterSetName = "Default")]
+    [OutputType([hashtable], [System.Collections.IEnumerable], [System.ValueType], [string])]
     param (
         ########################################################################
         [Parameter(
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true,
+            ParameterSetName = "Default",
             HelpMessage = "The PSCustomObject to convert into a HashTable"
         )]
         [ValidateNotNull()]
@@ -55,6 +56,15 @@ function ConvertTo-HashTable {
         $InputObject | ForEach-Object {
 
             $currentObject = $_
+
+            # handle simple value types directly
+            if ($currentObject -is [System.ValueType] -or
+                $currentObject -is [string]) {
+
+                Write-Verbose "Processing simple value: $currentObject"
+                Write-Output $currentObject
+                return
+            }
 
             # create new hashtable for storing converted properties
             $resultTable = @{}

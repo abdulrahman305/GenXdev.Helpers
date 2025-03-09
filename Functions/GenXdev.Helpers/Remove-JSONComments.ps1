@@ -29,29 +29,36 @@ $jsonContent | Remove-JSONComments
 #>
 function Remove-JSONComments {
 
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName = "Default")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
+    [OutputType([System.String])]
     param(
         ########################################################################
         [Parameter(
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true,
+            ParameterSetName = "Default",
             HelpMessage = "JSON content to process as string array"
         )]
         [string[]] $Json
     )
 
     begin {
+
         # inform user that processing is starting
         Write-Verbose "Starting JSON comment removal process"
     }
 
     process {
+
         # remove comments from json using the helper class
         [GenXdev.Helpers.Serialization]::RemoveJSONComments($Json)
     }
 
     end {
+
         # inform user that processing is complete
         Write-Verbose "Completed JSON comment removal process"
     }

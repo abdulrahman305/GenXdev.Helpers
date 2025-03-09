@@ -25,7 +25,7 @@ function Test-Function {
         [switch] $Recurse
     )
 
-    $params = Copy-IdenticalParamValues -BoundParameters $PSBoundParameters `
+    $params = GenXdev.Helpers\Copy-IdenticalParamValues -BoundParameters $PSBoundParameters `
         -FunctionName 'Get-ChildItem'
 
     Get-ChildItem @params
@@ -35,6 +35,7 @@ function Copy-IdenticalParamValues {
 
     [CmdletBinding()]
     [OutputType([hashtable])]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     param(
         ########################################################################
         [Parameter(
@@ -64,6 +65,7 @@ function Copy-IdenticalParamValues {
 
     begin {
 
+        # define common parameters to filter out
         $filter = @(
             "input",
             "MyInvocation",
@@ -89,26 +91,32 @@ function Copy-IdenticalParamValues {
             "ProgressAction",
             "ErrorVariable"
         )
+
         # initialize results hashtable
         [hashtable] $results = @{}
+
+        # create hashtable of default parameter values
         [hashtable] $defaults = (& {
-                $asda2 = @{};
+                $defaultsHash = @{}
+
                 $DefaultValues |
                 Where-Object -Property Options -EQ "None" |
                 ForEach-Object {
                     if ($filter.IndexOf($_.Name) -lt 0) {
 
-                        if (-not ($_.Value -is [string] -and [string]::IsNullOrWhiteSpace($_.Value))) {
+                        if (-not ($_.Value -is [string] -and
+                                [string]::IsNullOrWhiteSpace($_.Value))) {
 
                             if ($null -ne $_.Value) {
 
-                                $asda2."$($_.Name)" = $_.Value
+                                $defaultsHash."$($_.Name)" = $_.Value
                             }
                         }
                     }
                 }
-                $asda2
-            });
+
+                $defaultsHash
+            })
 
         # get function info for parameter validation
         Write-Verbose "Getting command info for function '$FunctionName'"
@@ -136,7 +144,10 @@ function Copy-IdenticalParamValues {
             if ($BoundParameters.ContainsKey($paramName)) {
 
                 Write-Verbose "Copying value for parameter '$paramName'"
-                $value = $BoundParameters[0].GetEnumerator() | Where-Object -Property Key -EQ $paramName | Select-Object -Property "Value"
+                $value = $BoundParameters[0].GetEnumerator() |
+                Where-Object -Property Key -EQ $paramName |
+                Select-Object -Property "Value"
+
                 $results."$paramName" = $value.Value
             }
             else {
@@ -147,7 +158,8 @@ function Copy-IdenticalParamValues {
 
                     $results."$paramName" = $defaultValue
 
-                    Write-Verbose "Using default value $(($defaultValue | ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))"
+                    Write-Verbose ("Using default value " +
+                        ($defaultValue | ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))
                 }
             }
         }
@@ -156,7 +168,7 @@ function Copy-IdenticalParamValues {
     end {
 
         Write-Verbose "Returning hashtable with $($results.Count) parameters"
-        Write-Output $results
+        $results
     }
 }
 ################################################################################
