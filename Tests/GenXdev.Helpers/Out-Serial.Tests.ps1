@@ -1,7 +1,7 @@
 ################################################################################
 Describe "Out-Serial" {
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
 
         # Define the module name
         $FullModuleName = "GenXdev.Helpers"

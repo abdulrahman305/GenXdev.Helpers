@@ -1,7 +1,7 @@
 ################################################################################
 Describe "alignScript.Tests" {
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
         # Define the full module name variable
         $FullModuleName = "GenXdev.Helpers"
 

@@ -7,7 +7,7 @@ Describe "Show-GenXDevCmdlets" {
             "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\Show-GenXDevCmdlets.ps1"
     }
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
 
         # run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `

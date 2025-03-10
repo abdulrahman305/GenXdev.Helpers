@@ -5,6 +5,7 @@
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Get-GenXDevCmdlets.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Get-ImageGeolocation.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Import-GenXdevModules.ps1"
+. "$PSScriptRoot\Functions\GenXdev.Helpers\Initialize-SearchPaths.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Invoke-OnEachGenXdevModule.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Out-Serial.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Remove-JSONComments.ps1"

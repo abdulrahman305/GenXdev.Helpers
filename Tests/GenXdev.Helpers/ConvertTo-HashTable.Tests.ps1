@@ -28,7 +28,7 @@ Describe "ConvertTo-HashTable function tests" {
         ) | ConvertTo-Json -Compress | ConvertFrom-Json
     }
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
 
         # get the script path for analysis
         $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\ConvertTo-HashTable.ps1"

@@ -1,7 +1,7 @@
 ################################################################################
 Describe "Copy-IdenticalParamValues.Tests" {
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
 
         # Define module name based on the folder structure
         $FullModuleName = "GenXdev.Helpers"

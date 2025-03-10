@@ -39,6 +39,7 @@ Update-Module
 | [Get-GenXDevCmdlets](#Get-GenXDevCmdlets) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#Get-ImageGeolocation) |  | Extracts geolocation data from an image file. |
 | [Import-GenXdevModules](#Import-GenXdevModules) | reloadgenxdev | Imports all GenXdev PowerShell modules into the global scope. |
+| [Initialize-SearchPaths](#Initialize-SearchPaths) |  | Initializes and configures system search paths for package management. |
 | [Invoke-OnEachGenXdevModule](#Invoke-OnEachGenXdevModule) | foreach-genxdev-module-do |  |
 | [Out-Serial](#Out-Serial) |  | Sends a string to a serial port |
 | [Remove-JSONComments](#Remove-JSONComments) |  | Removes comments from JSON content. |
@@ -387,6 +388,45 @@ Update-Module
 <br/><hr/><hr/><br/>
  
 
+##	Initialize-SearchPaths 
+````PowerShell 
+
+   Initialize-SearchPaths  
+```` 
+
+### SYNOPSIS 
+    Initializes and configures system search paths for package management.  
+
+### SYNTAX 
+````PowerShell 
+
+   Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>]  
+```` 
+
+### DESCRIPTION 
+    This function builds a comprehensive list of search paths by combining default  
+    system locations, chocolatey paths, development tool paths, and custom package  
+    paths. It then updates the system's PATH environment variable with these  
+    consolidated paths.  
+
+### PARAMETERS 
+    -WorkspaceFolder <String>  
+        The workspace folder path to use for node modules and PowerShell paths.  
+        Required?                    false  
+        Position?                    1  
+        Default value                "$PSScriptRoot\..\..\..\..\..\"  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+
+<br/><hr/><hr/><br/>
+ 
+
 ##	Invoke-OnEachGenXdevModule 
 ````PowerShell 
 
@@ -463,8 +503,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity]   
-   <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
+   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>]   
+   [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -611,8 +651,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-Online] [-OnlyAliases] [-ShowTable]   
-   [<CommonParameters>]  
+   Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-Online] [-OnlyAliases]   
+   [-ShowTable] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 

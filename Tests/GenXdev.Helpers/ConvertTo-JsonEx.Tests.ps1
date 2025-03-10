@@ -1,7 +1,7 @@
 ################################################################################
 Describe "ConvertTo-JsonEx.Tests" {
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
         # Define module name based on directory structure
         $FullModuleName = "GenXdev.Helpers"
 

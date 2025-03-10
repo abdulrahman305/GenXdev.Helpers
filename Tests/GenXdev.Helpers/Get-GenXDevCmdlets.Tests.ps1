@@ -3,7 +3,7 @@
 
 Describe "Get-GenXDevCmdlets.Tests" {
 
-    It "should pass PSScriptAnalyzer rules" {
+    It "Should pass PSScriptAnalyzer rules" {
         $FullModuleName = "GenXdev.Helpers"
 
         # get the script path for analysis
