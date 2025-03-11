@@ -78,7 +78,8 @@ Update-Module
 ```` 
 
 ### DESCRIPTION 
-    Changes the indentation of a scriptblock string while respecting the original code-block identations  
+    Changes the indentation of a scriptblock string while respecting the original code-block   
+    identations  
 
 ### PARAMETERS 
     -script <String>  
@@ -202,7 +203,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String> [[-DefaultValues] <PSVariable[]>] [<CommonParameters>]  
+   Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String>   
+   [[-DefaultValues] <PSVariable[]>] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -255,7 +257,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
+   Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal]   
+   [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -436,7 +439,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
+   Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>]   
+   [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
 ```` 
 
 ### PARAMETERS 
@@ -503,8 +507,9 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>]   
-   [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
+   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>]   
+   [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits]   
+   <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -651,8 +656,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-Online] [-OnlyAliases]   
-   [-ShowTable] [<CommonParameters>]  
+   Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal]   
+   [-OnlyPublished] [-FromScripts] [-Online] [-OnlyAliases] [-ShowTable] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
