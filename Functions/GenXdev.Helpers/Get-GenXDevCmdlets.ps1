@@ -151,7 +151,7 @@ function Get-GenXDevCmdlets {
 
                 [string] $BaseModule = $cmd.ModuleName
 
-                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.124.2025\Functions\$($cmd.Name).ps1"
+                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.126.2025\Functions\$($cmd.Name).ps1"
 
                 Get-ChildItem ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
 
