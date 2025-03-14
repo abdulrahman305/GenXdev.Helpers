@@ -1,11 +1,10 @@
+################################################################################
+Describe "Show-Verb" {
 
-    ################################################################################
-    Describe "Show-Verb" {
+    It "Should pass PSScriptAnalyzer rules" {
 
-        It "Should pass PSScriptAnalyzer rules" {
-
-            # get the script path for analysis
-            $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\Show-Verb.ps1"
+        # get the script path for analysis
+        $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\Show-Verb.ps1"
 
         # run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `

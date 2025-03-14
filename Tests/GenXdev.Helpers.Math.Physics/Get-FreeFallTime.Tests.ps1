@@ -1,11 +1,10 @@
+################################################################################
+Describe "Get-FreeFallTime" {
 
-    ################################################################################
-    Describe "Get-FreeFallTime" {
+    It "Should pass PSScriptAnalyzer rules" {
 
-        It "Should pass PSScriptAnalyzer rules" {
-
-            # get the script path for analysis
-            $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\GenXdev.Helpers.Math.Physics\Get-FreeFallTime.ps1"
+        # get the script path for analysis
+        $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\GenXdev.Helpers.Math.Physics\Get-FreeFallTime.ps1"
 
         # run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
