@@ -36,8 +36,10 @@ Update-Module
 | [ConvertTo-HashTable](#ConvertTo-HashTable) |  | Converts a PSCustomObject to a HashTable recursively. |
 | [ConvertTo-JsonEx](#ConvertTo-JsonEx) | tojsonex | Converts an object to a JSON string with extended options. |
 | [Copy-IdenticalParamValues](#Copy-IdenticalParamValues) |  |  |
+| [Get-DefaultWebLanguage](#Get-DefaultWebLanguage) |  | Gets the default web language key based on the system's current language settings. |
 | [Get-GenXDevCmdlets](#Get-GenXDevCmdlets) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#Get-ImageGeolocation) |  | Extracts geolocation data from an image file. |
+| [Get-WebLanguageDictionary](#Get-WebLanguageDictionary) |  | Returns a reversed dictionary for all languages supported by Google Search |
 | [Import-GenXdevModules](#Import-GenXdevModules) | reloadgenxdev | Imports all GenXdev PowerShell modules into the global scope. |
 | [Initialize-SearchPaths](#Initialize-SearchPaths) |  | Initializes and configures system search paths for package management. |
 | [Invoke-OnEachGenXdevModule](#Invoke-OnEachGenXdevModule) | foreach-genxdev-module-do |  |
@@ -78,8 +80,7 @@ Update-Module
 ```` 
 
 ### DESCRIPTION 
-    Changes the indentation of a scriptblock string while respecting the original code-block   
-    identations  
+    Changes the indentation of a scriptblock string while respecting the original code-block identations  
 
 ### PARAMETERS 
     -script <String>  
@@ -203,8 +204,7 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String>   
-   [[-DefaultValues] <PSVariable[]>] [<CommonParameters>]  
+   Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String> [[-DefaultValues] <PSVariable[]>] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -245,6 +245,35 @@ Update-Module
 <br/><hr/><hr/><br/>
  
 
+##	Get-DefaultWebLanguage 
+````PowerShell 
+
+   Get-DefaultWebLanguage  
+```` 
+
+### SYNOPSIS 
+    Gets the default web language key based on the system's current language settings.  
+
+### SYNTAX 
+````PowerShell 
+
+   Get-DefaultWebLanguage [<CommonParameters>]  
+```` 
+
+### DESCRIPTION 
+    Retrieves the current system language and culture settings and maps them to the  
+    corresponding web language dictionary key used by translation services.  
+
+### PARAMETERS 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+
+<br/><hr/><hr/><br/>
+ 
+
 ##	Get-GenXDevCmdlets 
 ````PowerShell 
 
@@ -257,8 +286,7 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal]   
-   [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
+   Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -343,6 +371,34 @@ Update-Module
         Accept pipeline input?       true (ByValue, ByPropertyName)  
         Aliases                        
         Accept wildcard characters?  false  
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+
+<br/><hr/><hr/><br/>
+ 
+
+##	Get-WebLanguageDictionary 
+````PowerShell 
+
+   Get-WebLanguageDictionary  
+```` 
+
+### SYNOPSIS 
+    Returns a reversed dictionary for all languages supported by Google Search  
+
+### SYNTAX 
+````PowerShell 
+
+   Get-WebLanguageDictionary [<CommonParameters>]  
+```` 
+
+### DESCRIPTION 
+    Returns a reversed dictionary for all languages supported by Google Search  
+
+### PARAMETERS 
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
@@ -439,8 +495,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>]   
-   [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
+   Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts]   
+   [<CommonParameters>]  
 ```` 
 
 ### PARAMETERS 
@@ -507,9 +563,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>]   
-   [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits]   
-   <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
+   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>]   
+   [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -656,8 +711,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal]   
-   [-OnlyPublished] [-FromScripts] [-Online] [-OnlyAliases] [-ShowTable] [<CommonParameters>]  
+   Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-Online]   
+   [-OnlyAliases] [-ShowTable] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
