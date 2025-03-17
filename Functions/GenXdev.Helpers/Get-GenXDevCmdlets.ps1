@@ -32,6 +32,8 @@ function Get-GenXDevCmdlets {
 
     [CmdletBinding()]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "Get-GenXDevCmdlets")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidTrailingWhitespace", "")]
+
     [Alias("gcmds")]
     param(
         ########################################################################
@@ -101,6 +103,7 @@ function Get-GenXDevCmdlets {
 
                 # skip test files to avoid processing test code
                 if ($_.Name -like "*.Tests.ps1") { return }
+                if ($_.Name -like "_AssertGenXdevUnitTests.ps1") { return }
 
                 # read entire function content for processing
                 $functionContent = [IO.File]::ReadAllText($_.FullName)
@@ -151,9 +154,11 @@ function Get-GenXDevCmdlets {
 
                 [string] $BaseModule = $cmd.ModuleName
 
-                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.130.2025\Functions\$($cmd.Name).ps1"
+                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.134.2025\Functions\$($cmd.Name).ps1"
 
                 Get-ChildItem ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
+
+                    if ($_.Name -like "_AssertGenXdevUnitTests.ps1") { return }
 
                     # prepare function details
                     $functionContent = [IO.File]::ReadAllText($_.FullName)
@@ -203,6 +208,7 @@ function Get-GenXDevCmdlets {
             @(Get-ChildItem .\Functions\*.ps1 -File -Recurse `
                     -ErrorAction SilentlyContinue) | ForEach-Object {
 
+                if ($_.Name -like "_AssertGenXdevUnitTests.ps1") { return }
                 $functionContent = [IO.File]::ReadAllText($_.FullName)
                 if ([string]::IsNullOrWhiteSpace($functionContent)) { return }
                 $aliases = @(Get-FunctionAliases `

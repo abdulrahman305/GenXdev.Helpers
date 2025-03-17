@@ -204,7 +204,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String> [[-DefaultValues] <PSVariable[]>] [<CommonParameters>]  
+   Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String> [[-DefaultValues] <PSVariable[]>]   
+   [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -286,7 +287,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]  
+   Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts]   
+   [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -563,8 +565,8 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>]   
-   [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
+   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout]   
+   <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
