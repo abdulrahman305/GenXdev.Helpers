@@ -96,7 +96,7 @@ function Show-GenXDevCmdlets {
     )
 
     begin {
-        Write-Verbose "Initializing Show-GenXDevCmdlets"
+        Microsoft.PowerShell.Utility\Write-Verbose "Initializing Show-GenXDevCmdlets"
 
         # initialize results collection
         $results = [System.Collections.ArrayList]::new()
@@ -124,10 +124,9 @@ function Show-GenXDevCmdlets {
                 if ($Online) {
                     if (@("GenXdev.Local", "GenXdev.Scripts").IndexOf($cmdlet.BaseModule) -ge 0) {
 
-                        Write-Verbose "Opening documentation for $($cmdlet.ModuleName)"
-                        GenXdev.Webbrowser\Open-Webbrowser `
-                            -Url "https://github.com/genXdev/$($cmdlet.ModuleName)/blob/main/README.md#$($cmdlet.Name)" `
-                            -Monitor -1
+                        Microsoft.PowerShell.Utility\Write-Verbose "Opening documentation for $($cmdlet.ModuleName)"
+                        Microsoft.PowerShell.Management\Start-Process `
+                            "https://github.com/genXdev/$($cmdlet.ModuleName)/blob/main/README.md#$($cmdlet.Name)" `
 
                         return
                     }
@@ -150,8 +149,8 @@ function Show-GenXDevCmdlets {
                 if ($OnlyAliases) {
 
                     $cmdletData.Aliases = @($cmdletData.Aliases.Split(',') |
-                        ForEach-Object { if ($_.Trim() -notlike "*-*") { $_.Trim() } } |
-                        Select-Object -First 1) -join ', '
+                        Microsoft.PowerShell.Core\ForEach-Object { if ($_.Trim() -notlike "*-*") { $_.Trim() } } |
+                        Microsoft.PowerShell.Utility\Select-Object -First 1) -join ', '
 
                     if ([string]::IsNullOrWhiteSpace($cmdletData.Aliases)) {
 
@@ -165,13 +164,13 @@ function Show-GenXDevCmdlets {
             }
         }
         catch {
-            Write-Error "Error processing cmdlets: $_"
+            Microsoft.PowerShell.Utility\Write-Error "Error processing cmdlets: $_"
         }
     }
 
     end {
         if ($results.Count -eq 0) {
-            Write-Verbose "No results found matching criteria"
+            Microsoft.PowerShell.Utility\Write-Verbose "No results found matching criteria"
             return
         }
 
@@ -181,29 +180,29 @@ function Show-GenXDevCmdlets {
 
                 # display as table
                 $results |
-                Select-Object ModuleName, Aliases, Description |
-                Format-Table -AutoSize
+                Microsoft.PowerShell.Utility\Select-Object ModuleName, Aliases, Description |
+                Microsoft.PowerShell.Utility\Format-Table -AutoSize
             }
             else {
 
                 # display as table
                 $results |
-                Select-Object ModuleName, Name, Aliases, Description |
-                Format-Table -AutoSize
+                Microsoft.PowerShell.Utility\Select-Object ModuleName, Name, Aliases, Description |
+                Microsoft.PowerShell.Utility\Format-Table -AutoSize
             }
         }
         else {
             # group by module and display with formatting
-            $results | Group-Object ModuleName | ForEach-Object {
-                "`r`n$($_.Name):" | Write-Host -ForegroundColor Yellow
+            $results | Microsoft.PowerShell.Utility\Group-Object ModuleName | Microsoft.PowerShell.Core\ForEach-Object {
+                "`r`n$($_.Name):" | Microsoft.PowerShell.Utility\Write-Host -ForegroundColor Yellow
 
-                $all = @($_.Group | ForEach-Object {
+                $all = @($_.Group | Microsoft.PowerShell.Core\ForEach-Object {
 
                         if ($OnlyAliases) {
 
                             $_.Aliases.Split(",") |
-                            Select-Object -First 1 |
-                            ForEach-Object {
+                            Microsoft.PowerShell.Utility\Select-Object -First 1 |
+                            Microsoft.PowerShell.Core\ForEach-Object {
 
                                 if ($_.Trim() -notlike "*-*") {
 
@@ -221,7 +220,7 @@ function Show-GenXDevCmdlets {
                         }
                     })
 
-                [string]::Join(", ", $all) | Write-Host -ForegroundColor White
+                [string]::Join(", ", $all) | Microsoft.PowerShell.Utility\Write-Host -ForegroundColor White
             }
         }
     }

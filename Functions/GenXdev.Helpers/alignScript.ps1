@@ -19,7 +19,7 @@ function alignScript([string] $script, [int] $spaces = 0) {
 
     [int] $NrOfSpacesToTrim = [int]::MaxValue;
 
-    $lines | ForEach-Object -ErrorAction SilentlyContinue {
+    $lines | Microsoft.PowerShell.Core\ForEach-Object -ErrorAction SilentlyContinue {
 
         $c = 0;
         $s = $PSItem
@@ -44,7 +44,7 @@ function alignScript([string] $script, [int] $spaces = 0) {
         $NrOfSpacesToTrim = 0;
     }
 
-    @($lines | ForEach-Object -ErrorAction SilentlyContinue {
+    @($lines | Microsoft.PowerShell.Core\ForEach-Object -ErrorAction SilentlyContinue {
 
             [int] $c = $NrOfSpacesToTrim;
             $a = $PSItem

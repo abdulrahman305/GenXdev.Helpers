@@ -83,7 +83,7 @@ function Get-GenXDevCmdlets {
     begin {
 
         # log search criteria for diagnostics
-        Write-Verbose ("Searching for cmdlets matching '$CmdletName' in modules: " +
+        Microsoft.PowerShell.Utility\Write-Verbose ("Searching for cmdlets matching '$CmdletName' in modules: " +
             "$($BaseModuleName -join ',')")
 
         # resolve path to scripts directory
@@ -96,10 +96,10 @@ function Get-GenXDevCmdlets {
 
         if ($FromScripts) {
 
-            $CmdletName = @($CmdletName | ForEach-Object { "$([IO.Path]::GetDirectoryName($scriptFilePath))\$PSItem.ps1" } )
+            $CmdletName = @($CmdletName | Microsoft.PowerShell.Core\ForEach-Object { "$([IO.Path]::GetDirectoryName($scriptFilePath))\$PSItem.ps1" } )
 
             # process all ps1 files in scripts directory
-            Get-ChildItem $CmdletName -File -ErrorAction SilentlyContinue | ForEach-Object {
+            Microsoft.PowerShell.Management\Get-ChildItem $CmdletName -File -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
 
                 # skip test files to avoid processing test code
                 if ($_.Name -like "*.Tests.ps1") { return }
@@ -109,10 +109,10 @@ function Get-GenXDevCmdlets {
                 $functionContent = [IO.File]::ReadAllText($_.FullName)
 
                 # determine function definition start line
-                $lineNo = Get-FunctionStartLine -Content $functionContent
+                $lineNo = GenXdev.Helpers\Get-FunctionStartLine -Content $functionContent
 
                 # extract function aliases from content
-                $aliases = Get-FunctionAliases `
+                $aliases = GenXdev.Helpers\Get-FunctionAliases `
                     -FileName ($_.FullName) `
                     -FunctionContent $functionContent
 
@@ -128,14 +128,14 @@ function Get-GenXDevCmdlets {
                     ModuleName         = "GenXdev.Scripts"
                     BaseModule         = "GenXdev.Scripts"
                     LineNo             = $lineNo
-                    Description        = Get-FunctionDescription `
+                    Description        = GenXdev.Helpers\Get-FunctionDescription `
                         -FileName ($_.FullName) `
                         -FunctionContent $functionContent
                     Aliases            = $aliases -join ", "
                     ScriptFilePath     = $scriptFilePath
                     ScriptTestFilePath = $functionTestFilePath
                 }
-            } | Sort-Object { $_.BaseModule + "_" + $_.ModuleName + "_" + $_.Name }
+            } | Microsoft.PowerShell.Utility\Sort-Object { $_.BaseModule + "_" + $_.ModuleName + "_" + $_.Name }
 
             return
         }
@@ -143,7 +143,7 @@ function Get-GenXDevCmdlets {
         # handle single cmdlet test scenario
         if (-not ([string]::IsNullOrWhiteSpace($CmdletName) -or ($CmdletName -eq "*"))) {
 
-            Get-Command -Name $CmdletName -CommandType @("Cmdlet", "Function", "Alias") | ForEach-Object {
+            Microsoft.PowerShell.Core\Get-Command -Name $CmdletName -CommandType @("Cmdlet", "Function", "Alias") | Microsoft.PowerShell.Core\ForEach-Object {
 
                 $cmd = $_
 
@@ -154,16 +154,16 @@ function Get-GenXDevCmdlets {
 
                 [string] $BaseModule = $cmd.ModuleName
 
-                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.134.2025\Functions\$($cmd.Name).ps1"
+                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.136.2025\Functions\$($cmd.ModuleName)\$($cmd.Name).ps1"
 
-                Get-ChildItem ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | ForEach-Object {
+                Microsoft.PowerShell.Management\Get-ChildItem ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
 
                     if ($_.Name -like "_AssertGenXdevUnitTests.ps1") { return }
 
                     # prepare function details
                     $functionContent = [IO.File]::ReadAllText($_.FullName)
                     if ([string]::IsNullOrWhiteSpace($functionContent)) { return }
-                    $lineNo = Get-FunctionStartLine -Content $functionContent
+                    $lineNo = GenXdev.Helpers\Get-FunctionStartLine -Content $functionContent
                     $scriptFilePath = $_.FullName
                     $functionTestFilePath = GenXdev.FileSystem\Expand-Path `
                         -FilePath "$([IO.Path]::GetDirectoryName($ScriptFilePath))\..\..\Tests\$([IO.Path]::GetFileName([IO.Path]::GetDirectoryName($ScriptFilePath)))\$(
@@ -176,7 +176,7 @@ function Get-GenXDevCmdlets {
                         BaseModule         = $BaseModule
                         LineNo             = $lineNo
                         Description        = (
-                            Get-FunctionDescription `
+                            GenXdev.Helpers\Get-FunctionDescription `
                                 -FileName ($_.FullName) `
                                 -FunctionContent $functionContent
                         )
@@ -205,18 +205,18 @@ function Get-GenXDevCmdlets {
             [string] $BaseModule = $module.Name
 
             # process each function file in module
-            @(Get-ChildItem .\Functions\*.ps1 -File -Recurse `
-                    -ErrorAction SilentlyContinue) | ForEach-Object {
+            @(Microsoft.PowerShell.Management\Get-ChildItem .\Functions\*.ps1 -File -Recurse `
+                    -ErrorAction SilentlyContinue) | Microsoft.PowerShell.Core\ForEach-Object {
 
                 if ($_.Name -like "_AssertGenXdevUnitTests.ps1") { return }
                 $functionContent = [IO.File]::ReadAllText($_.FullName)
                 if ([string]::IsNullOrWhiteSpace($functionContent)) { return }
-                $aliases = @(Get-FunctionAliases `
+                $aliases = @(GenXdev.Helpers\Get-FunctionAliases `
                         -FileName ($_.FullName) `
                         -FunctionContent $functionContent)
 
                 # prepare function details
-                $lineNo = Get-FunctionStartLine -Content $functionContent
+                $lineNo = GenXdev.Helpers\Get-FunctionStartLine -Content $functionContent
                 $scriptFilePath = $_.FullName
                 $functionTestFilePath = GenXdev.FileSystem\Expand-Path `
                     -FilePath "$([IO.Path]::GetDirectoryName($ScriptFilePath))\..\..\Tests\$([IO.Path]::GetFileName([IO.Path]::GetDirectoryName($ScriptFilePath)))\$(
@@ -230,7 +230,7 @@ function Get-GenXDevCmdlets {
                             [IO.Path]::GetDirectoryName($_.FullName)))
                     BaseModule         = $BaseModule
                     LineNo             = $lineNo
-                    Description        = Get-FunctionDescription `
+                    Description        = GenXdev.Helpers\Get-FunctionDescription `
                         -FileName ($_.FullName) `
                         -FunctionContent $functionContent
                     Aliases            = $aliases -join ", "
@@ -238,7 +238,7 @@ function Get-GenXDevCmdlets {
                     ScriptTestFilePath = $functionTestFilePath
                 }
             }
-        }.GetNewClosure() | Sort-Object { $_.BaseModule + "_" + $_.ModuleName + "_" + $_.Name }
+        }.GetNewClosure() | Microsoft.PowerShell.Utility\Sort-Object { $_.BaseModule + "_" + $_.ModuleName + "_" + $_.Name }
     }
 
     end {
@@ -304,7 +304,7 @@ function Get-FunctionDescription {
         }
     }
     catch {
-        Write-Verbose "Failed to get description: $($_.Exception.Message)"
+        Microsoft.PowerShell.Utility\Write-Verbose "Failed to get description: $($_.Exception.Message)"
     }
 
     return ""
@@ -373,11 +373,11 @@ function Get-FunctionAliases {
             $aliases = $aliases.Substring(0, $aliases.IndexOf(")")).Replace(
                 "'", "`"")
             $aliases = $aliases -replace "[\)\[\]\`"]", ""
-            return (@($aliases -split ",") | ForEach-Object { $_.Trim() })
+            return (@($aliases -split ",") | Microsoft.PowerShell.Core\ForEach-Object { $_.Trim() })
         }
     }
     catch {
-        Write-Verbose "Failed to get aliases: $($_.Exception.Message)"
+        Microsoft.PowerShell.Utility\Write-Verbose "Failed to get aliases: $($_.Exception.Message)"
     }
 
     return [string]::Empty

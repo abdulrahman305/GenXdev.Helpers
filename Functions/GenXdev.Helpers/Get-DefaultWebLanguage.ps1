@@ -20,12 +20,12 @@ function Get-DefaultWebLanguage {
     begin {
         # get the current system culture info
         $systemCulture = [System.Globalization.CultureInfo]::CurrentUICulture
-        Write-Verbose "System culture: $($systemCulture.Name)"
+        Microsoft.PowerShell.Utility\Write-Verbose "System culture: $($systemCulture.Name)"
     }
 
     process {
         # get the dictionary of supported languages
-        $webLanguages = Get-WebLanguageDictionary
+        $webLanguages = GenXdev.Helpers\Get-WebLanguageDictionary
 
         # get the reversed dictionary (language codes to names)
         $reversedDict = @{}
@@ -47,7 +47,7 @@ function Get-DefaultWebLanguage {
         }
 
         # default to English if no match found
-        Write-Verbose "No matching language found, defaulting to English"
+        Microsoft.PowerShell.Utility\Write-Verbose "No matching language found, defaulting to English"
         return "English"
     }
 }

@@ -1,7 +1,7 @@
 ################################################################################
-Describe "alignScript.Tests" {
+Pester\Describe "alignScript.Tests" {
 
-    It "Should pass PSScriptAnalyzer rules" {
+    Pester\It "Should pass PSScriptAnalyzer rules" {
         # Define the full module name variable
         $FullModuleName = "GenXdev.Helpers"
 
@@ -13,7 +13,7 @@ Describe "alignScript.Tests" {
             -Path $scriptPath
 
         [string] $message = ""
-        $analyzerResults | ForEach-Object {
+        $analyzerResults | Microsoft.PowerShell.Core\ForEach-Object {
 
             $message = $message + @"
 --------------------------------------------------
@@ -24,7 +24,7 @@ Message: $($_.Message)
 "@
         }
 
-        $analyzerResults.Count | Should -Be 0 -Because @"
+        $analyzerResults.Count | Pester\Should -Be 0 -Because @"
 The following PSScriptAnalyzer rules are being violated:
 $message
 "@;

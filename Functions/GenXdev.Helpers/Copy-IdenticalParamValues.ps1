@@ -100,8 +100,8 @@ function Copy-IdenticalParamValues {
                 $defaultsHash = @{}
 
                 $DefaultValues |
-                Where-Object -Property Options -EQ "None" |
-                ForEach-Object {
+                Microsoft.PowerShell.Core\Where-Object -Property Options -EQ "None" |
+                Microsoft.PowerShell.Core\ForEach-Object {
                     if ($filter.IndexOf($_.Name) -lt 0) {
 
                         if (-not ($_.Value -is [string] -and
@@ -119,23 +119,23 @@ function Copy-IdenticalParamValues {
             })
 
         # get function info for parameter validation
-        Write-Verbose "Getting command info for function '$FunctionName'"
-        $functionInfo = Get-Command -Name $FunctionName -ErrorAction SilentlyContinue
+        Microsoft.PowerShell.Utility\Write-Verbose "Getting command info for function '$FunctionName'"
+        $functionInfo = Microsoft.PowerShell.Core\Get-Command -Name $FunctionName -ErrorAction SilentlyContinue
 
         # validate function exists
         if ($null -eq $functionInfo) {
 
-            Write-Error "Function '$FunctionName' not found"
+            Microsoft.PowerShell.Utility\Write-Error "Function '$FunctionName' not found"
             return
         }
 
-        Write-Verbose "Found function with $($functionInfo.Parameters.Count) parameters"
+        Microsoft.PowerShell.Utility\Write-Verbose "Found function with $($functionInfo.Parameters.Count) parameters"
     }
 
     process {
 
         # iterate through all parameters of the target function
-        $functionInfo.Parameters.Keys | ForEach-Object {
+        $functionInfo.Parameters.Keys | Microsoft.PowerShell.Core\ForEach-Object {
 
             # get parameter name
             $paramName = $_
@@ -143,10 +143,10 @@ function Copy-IdenticalParamValues {
             # check if parameter exists in bound parameters
             if ($BoundParameters.ContainsKey($paramName)) {
 
-                Write-Verbose "Copying value for parameter '$paramName'"
+                Microsoft.PowerShell.Utility\Write-Verbose "Copying value for parameter '$paramName'"
                 $value = $BoundParameters[0].GetEnumerator() |
-                Where-Object -Property Key -EQ $paramName |
-                Select-Object -Property "Value"
+                Microsoft.PowerShell.Core\Where-Object -Property Key -EQ $paramName |
+                Microsoft.PowerShell.Utility\Select-Object -Property "Value"
 
                 $results."$paramName" = $value.Value
             }
@@ -158,8 +158,8 @@ function Copy-IdenticalParamValues {
 
                     $results."$paramName" = $defaultValue
 
-                    Write-Verbose ("Using default value " +
-                        ($defaultValue | ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))
+                    Microsoft.PowerShell.Utility\Write-Verbose ("Using default value " +
+                        ($defaultValue | Microsoft.PowerShell.Utility\ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))
                 }
             }
         }
@@ -167,7 +167,7 @@ function Copy-IdenticalParamValues {
 
     end {
 
-        Write-Verbose "Returning hashtable with $($results.Count) parameters"
+        Microsoft.PowerShell.Utility\Write-Verbose "Returning hashtable with $($results.Count) parameters"
         $results
     }
 }

@@ -82,7 +82,7 @@ function Out-Serial {
         [switch]$AddCRLinefeeds = $false
     )
     begin {
-        $serialPort = New-Object System.IO.Ports.SerialPort -ArgumentList $Portname, $BaudRate, $Parity, $DataBits, $StopBits
+        $serialPort = Microsoft.PowerShell.Utility\New-Object System.IO.Ports.SerialPort -ArgumentList $Portname, $BaudRate, $Parity, $DataBits, $StopBits
         $serialPort.ReadTimeout = if ($ReadTimeout) { $ReadTimeout } else { 100 }
         $serialPort.WriteTimeout = if ($WriteTimeout) { $WriteTimeout } else { 100 }
         $serialPort.Open()
@@ -99,8 +99,8 @@ function Out-Serial {
             }
             if ($ReadTimeout -or $MaxBytesToRead -gt 0) {
                 $serialPort.ReadTimeout = $ReadTimeout
-                Start-Sleep -Milliseconds $serialPort.ReadTimeout
-                $bytes = New-Object byte[] ($MaxBytesToRead -gt 0 ? $MaxBytesToRead : 1024)
+                Microsoft.PowerShell.Utility\Start-Sleep -Milliseconds $serialPort.ReadTimeout
+                $bytes = Microsoft.PowerShell.Utility\New-Object byte[] ($MaxBytesToRead -gt 0 ? $MaxBytesToRead : 1024)
                 $readTotal = 0
                 while ($readTotal -lt $bytes.Length) {
                     try {
@@ -109,15 +109,15 @@ function Out-Serial {
                         $readTotal += $read
                     }
                     catch {
-                        if ($readTotal -gt 0) { Write-Output ([System.Text.Encoding]::ASCII.GetString($bytes, 0, $readTotal)) }
+                        if ($readTotal -gt 0) { Microsoft.PowerShell.Utility\Write-Output ([System.Text.Encoding]::ASCII.GetString($bytes, 0, $readTotal)) }
                         break
                     }
                 }
-                if ($readTotal -gt 0) { Write-Output ([System.Text.Encoding]::ASCII.GetString($bytes, 0, $readTotal)) }
+                if ($readTotal -gt 0) { Microsoft.PowerShell.Utility\Write-Output ([System.Text.Encoding]::ASCII.GetString($bytes, 0, $readTotal)) }
             }
         }
         catch {
-            Write-Verbose "Error occured: $PSItem"
+            Microsoft.PowerShell.Utility\Write-Verbose "Error occured: $PSItem"
         }
     }
     end {

@@ -9,7 +9,7 @@ Returns a reversed dictionary for all languages supported by Google Search
 #>
 function Get-WebLanguageDictionary {
 
-    $result = New-Object System.Collections.Generic.Dictionary"[String, string]"
+    $result = Microsoft.PowerShell.Utility\New-Object System.Collections.Generic.Dictionary"[String, string]"
     $result["Afrikaans"] = "af";
     $result["Akan"] = "ak";
     $result["Albanian"] = "sq";

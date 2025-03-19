@@ -50,8 +50,8 @@ function Invoke-OnEachGenXdevModule {
             function go {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.134.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.134.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.136.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.136.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 
@@ -68,20 +68,20 @@ function Invoke-OnEachGenXdevModule {
                         [IO.File]::Exists($licenseFilePath) -and
                         [IO.File]::Exists($readmeFilePath)
                     ))) {
-                    $location = (Get-Location).Path
+                    $location = (Microsoft.PowerShell.Management\Get-Location).Path
                     try {
                         if ($module.Name -like "GenXdev.Scripts") {
 
-                            Set-Location $ScriptsPath
+                            Microsoft.PowerShell.Management\Set-Location $ScriptsPath
                         }
                         else {
 
-                            Set-Location "$($module.FullName)"
+                            Microsoft.PowerShell.Management\Set-Location "$($module.FullName)"
 
-                            $newLocation = Get-ChildItem ".\*.*.*" -dir -ErrorAction SilentlyContinue |
-                            Sort-Object -Property Name -Descending |
-                            Select-Object -First 1 |
-                            ForEach-Object {
+                            $newLocation = Microsoft.PowerShell.Management\Get-ChildItem ".\*.*.*" -dir -ErrorAction SilentlyContinue |
+                            Microsoft.PowerShell.Utility\Sort-Object -Property Name -Descending |
+                            Microsoft.PowerShell.Utility\Select-Object -First 1 |
+                            Microsoft.PowerShell.Core\ForEach-Object {
 
                                 $_.FullName
                             }
@@ -91,14 +91,14 @@ function Invoke-OnEachGenXdevModule {
                                 return;
                             }
 
-                            Set-Location $newLocation
+                            Microsoft.PowerShell.Management\Set-Location $newLocation
                         }
 
-                        . Invoke-Command -ScriptBlock $Script -ArgumentList $module -NoNewScope
+                        . Microsoft.PowerShell.Core\Invoke-Command -ScriptBlock $Script -ArgumentList $module -NoNewScope
                     }
                     finally {
 
-                        Set-Location $location
+                        Microsoft.PowerShell.Management\Set-Location $location
                     }
                 }
             }
@@ -113,8 +113,8 @@ function Invoke-OnEachGenXdevModule {
                 continue;
             }
 
-            @(Get-ChildItem "$modulesPath\GenXdev*" -dir -Force -ErrorAction SilentlyContinue) |
-            ForEach-Object {
+            @(Microsoft.PowerShell.Management\Get-ChildItem "$modulesPath\GenXdev*" -dir -Force -ErrorAction SilentlyContinue) |
+            Microsoft.PowerShell.Core\ForEach-Object {
 
                 if ($_.Name -like $ModuleName) {
 
@@ -123,7 +123,7 @@ function Invoke-OnEachGenXdevModule {
                     }
                     catch {
 
-                        Write-Error $_.Exception.Message
+                        Microsoft.PowerShell.Utility\Write-Error $_.Exception.Message
                     }
                 }
             }

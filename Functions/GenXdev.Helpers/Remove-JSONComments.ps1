@@ -48,7 +48,7 @@ function Remove-JSONComments {
     begin {
 
         # inform user that processing is starting
-        Write-Verbose "Starting JSON comment removal process"
+        Microsoft.PowerShell.Utility\Write-Verbose "Starting JSON comment removal process"
     }
 
     process {
@@ -60,7 +60,7 @@ function Remove-JSONComments {
     end {
 
         # inform user that processing is complete
-        Write-Verbose "Completed JSON comment removal process"
+        Microsoft.PowerShell.Utility\Write-Verbose "Completed JSON comment removal process"
     }
 }
 ################################################################################

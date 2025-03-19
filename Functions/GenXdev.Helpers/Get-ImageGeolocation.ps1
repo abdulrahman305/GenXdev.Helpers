@@ -42,33 +42,33 @@ function Get-ImageGeolocation {
 
     begin {
         # check if image path exists
-        if (-not (Test-Path $ImagePath)) {
-            Write-Error "The specified image path '$ImagePath' does not exist."
+        if (-not (Microsoft.PowerShell.Management\Test-Path $ImagePath)) {
+            Microsoft.PowerShell.Utility\Write-Error "The specified image path '$ImagePath' does not exist."
             return
         }
 
-        Write-Verbose "Processing image: $ImagePath"
+        Microsoft.PowerShell.Utility\Write-Verbose "Processing image: $ImagePath"
     }
 
     process {
         try {
             # load the image file
-            Write-Verbose "Loading image file"
+            Microsoft.PowerShell.Utility\Write-Verbose "Loading image file"
             $image = [System.Drawing.Image]::FromFile($ImagePath)
 
             # get all property items
             $propertyItems = $image.PropertyItems
 
             # extract gps metadata properties
-            Write-Verbose "Extracting GPS metadata"
+            Microsoft.PowerShell.Utility\Write-Verbose "Extracting GPS metadata"
             $latitudeRef = $propertyItems |
-            Where-Object { $PSItem.Id -eq 0x0001 }
+            Microsoft.PowerShell.Core\Where-Object { $PSItem.Id -eq 0x0001 }
             $latitude = $propertyItems |
-            Where-Object { $PSItem.Id -eq 0x0002 }
+            Microsoft.PowerShell.Core\Where-Object { $PSItem.Id -eq 0x0002 }
             $longitudeRef = $propertyItems |
-            Where-Object { $PSItem.Id -eq 0x0003 }
+            Microsoft.PowerShell.Core\Where-Object { $PSItem.Id -eq 0x0003 }
             $longitude = $propertyItems |
-            Where-Object { $PSItem.Id -eq 0x0004 }
+            Microsoft.PowerShell.Core\Where-Object { $PSItem.Id -eq 0x0004 }
 
             # check if gps data exists
             if ($latitude -and $longitude -and $latitudeRef -and $longitudeRef) {
@@ -87,19 +87,19 @@ function Get-ImageGeolocation {
                     $lon = - $lon
                 }
 
-                Write-Verbose "GPS coordinates found: $lat, $lon"
+                Microsoft.PowerShell.Utility\Write-Verbose "GPS coordinates found: $lat, $lon"
                 return @{
                     Latitude  = $lat
                     Longitude = $lon
                 }
             }
             else {
-                Write-Verbose "No GPS metadata found in image"
+                Microsoft.PowerShell.Utility\Write-Verbose "No GPS metadata found in image"
                 return $null
             }
         }
         catch {
-            Write-Error "Failed to process image: $_"
+            Microsoft.PowerShell.Utility\Write-Error "Failed to process image: $_"
         }
         finally {
             if ($image) {

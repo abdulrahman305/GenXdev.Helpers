@@ -1,9 +1,9 @@
 ################################################################################
 # Define the full module name for use in paths
 
-Describe "Get-GenXDevCmdlets.Tests" {
+Pester\Describe "Get-GenXDevCmdlets.Tests" {
 
-    It "Should pass PSScriptAnalyzer rules" {
+    Pester\It "Should pass PSScriptAnalyzer rules" {
         $FullModuleName = "GenXdev.Helpers"
 
         # get the script path for analysis
@@ -14,7 +14,7 @@ Describe "Get-GenXDevCmdlets.Tests" {
             -Path $scriptPath
 
         [string] $message = ""
-        $analyzerResults | ForEach-Object {
+        $analyzerResults | Microsoft.PowerShell.Core\ForEach-Object {
 
             $message = $message + @"
 --------------------------------------------------
@@ -25,7 +25,7 @@ Message: $($_.Message)
 "@
         }
 
-        $analyzerResults.Count | Should -Be 0 -Because @"
+        $analyzerResults.Count | Pester\Should -Be 0 -Because @"
 The following PSScriptAnalyzer rules are being violated:
 $message
 "@;

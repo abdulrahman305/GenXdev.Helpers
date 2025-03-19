@@ -42,7 +42,7 @@ function Show-Verb {
     )
 
     begin {
-        Write-Verbose "Starting Show-Verb with filter patterns: $($Verb -join ', ')"
+        Microsoft.PowerShell.Utility\Write-Verbose "Starting Show-Verb with filter patterns: $($Verb -join ', ')"
     }
 
     process {
@@ -50,12 +50,12 @@ function Show-Verb {
         # if no specific verbs requested, get all approved verbs
         if ($Verb.Length -eq 0) {
 
-            $verbs = Get-Verb
+            $verbs = Microsoft.PowerShell.Utility\Get-Verb
         }
         else {
             # filter verbs based on provided patterns
-            $verbs = Get-Verb |
-            ForEach-Object -ErrorAction SilentlyContinue {
+            $verbs = Microsoft.PowerShell.Utility\Get-Verb |
+            Microsoft.PowerShell.Core\ForEach-Object -ErrorAction SilentlyContinue {
 
                 $existingVerb = $PSItem
 
@@ -71,8 +71,8 @@ function Show-Verb {
 
         # sort verbs alphabetically and return as comma-separated string
         ($verbs |
-        Sort-Object { $PSItem.Verb } |
-        ForEach-Object Verb -ErrorAction SilentlyContinue) -Join ", "
+        Microsoft.PowerShell.Utility\Sort-Object { $PSItem.Verb } |
+        Microsoft.PowerShell.Core\ForEach-Object Verb -ErrorAction SilentlyContinue) -Join ", "
     }
 
     end {

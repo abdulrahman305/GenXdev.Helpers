@@ -26,7 +26,7 @@ function Initialize-SearchPaths {
 
     begin {
 
-        Write-Verbose "Initializing search paths collection"
+        Microsoft.PowerShell.Utility\Write-Verbose "Initializing search paths collection"
     }
 
     process {
@@ -45,14 +45,14 @@ function Initialize-SearchPaths {
             ) + @(
                 # add paths from GenXdev packages
                 $GenXdevPackages |
-                ForEach-Object {
+                Microsoft.PowerShell.Core\ForEach-Object {
                     if (-not [string]::IsNullOrWhiteSpace($PSItem.searchpath)) {
                         # escape special characters in path
                         $path = $PSItem.searchpath.replace('`', '``').replace(
                             '"', '`"')
 
                         # evaluate any variables in the path
-                        $path = Invoke-Expression "`"$path`""
+                        $path = Microsoft.PowerShell.Utility\Invoke-Expression "`"$path`""
 
                         # convert to full path
                         GenXdev.FileSystem\Expand-Path $path
@@ -61,9 +61,9 @@ function Initialize-SearchPaths {
             ))
 
         # process existing PATH entries
-        Write-Verbose "Processing existing PATH environment entries"
+        Microsoft.PowerShell.Utility\Write-Verbose "Processing existing PATH environment entries"
         @($env:Path.Split(';')) |
-        ForEach-Object -Process {
+        Microsoft.PowerShell.Core\ForEach-Object -Process {
             $path = $PSItem
 
             if ([String]::IsNullOrWhiteSpace($path) -eq $false) {
@@ -77,13 +77,13 @@ function Initialize-SearchPaths {
                     }
                 }
                 catch {
-                    Write-Host "Could not parse path: $PSItem"
+                    Microsoft.PowerShell.Utility\Write-Host "Could not parse path: $PSItem"
                 }
             }
         }
 
         # update system PATH with consolidated search paths
-        Write-Verbose "Updating system PATH environment variable"
+        Microsoft.PowerShell.Utility\Write-Verbose "Updating system PATH environment variable"
         $env:Path = [string]::Join(";", $searchPaths)
     }
 

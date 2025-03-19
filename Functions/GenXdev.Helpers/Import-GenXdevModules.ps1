@@ -40,49 +40,49 @@ function Import-GenXdevModules {
     begin {
 
         # store current location for later restoration
-        Write-Verbose "Saving current location to location stack"
-        Push-Location
+        Microsoft.PowerShell.Utility\Write-Verbose "Saving current location to location stack"
+        Microsoft.PowerShell.Management\Push-Location
 
         # prepare console output variables
         $esc = [char]0x1b
-        Write-Output (
+        Microsoft.PowerShell.Utility\Write-Output (
             "$esc[36m$("## Reloading genXdev..".PadRight([Console]::WindowWidth - 1, " "))" +
             "$esc[0m"
         )
 
         # capture initial function count
-        [int] $functionCountBefore = @(Get-GenXDevCmdlets).Length
+        [int] $functionCountBefore = @(GenXdev.Helpers\Get-GenXDevCmdlets).Length
     }
 
     process {
 
         try {
             # navigate to modules parent directory
-            Write-Verbose "Changing to parent module directory"
-            Set-Location "$PSScriptRoot\..\..\..\.."
+            Microsoft.PowerShell.Utility\Write-Verbose "Changing to parent module directory"
+            Microsoft.PowerShell.Management\Set-Location "$PSScriptRoot\..\..\..\.."
 
             # find and process each genxdev module
-            Write-Verbose "Scanning for GenXdev modules"
-            Get-ChildItem ".\GenXdev*" -dir |
-            ForEach-Object {
+            Microsoft.PowerShell.Utility\Write-Verbose "Scanning for GenXdev modules"
+            Microsoft.PowerShell.Management\Get-ChildItem ".\GenXdev*" -dir |
+            Microsoft.PowerShell.Core\ForEach-Object {
 
                 $name = $PSItem.Name
                 try {
                     # attempt module import
-                    Write-Verbose "Importing module: $name"
+                    Microsoft.PowerShell.Utility\Write-Verbose "Importing module: $name"
                     $importError = $null
 
-                    $null = Import-Module $name `
+                    $null = Microsoft.PowerShell.Core\Import-Module $name `
                         -Scope Global `
                         -ErrorVariable ImportError `
                         -Force
 
                     if (($null -ne $importError) -and ($importError.Length -gt 0)) {
-                        throw ($ImportError | ConvertTo-Json -Depth 4 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
+                        throw ($ImportError | Microsoft.PowerShell.Utility\ConvertTo-Json -Depth 4 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
                     }
 
                     # show success message
-                    Write-Output (
+                    Microsoft.PowerShell.Utility\Write-Output (
                         "$esc[32m$("- [✅] $name".PadRight([Console]::WindowWidth - 1, " "))" +
                         "$esc[0m"
                     )
@@ -90,16 +90,16 @@ function Import-GenXdevModules {
                 catch {
                     if ($DebugFailedModuleDefinitions) {
                         # debug mode: validate and retry import
-                        Assert-ModuleDefinition -ModuleName $name
+                        GenXdev.Coding\Assert-ModuleDefinition -ModuleName $name
                         $importError = $null
 
-                        $null = Import-Module $name `
+                        $null = Microsoft.PowerShell.Core\Import-Module $name `
                             -Scope Global `
                             -ErrorVariable ImportError `
                             -Force
 
                         if (($null -ne $importError) -and ($importError.Length -gt 0)) {
-                            Write-Output (
+                            Microsoft.PowerShell.Utility\Write-Output (
                                 "$esc[91m$("- [❌] $importError".PadRight(
                                     [Console]::WindowWidth - 1, " "
                                 ))$esc[0m"
@@ -108,8 +108,8 @@ function Import-GenXdevModules {
                     }
                     else {
                         # show failure message
-                        Write-Verbose "Failed to import module: $name"
-                        Write-Output (
+                        Microsoft.PowerShell.Utility\Write-Verbose "Failed to import module: $name"
+                        Microsoft.PowerShell.Utility\Write-Output (
                             "$esc[91m$("- [❌] $name".PadRight(
                                 [Console]::WindowWidth - 1, " "
                             ))$esc[0m"
@@ -120,15 +120,15 @@ function Import-GenXdevModules {
         }
         finally {
             # restore original location
-            Write-Verbose "Restoring original location"
-            Pop-Location
+            Microsoft.PowerShell.Utility\Write-Verbose "Restoring original location"
+            Microsoft.PowerShell.Management\Pop-Location
         }
     }
 
     end {
 
         # calculate and display function count changes
-        [int] $functionCountAfter = @(Get-GenXDevCmdlets).Length
+        [int] $functionCountAfter = @(GenXdev.Helpers\Get-GenXDevCmdlets).Length
         $functionsAdded = $functionCountAfter - $functionCountBefore
 
         $text = $functionsAdded -lt 0 ? (
@@ -137,7 +137,7 @@ function Import-GenXdevModules {
             $functionsAdded -eq 0 ? "" : ", added $functionsAdded functions"
         )
 
-        Write-Output (
+        Microsoft.PowerShell.Utility\Write-Output (
             "$esc[36m$("## Reloaded genXdev$text".PadRight(
                 [Console]::WindowWidth - 1, " "
             ))$esc[0m"

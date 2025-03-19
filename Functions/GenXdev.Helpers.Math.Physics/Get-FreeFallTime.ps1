@@ -27,7 +27,7 @@ Function Get-FreeFallTime {
 
         # Add safety check
         if ($time -gt 1000) {
-            Write-Error "Calculation timeout"
+            Microsoft.PowerShell.Utility\Write-Error "Calculation timeout"
             return 0
         }
     }

@@ -41,7 +41,7 @@ function ConvertTo-HashTable {
 
     begin {
 
-        Write-Verbose "Starting PSCustomObject to HashTable conversion"
+        Microsoft.PowerShell.Utility\Write-Verbose "Starting PSCustomObject to HashTable conversion"
     }
 
     process {
@@ -49,11 +49,11 @@ function ConvertTo-HashTable {
         # return empty hashtable if input is null
         if ($null -eq $InputObject) {
 
-            Write-Verbose "Input object is null, returning empty hashtable"
+            Microsoft.PowerShell.Utility\Write-Verbose "Input object is null, returning empty hashtable"
             return @{}
         }
 
-        $InputObject | ForEach-Object {
+        $InputObject | Microsoft.PowerShell.Core\ForEach-Object {
 
             $currentObject = $_
 
@@ -61,8 +61,8 @@ function ConvertTo-HashTable {
             if ($currentObject -is [System.ValueType] -or
                 $currentObject -is [string]) {
 
-                Write-Verbose "Processing simple value: $currentObject"
-                Write-Output $currentObject
+                Microsoft.PowerShell.Utility\Write-Verbose "Processing simple value: $currentObject"
+                Microsoft.PowerShell.Utility\Write-Output $currentObject
                 return
             }
 
@@ -72,12 +72,12 @@ function ConvertTo-HashTable {
             # process each property of the current object
             foreach ($property in $currentObject.PSObject.Properties) {
 
-                Write-Verbose "Processing property: $($property.Name)"
+                Microsoft.PowerShell.Utility\Write-Verbose "Processing property: $($property.Name)"
 
                 # handle nested PSCustomObject properties
                 if ($property.Value -is [System.Management.Automation.PSCustomObject]) {
 
-                    $resultTable[$property.Name] = ConvertTo-HashTable `
+                    $resultTable[$property.Name] = GenXdev.Helpers\ConvertTo-HashTable `
                         -InputObject $property.Value
                 }
                 # handle collection properties
@@ -85,10 +85,10 @@ function ConvertTo-HashTable {
                     $property.Value -isnot [string]) {
 
                     $resultTable[$property.Name] = @(
-                        $property.Value | ForEach-Object {
+                        $property.Value | Microsoft.PowerShell.Core\ForEach-Object {
 
                             if ($_ -is [System.Management.Automation.PSCustomObject]) {
-                                ConvertTo-HashTable -InputObject $_
+                                GenXdev.Helpers\ConvertTo-HashTable -InputObject $_
                             }
                             else {
                                 $_
@@ -103,13 +103,13 @@ function ConvertTo-HashTable {
                 }
             }
 
-            Write-Output $resultTable
+            Microsoft.PowerShell.Utility\Write-Output $resultTable
         }
     }
 
     end {
 
-        Write-Verbose "Completed HashTable conversion"
+        Microsoft.PowerShell.Utility\Write-Verbose "Completed HashTable conversion"
     }
 }
 ################################################################################
