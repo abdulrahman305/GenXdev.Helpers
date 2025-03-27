@@ -20,7 +20,7 @@ function Invoke-OnEachGenXdevModule {
         )]
         [ValidateNotNullOrEmpty()]
         [Alias("Module", "ModuleName")]
-        [SupportsWildcards()]
+        [ValidatePattern("^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$")]
         [string[]] $BaseModuleName = @("GenXdev*"),
 
         [Parameter(Mandatory = $false)]
@@ -43,15 +43,16 @@ function Invoke-OnEachGenXdevModule {
         }
     }
 
-    process {
+
+process {
 
         foreach ($ModuleName in $BaseModuleName) {
 
             function go {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.136.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.136.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.156.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.156.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 

@@ -308,7 +308,7 @@ Update-Module
         Default value                @("GenXdev*")  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
         Aliases                        
-        Accept wildcard characters?  true  
+        Accept wildcard characters?  false  
     -NoLocal [<SwitchParameter>]  
         Skip searching in local module paths.  
         Required?                    false  
@@ -507,7 +507,7 @@ Update-Module
         Parameter set name           (All)  
         Aliases                      Module, ModuleName  
         Dynamic?                     false  
-        Accept wildcard characters?  true  
+        Accept wildcard characters?  false  
     -FromScripts  
         Required?                    false  
         Position?                    Named  
@@ -562,8 +562,7 @@ Update-Module
 ### SYNTAX 
 ````PowerShell 
 
-   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object>   
-   [-AddCRLinefeeds] [<CommonParameters>]  
+   Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>]  
 ```` 
 
 ### DESCRIPTION 
@@ -732,7 +731,7 @@ Update-Module
         Default value                @("GenXdev*")  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
         Aliases                        
-        Accept wildcard characters?  true  
+        Accept wildcard characters?  false  
     -NoLocal [<SwitchParameter>]  
         Required?                    false  
         Position?                    named  

@@ -44,7 +44,8 @@ function ConvertTo-HashTable {
         Microsoft.PowerShell.Utility\Write-Verbose "Starting PSCustomObject to HashTable conversion"
     }
 
-    process {
+
+process {
 
         # return empty hashtable if input is null
         if ($null -eq $InputObject) {

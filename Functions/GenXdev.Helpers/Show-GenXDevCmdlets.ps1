@@ -58,8 +58,9 @@ function Show-GenXDevCmdlets {
             Position = 1,
             HelpMessage = "GenXdev module names to search"
         )]
+        [ValidateNotNullOrEmpty()]
         [Alias("Module", "ModuleName")]
-        [SupportsWildcards()]
+        [ValidatePattern("^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$")]
         [string[]] $BaseModuleName = @("GenXdev*"),
         ########################################################################
         [Parameter(Mandatory = $false)]
@@ -107,7 +108,8 @@ function Show-GenXDevCmdlets {
         }
     }
 
-    process {
+
+process {
         try {
             $invocationParams = GenXdev.Helpers\Copy-IdenticalParamValues `
                 -FunctionName "GenXdev.Helpers\Get-GenXDevCmdlets" `

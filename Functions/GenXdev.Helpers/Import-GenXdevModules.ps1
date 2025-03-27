@@ -54,7 +54,8 @@ function Import-GenXdevModules {
         [int] $functionCountBefore = @(GenXdev.Helpers\Get-GenXDevCmdlets).Length
     }
 
-    process {
+
+process {
 
         try {
             # navigate to modules parent directory
@@ -72,7 +73,7 @@ function Import-GenXdevModules {
                     Microsoft.PowerShell.Utility\Write-Verbose "Importing module: $name"
                     $importError = $null
 
-                    $null = Microsoft.PowerShell.Core\Import-Module $name `
+                    $null = Microsoft.PowerShell.Core\Import-Module -Name $name `
                         -Scope Global `
                         -ErrorVariable ImportError `
                         -Force

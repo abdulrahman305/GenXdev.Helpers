@@ -50,7 +50,8 @@ function Get-ImageGeolocation {
         Microsoft.PowerShell.Utility\Write-Verbose "Processing image: $ImagePath"
     }
 
-    process {
+
+process {
         try {
             # load the image file
             Microsoft.PowerShell.Utility\Write-Verbose "Loading image file"

@@ -51,7 +51,8 @@ function Remove-JSONComments {
         Microsoft.PowerShell.Utility\Write-Verbose "Starting JSON comment removal process"
     }
 
-    process {
+
+process {
 
         # remove comments from json using the helper class
         [GenXdev.Helpers.Serialization]::RemoveJSONComments($Json)

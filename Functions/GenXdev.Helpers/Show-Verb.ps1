@@ -45,7 +45,8 @@ function Show-Verb {
         Microsoft.PowerShell.Utility\Write-Verbose "Starting Show-Verb with filter patterns: $($Verb -join ', ')"
     }
 
-    process {
+
+process {
 
         # if no specific verbs requested, get all approved verbs
         if ($Verb.Length -eq 0) {

@@ -48,7 +48,8 @@ function ConvertTo-JsonEx {
         Microsoft.PowerShell.Utility\Write-Verbose "Starting JSON conversion process"
     }
 
-    process {
+
+process {
         # convert the object to json using the custom serializer
         Microsoft.PowerShell.Utility\Write-Verbose "Converting object to JSON with compression: $Compress"
         [GenXdev.Helpers.Serialization]::ToJson($Object, ($Compress -eq $true))

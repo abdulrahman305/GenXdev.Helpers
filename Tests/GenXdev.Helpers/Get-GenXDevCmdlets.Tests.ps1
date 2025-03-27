@@ -3,6 +3,14 @@
 
 Pester\Describe "Get-GenXDevCmdlets.Tests" {
 
+    Pester\It "Should find certain cmdlets" {
+
+        # run the script to get the cmdlets
+
+        GenXdev.Helpers\Get-GenXDevCmdlets gcmds | Microsoft.PowerShell.Core\ForEach-Object Name | Pester\Should -Contain "Get-GenXDevCmdlets"
+        GenXdev.Helpers\Get-GenXDevCmdlets refactors | Microsoft.PowerShell.Core\ForEach-Object Name | Pester\Should -Contain "Show-RefactorReport"
+    }
+
     Pester\It "Should pass PSScriptAnalyzer rules" {
         $FullModuleName = "GenXdev.Helpers"
 

@@ -132,7 +132,8 @@ function Copy-IdenticalParamValues {
         Microsoft.PowerShell.Utility\Write-Verbose "Found function with $($functionInfo.Parameters.Count) parameters"
     }
 
-    process {
+
+process {
 
         # iterate through all parameters of the target function
         $functionInfo.Parameters.Keys | Microsoft.PowerShell.Core\ForEach-Object {

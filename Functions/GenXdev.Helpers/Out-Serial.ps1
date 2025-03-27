@@ -87,7 +87,8 @@ function Out-Serial {
         $serialPort.WriteTimeout = if ($WriteTimeout) { $WriteTimeout } else { 100 }
         $serialPort.Open()
     }
-    process {
+
+process {
         try {
             if ($Text -is [string]) {
                 if ($AddCRLinefeeds) {

@@ -55,9 +55,9 @@ function Get-GenXDevCmdlets {
             ValueFromPipelineByPropertyName = $true,
             HelpMessage = "GenXdev module names to search"
         )]
-        [ValidateNotNull()]
-        [Alias("Module", "ModuleName", "BaseModule")]
-        [SupportsWildcards()]
+        [ValidateNotNullOrEmpty()]
+        [Alias("Module", "ModuleName")]
+        [ValidatePattern("^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$")]
         [string[]] $BaseModuleName = @("GenXdev*"),
         ########################################################################
         [Parameter(
@@ -92,11 +92,12 @@ function Get-GenXDevCmdlets {
             -CreateDirectory
     }
 
-    process {
+
+process {
 
         if ($FromScripts) {
 
-            $CmdletName = @($CmdletName | Microsoft.PowerShell.Core\ForEach-Object { "$([IO.Path]::GetDirectoryName($scriptFilePath))\$PSItem.ps1" } )
+            $CmdletName = GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($ScriptFilePath))\$CmdletName.ps1"
 
             # process all ps1 files in scripts directory
             Microsoft.PowerShell.Management\Get-ChildItem $CmdletName -File -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
@@ -147,14 +148,20 @@ function Get-GenXDevCmdlets {
 
                 $cmd = $_
 
+                [string] $BaseModule = $cmd.ModuleName
+
+                if ($BaseModule -notlike "GenXdev*") { return }
+                if ($BaseModule -notlike $BaseModuleName) { return }
+
+
                 if ($cmd -is [System.Management.Automation.AliasInfo]) {
 
                     $cmd = $cmd.ResolvedCommand
                 }
 
-                [string] $BaseModule = $cmd.ModuleName
+                $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.156.2025\Functions\*\$($cmd.Name).ps1" -PassThru | Microsoft.PowerShell.Core\ForEach-Object FullName
 
-                $functionPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.136.2025\Functions\$($cmd.ModuleName)\$($cmd.Name).ps1"
+                if ($null -eq $functionPath) { return }
 
                 Microsoft.PowerShell.Management\Get-ChildItem ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
 
@@ -278,7 +285,7 @@ function Get-FunctionDescription {
     )
 
 
-    $FunctionContent = $null -eq $FunctionContent ? "" : $FunctionContent
+    $FunctionContent = ($null -eq $FunctionContent) ? "" : $FunctionContent
 
     # check if file is in Scripts folder
     $FromScripts = $FileName.StartsWith((GenXdev.FileSystem\Expand-Path `
@@ -406,13 +413,14 @@ function Get-FunctionStartLine {
         [string]$Content
     )
 
-    $Content = $null -eq $Content ? "" : $Content
+    $Content = ($null -eq $Content) ? "" : $Content
 
     $lineNo = $Content.IndexOf("#>")
     if ($lineNo -lt 0) { $lineNo = $Content.IndexOf("[CmdletBinding") }
     if ($lineNo -lt 0) { $lineNo = $Content.IndexOf("params") }
     if ($lineNo -lt 0) { $lineNo = $Content.IndexOf("begin {") }
-    if ($lineNo -lt 0) { $lineNo = $Content.IndexOf("process {") }
+    if ($lineNo -lt 0) { $lineNo = $Content.IndexOf("
+process {") }
     if ($lineNo -lt 0) { $lineNo = 0 }
     else {
         $lineNo = $Content.Substring(0, $lineNo).Split("`n").Count + 1

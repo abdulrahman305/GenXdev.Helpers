@@ -17,7 +17,7 @@ Initialize-SearchPaths -WorkspaceFolder "C:\workspace"
 #>
 function Initialize-SearchPaths {
 
-    [CmdletBinding(DefaultParameterSetName = "Default")]
+    [CmdletBinding()]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
     param(
         [Parameter(Position = 0)]
@@ -29,7 +29,8 @@ function Initialize-SearchPaths {
         Microsoft.PowerShell.Utility\Write-Verbose "Initializing search paths collection"
     }
 
-    process {
+
+process {
 
         # create a new list to store unique search paths
         $searchPaths = [System.Collections.Generic.List[string]] (@(
@@ -63,7 +64,8 @@ function Initialize-SearchPaths {
         # process existing PATH entries
         Microsoft.PowerShell.Utility\Write-Verbose "Processing existing PATH environment entries"
         @($env:Path.Split(';')) |
-        Microsoft.PowerShell.Core\ForEach-Object -Process {
+        Microsoft.PowerShell.Core\ForEach-Object {
+
             $path = $PSItem
 
             if ([String]::IsNullOrWhiteSpace($path) -eq $false) {

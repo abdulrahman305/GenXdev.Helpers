@@ -23,7 +23,8 @@ function Get-DefaultWebLanguage {
         Microsoft.PowerShell.Utility\Write-Verbose "System culture: $($systemCulture.Name)"
     }
 
-    process {
+
+process {
         # get the dictionary of supported languages
         $webLanguages = GenXdev.Helpers\Get-WebLanguageDictionary
 
