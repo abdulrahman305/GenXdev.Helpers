@@ -42,6 +42,7 @@ process {
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\nodejs"),
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\Google\Chrome\Application"),
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\Microsoft VS Code\bin"),
+                (GenXdev.FileSystem\Expand-Path "${env:LOCALAPPDATA}Programs\Microsoft VS Code Insiders"),
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\dotnet")
             ) + @(
                 # add paths from GenXdev packages

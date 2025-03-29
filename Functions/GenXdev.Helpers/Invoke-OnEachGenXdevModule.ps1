@@ -44,15 +44,15 @@ function Invoke-OnEachGenXdevModule {
     }
 
 
-process {
+    process {
 
         foreach ($ModuleName in $BaseModuleName) {
 
             function go {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.158.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.158.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.162.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.162.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 
@@ -76,11 +76,18 @@ process {
                             Microsoft.PowerShell.Management\Set-Location $ScriptsPath
                         }
                         else {
-
+                            [version] $version = $null
                             Microsoft.PowerShell.Management\Set-Location "$($module.FullName)"
 
                             $newLocation = Microsoft.PowerShell.Management\Get-ChildItem ".\*.*.*" -dir -ErrorAction SilentlyContinue |
-                            Microsoft.PowerShell.Utility\Sort-Object -Property Name -Descending |
+                            Microsoft.PowerShell.Core\Where-Object {
+                                [Version]::TryParse($_.Name, [ref]$version)
+                            } |
+                            Microsoft.PowerShell.Utility\Sort-Object {
+
+                                [Version]::new($_.Name)
+
+                            } -Descending |
                             Microsoft.PowerShell.Utility\Select-Object -First 1 |
                             Microsoft.PowerShell.Core\ForEach-Object {
 
@@ -115,6 +122,7 @@ process {
             }
 
             @(Microsoft.PowerShell.Management\Get-ChildItem "$modulesPath\GenXdev*" -dir -Force -ErrorAction SilentlyContinue) |
+            Microsoft.PowerShell.Utility\Sort-Object { $_.Name.Length } -Descending |
             Microsoft.PowerShell.Core\ForEach-Object {
 
                 if ($_.Name -like $ModuleName) {
