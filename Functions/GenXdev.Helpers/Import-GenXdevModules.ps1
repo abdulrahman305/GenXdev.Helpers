@@ -57,73 +57,73 @@ function Import-GenXdevModules {
 
 process {
 
-        try {
-            # navigate to modules parent directory
-            Microsoft.PowerShell.Utility\Write-Verbose "Changing to parent module directory"
-            Microsoft.PowerShell.Management\Set-Location "$PSScriptRoot\..\..\..\.."
+    try {
+        # navigate to modules parent directory
+        Microsoft.PowerShell.Utility\Write-Verbose "Changing to parent module directory"
+        Microsoft.PowerShell.Management\Set-Location "$PSScriptRoot\..\..\..\.."
 
-            # find and process each genxdev module
-            Microsoft.PowerShell.Utility\Write-Verbose "Scanning for GenXdev modules"
-            Microsoft.PowerShell.Management\Get-ChildItem ".\GenXdev*" -dir |
-            Microsoft.PowerShell.Core\ForEach-Object {
+        # find and process each genxdev module
+        Microsoft.PowerShell.Utility\Write-Verbose "Scanning for GenXdev modules"
+        Microsoft.PowerShell.Management\Get-ChildItem ".\GenXdev*" -dir |
+        Microsoft.PowerShell.Core\ForEach-Object {
 
-                $name = $PSItem.Name
-                try {
-                    # attempt module import
-                    Microsoft.PowerShell.Utility\Write-Verbose "Importing module: $name"
+            $name = $PSItem.Name
+            try {
+                # attempt module import
+                Microsoft.PowerShell.Utility\Write-Verbose "Importing module: $name"
+                $importError = $null
+
+                $null = Microsoft.PowerShell.Core\Import-Module -Name $name `
+                    -Scope Global `
+                    -ErrorVariable ImportError `
+                    -Force
+
+                if (($null -ne $importError) -and ($importError.Length -gt 0)) {
+                    throw ($ImportError | Microsoft.PowerShell.Utility\ConvertTo-Json -Depth 4 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
+                }
+
+                # show success message
+                Microsoft.PowerShell.Utility\Write-Output (
+                    "$esc[32m$("- [✅] $name".PadRight([Console]::WindowWidth - 1, " "))" +
+                    "$esc[0m"
+                )
+            }
+            catch {
+                if ($DebugFailedModuleDefinitions) {
+                    # debug mode: validate and retry import
+                    GenXdev.Coding\Assert-ModuleDefinition -ModuleName $name
                     $importError = $null
 
-                    $null = Microsoft.PowerShell.Core\Import-Module -Name $name `
+                    $null = Microsoft.PowerShell.Core\Import-Module $name `
                         -Scope Global `
                         -ErrorVariable ImportError `
                         -Force
 
                     if (($null -ne $importError) -and ($importError.Length -gt 0)) {
-                        throw ($ImportError | Microsoft.PowerShell.Utility\ConvertTo-Json -Depth 4 -ErrorAction SilentlyContinue -WarningAction SilentlyContinue)
-                    }
-
-                    # show success message
-                    Microsoft.PowerShell.Utility\Write-Output (
-                        "$esc[32m$("- [✅] $name".PadRight([Console]::WindowWidth - 1, " "))" +
-                        "$esc[0m"
-                    )
-                }
-                catch {
-                    if ($DebugFailedModuleDefinitions) {
-                        # debug mode: validate and retry import
-                        GenXdev.Coding\Assert-ModuleDefinition -ModuleName $name
-                        $importError = $null
-
-                        $null = Microsoft.PowerShell.Core\Import-Module $name `
-                            -Scope Global `
-                            -ErrorVariable ImportError `
-                            -Force
-
-                        if (($null -ne $importError) -and ($importError.Length -gt 0)) {
-                            Microsoft.PowerShell.Utility\Write-Output (
-                                "$esc[91m$("- [❌] $importError".PadRight(
-                                    [Console]::WindowWidth - 1, " "
-                                ))$esc[0m"
-                            )
-                        }
-                    }
-                    else {
-                        # show failure message
-                        Microsoft.PowerShell.Utility\Write-Verbose "Failed to import module: $name"
                         Microsoft.PowerShell.Utility\Write-Output (
-                            "$esc[91m$("- [❌] $name".PadRight(
+                            "$esc[91m$("- [❌] $importError".PadRight(
                                 [Console]::WindowWidth - 1, " "
                             ))$esc[0m"
                         )
                     }
                 }
+                else {
+                    # show failure message
+                    Microsoft.PowerShell.Utility\Write-Verbose "Failed to import module: $name"
+                    Microsoft.PowerShell.Utility\Write-Output (
+                        "$esc[91m$("- [❌] $name".PadRight(
+                            [Console]::WindowWidth - 1, " "
+                        ))$esc[0m"
+                    )
+                }
             }
         }
-        finally {
-            # restore original location
-            Microsoft.PowerShell.Utility\Write-Verbose "Restoring original location"
-            Microsoft.PowerShell.Management\Pop-Location
-        }
+    }
+    finally {
+        # restore original location
+        Microsoft.PowerShell.Utility\Write-Verbose "Restoring original location"
+        Microsoft.PowerShell.Management\Pop-Location
+    }
     }
 
     end {

@@ -32,7 +32,7 @@ Update-Module
 ### GenXdev.Helpers<hr/>
 | Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | aliases&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
 | --- | --- | --- |
-| [_AssureTypes](#_AssureTypes) |  |  |
+| [_EnsureTypes](#_EnsureTypes) |  |  |
 | [alignScript](#alignScript) |  | Returns a string (with altered indentation) of a provided scriptblock string |
 | [ConvertTo-HashTable](#ConvertTo-HashTable) |  | Converts a PSCustomObject to a HashTable recursively. |
 | [ConvertTo-JsonEx](#ConvertTo-JsonEx) | tojsonex | Converts an object to a JSON string with extended options. |
@@ -55,6 +55,7 @@ Update-Module
 ### GenXdev.Helpers.Math.Physics</hr>
 | Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | aliases&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
 | --- | --- | --- |
+| [Get-FreeFallHeight](#Get-FreeFallHeight) |  |  |
 | [Get-FreeFallTime](#Get-FreeFallTime) |  |  |
 
 <br/><hr/><hr/><br/>
