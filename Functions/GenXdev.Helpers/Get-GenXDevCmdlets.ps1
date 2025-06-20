@@ -159,7 +159,7 @@ process {
                     $cmd = $cmd.ResolvedCommand
                 }
 
-                $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.182.2025\Functions\*\$($cmd.Name).ps1" -PassThru | Microsoft.PowerShell.Core\ForEach-Object FullName
+                $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.184.2025\Functions\*\$($cmd.Name).ps1" -PassThru | Microsoft.PowerShell.Core\ForEach-Object FullName
 
                 if ($null -eq $functionPath) { return }
 
