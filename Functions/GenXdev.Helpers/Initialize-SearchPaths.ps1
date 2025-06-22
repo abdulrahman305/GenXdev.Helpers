@@ -37,7 +37,7 @@ process {
                 # add system and development tool paths
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramData}\chocolatey\bin\")
                 (GenXdev.FileSystem\Expand-Path "$WorkspaceFolder\node_modules\.bin"),
-                (GenXdev.FileSystem\Expand-Path "$WorkspaceFolder\powershell"),
+                (GenXdev.FileSystem\Expand-Path "$WorkspaceFolder\scripts"),
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\Git\cmd"),
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\nodejs"),
                 (GenXdev.FileSystem\Expand-Path "${env:ProgramFiles}\Google\Chrome\Application"),

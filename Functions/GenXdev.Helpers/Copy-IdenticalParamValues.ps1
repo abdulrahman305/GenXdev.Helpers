@@ -9,11 +9,18 @@ This function creates a new hashtable containing only the parameter values that
 match the parameters defined in the specified target function.
 This can then be used to invoke the function using splatting.
 
+Switch parameters are only included in the result if they were explicitly provided
+and set to $true in the bound parameters. Non-present switch parameters are
+excluded from the result to maintain proper parameter semantics.
+
 .PARAMETER BoundParameters
 The bound parameters from which to copy values, typically $PSBoundParameters.
 
 .PARAMETER FunctionName
 The name of the function whose parameter set will be used as a filter.
+
+.PARAMETER DefaultValues
+Default values for non-switch parameters that are not present in BoundParameters.
 
 .EXAMPLE
 function Test-Function {
@@ -30,6 +37,11 @@ function Test-Function {
 
     Get-ChildItem @params
 }
+
+.NOTES
+- Switch parameters are only included if explicitly set to $true
+- Default values are only applied to non-switch parameters
+- Common PowerShell parameters are automatically filtered out
 #>
 function Copy-IdenticalParamValues {
 
@@ -140,6 +152,7 @@ process {
 
             # get parameter name
             $paramName = $_
+            $paramInfo = $functionInfo.Parameters[$paramName]
 
             # check if parameter exists in bound parameters
             if ($BoundParameters.ContainsKey($paramName)) {
@@ -149,18 +162,37 @@ process {
                 Microsoft.PowerShell.Core\Where-Object -Property Key -EQ $paramName |
                 Microsoft.PowerShell.Utility\Select-Object -Property "Value"
 
-                $results."$paramName" = $value.Value
+                $paramValue = $value.Value
+
+                # For switch parameters, only include if explicitly set to $true
+                if ($paramInfo.ParameterType -eq [System.Management.Automation.SwitchParameter]) {
+                    if ($paramValue -eq $true) {
+                        $results."$paramName" = $paramValue
+                        Microsoft.PowerShell.Utility\Write-Verbose "Including switch parameter '$paramName' (explicitly set to true)"
+                    }
+                    else {
+                        Microsoft.PowerShell.Utility\Write-Verbose "Excluding switch parameter '$paramName' (not set or false)"
+                    }
+                }
+                else {
+                    $results."$paramName" = $paramValue
+                }
             }
             else {
+                # Only add default values for non-switch parameters
+                if ($paramInfo.ParameterType -ne [System.Management.Automation.SwitchParameter]) {
+                    $defaultValue = $defaults."$paramName"
 
-                $defaultValue = $defaults."$paramName"
+                    if ($null -ne $defaultValue) {
 
-                if ($null -ne $defaultValue) {
+                        $results."$paramName" = $defaultValue
 
-                    $results."$paramName" = $defaultValue
-
-                    Microsoft.PowerShell.Utility\Write-Verbose ("Using default value " +
-                        ($defaultValue | Microsoft.PowerShell.Utility\ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))
+                        Microsoft.PowerShell.Utility\Write-Verbose ("Using default value for '$paramName': " +
+                            ($defaultValue | Microsoft.PowerShell.Utility\ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue))
+                    }
+                }
+                else {
+                    Microsoft.PowerShell.Utility\Write-Verbose "Excluding switch parameter '$paramName' (not provided in bound parameters)"
                 }
             }
         }
