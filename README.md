@@ -56,7 +56,7 @@ Update-Module
 | Command&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | aliases&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description |
 | --- | --- | --- |
 | [Get-FreeFallHeight](#Get-FreeFallHeight) |  |  |
-| [Get-FreeFallTime](#Get-FreeFallTime) |  |  |
+| [Get-FreeFallTime](#Get-FreeFallTime) |  | Calculates the time it takes for an object to fall a specified distance. |
 
 <br/><hr/><hr/><br/>
 
