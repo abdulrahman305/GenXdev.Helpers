@@ -12,7 +12,7 @@
 RootModule = 'GenXdev.Helpers.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.192.2025'
+ModuleVersion = '1.194.2025'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core'
@@ -77,10 +77,10 @@ NestedModules = @('lib\GenXdev.Helpers.dll',
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = 'alignScript', 'ConvertTo-HashTable', 'ConvertTo-JsonEx', 
-               'Copy-IdenticalParamValues', 'Get-DefaultWebLanguage', 
-               'Get-FreeFallHeight', 'Get-FreeFallTime', 'Get-FunctionAliases', 
-               'Get-FunctionDescription', 'Get-FunctionStartLine', 
-               'Get-GenXDevCmdlets', 'Get-ImageGeolocation', 
+               'Copy-IdenticalParamValues', 'EnsureGenXdev', 
+               'Get-DefaultWebLanguage', 'Get-FreeFallHeight', 'Get-FreeFallTime', 
+               'Get-FunctionAliases', 'Get-FunctionDescription', 
+               'Get-FunctionStartLine', 'Get-GenXDevCmdlets', 'Get-ImageGeolocation', 
                'Get-WebLanguageDictionary', 'Import-GenXdevModules', 
                'Initialize-SearchPaths', 'Invoke-OnEachGenXdevModule', 'Out-Serial', 
                'Remove-JSONComments', 'Show-GenXDevCmdlets', 'Show-Verb'
@@ -112,6 +112,7 @@ FileList = 'GenXdev.Helpers.Math.Physics.psm1', 'GenXdev.Helpers.psd1',
                'Tests\GenXdev.Helpers\ConvertTo-HashTable.Tests.ps1', 
                'Tests\GenXdev.Helpers\ConvertTo-JsonEx.Tests.ps1', 
                'Tests\GenXdev.Helpers\Copy-IdenticalParamValues.Tests.ps1', 
+               'Tests\GenXdev.Helpers\EnsureGenXdev.Tests.ps1', 
                'Tests\GenXdev.Helpers\Get-DefaultWebLanguage.Tests.ps1', 
                'Tests\GenXdev.Helpers\Get-GenXDevCmdlets.Tests.ps1', 
                'Tests\GenXdev.Helpers\Get-ImageGeolocation.Tests.ps1', 
@@ -516,6 +517,7 @@ FileList = 'GenXdev.Helpers.Math.Physics.psm1', 'GenXdev.Helpers.psd1',
                'Functions\GenXdev.Helpers\ConvertTo-HashTable.ps1', 
                'Functions\GenXdev.Helpers\ConvertTo-JsonEx.ps1', 
                'Functions\GenXdev.Helpers\Copy-IdenticalParamValues.ps1', 
+               'Functions\GenXdev.Helpers\EnsureGenXdev.ps1', 
                'Functions\GenXdev.Helpers\Get-DefaultWebLanguage.ps1', 
                'Functions\GenXdev.Helpers\Get-GenXDevCmdlets.ps1', 
                'Functions\GenXdev.Helpers\Get-ImageGeolocation.ps1', 

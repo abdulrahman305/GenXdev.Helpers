@@ -92,8 +92,9 @@ function Show-GenXDevCmdlets {
             HelpMessage = "Display results in table format"
         )]
         [Alias("table", "grid")]
-        [switch] $ShowTable
+        [switch] $ShowTable,
         #######################################################################
+        [switch] $PassThru
     )
 
     begin {
@@ -171,6 +172,11 @@ process {
     }
 
     end {
+        if ($PassThru) {
+
+            Microsoft.PowerShell.Utility\Write-Verbose "Returning results as output"
+            return $results
+        }
         if ($results.Count -eq 0) {
             Microsoft.PowerShell.Utility\Write-Verbose "No results found matching criteria"
             return

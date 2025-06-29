@@ -37,6 +37,7 @@ Update-Module
 | [ConvertTo-HashTable](#ConvertTo-HashTable) |  | Converts a PSCustomObject to a HashTable recursively. |
 | [ConvertTo-JsonEx](#ConvertTo-JsonEx) | tojsonex | Converts an object to a JSON string with extended options. |
 | [Copy-IdenticalParamValues](#Copy-IdenticalParamValues) |  |  |
+| [EnsureGenXdev](#EnsureGenXdev) |  |  |
 | [Get-DefaultWebLanguage](#Get-DefaultWebLanguage) |  | Gets the default web language key based on the system's current language settings. |
 | [Get-GenXDevCmdlets](#Get-GenXDevCmdlets) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#Get-ImageGeolocation) |  | Extracts geolocation data from an image file. |
