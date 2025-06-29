@@ -48,11 +48,11 @@ function Invoke-OnEachGenXdevModule {
 
         foreach ($ModuleName in $BaseModuleName) {
 
-            function go {
+            function goNext {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.190.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.190.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.192.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.192.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 
@@ -113,7 +113,7 @@ function Invoke-OnEachGenXdevModule {
 
             if ($ModuleName -like "GenXdev.Scripts") {
 
-                go -module @{
+                goNext -module @{
                     Name     = "GenXdev.Scripts"
                     FullName = $ScriptsPath
                 }
@@ -128,7 +128,7 @@ function Invoke-OnEachGenXdevModule {
                 if ($_.Name -like $ModuleName) {
 
                     try {
-                        go -module $_
+                        goNext -module $_
                     }
                     catch {
 

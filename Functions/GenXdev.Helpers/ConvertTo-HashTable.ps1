@@ -19,11 +19,12 @@ $object = [PSCustomObject]@{
         City = "New York"
     }
 }
-$hashTable = ConvertTo-HashTable -InputObject $object
+$hashTable = GenXdev.Helpers\ConvertTo-HashTable -InputObject $object
 #>
 function ConvertTo-HashTable {
 
     [CmdletBinding(DefaultParameterSetName = "Default")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseFullyQualifiedCmdletNames', '')]
     [OutputType([hashtable], [System.Collections.IEnumerable], [System.ValueType], [string])]
     param (
         ########################################################################
@@ -78,7 +79,7 @@ process {
                 # handle nested PSCustomObject properties
                 if ($property.Value -is [System.Management.Automation.PSCustomObject]) {
 
-                    $resultTable[$property.Name] = GenXdev.Helpers\ConvertTo-HashTable `
+                    $resultTable[$property.Name] = ConvertTo-HashTable `
                         -InputObject $property.Value
                 }
                 # handle collection properties
@@ -104,7 +105,14 @@ process {
                 }
             }
 
-            Microsoft.PowerShell.Utility\Write-Output $resultTable
+            $finalResultTable = @{}
+
+            $resultTable.Keys | Microsoft.PowerShell.Utility\Sort-Object | Microsoft.PowerShell.Core\ForEach-Object {
+
+                $finalResultTable."$_" = $resultTable."$_"
+            }
+
+            Microsoft.PowerShell.Utility\Write-Output $finalResultTable
         }
     }
 
