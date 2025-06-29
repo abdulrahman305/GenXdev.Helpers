@@ -37,6 +37,7 @@ function Show-GenXDevCmdlets {
 
     [CmdletBinding()]
     [Alias("cmds")]
+    [OutputType([System.Collections.ArrayList], [void])]
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
 
     param(

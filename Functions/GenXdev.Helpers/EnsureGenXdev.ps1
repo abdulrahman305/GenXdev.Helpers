@@ -21,6 +21,13 @@ function EnsureGenXdev {
     [CmdletBinding()]
 
     param(
+         ###################################################################
+         [Parameter(
+            Mandatory = $false,
+            HelpMessage = "Show Docker Desktop window during initialization"
+        )]
+        [switch]$ShowWindow
+        ###################################################################
     )
 
     begin {
@@ -40,13 +47,19 @@ function EnsureGenXdev {
 
             try {
 
+                if ([string]::IsNullOrWhiteSpace($_)) { return }
+
                 # execute the current ensure cmdlet
                 Microsoft.PowerShell.Utility\Write-Verbose (
                     "Executing cmdlet: $_"
                 )
+                $params = GenXdev.Helpers\Copy-IdenticalParamValues `
+                    -BoundParameters $PSBoundParameters `
+                    -FunctionName $_ `
+                    -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
 
-                Microsoft.PowerShell.Utility\Invoke-Expression -Command $_
-
+                $command = Microsoft.PowerShell.Core\Get-Command -Name $_
+                & $command @params
             } catch {
 
                 # capture and display any execution failures
