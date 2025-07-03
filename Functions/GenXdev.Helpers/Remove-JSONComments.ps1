@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Removes comments from JSON content.
@@ -26,7 +26,7 @@ Remove-JSONComments -Json $jsonContent
 
 .EXAMPLE
 $jsonContent | Remove-JSONComments
-#>
+        ###############################################################################>
 function Remove-JSONComments {
 
     [CmdletBinding(DefaultParameterSetName = "Default")]
@@ -64,4 +64,4 @@ process {
         Microsoft.PowerShell.Utility\Write-Verbose "Completed JSON comment removal process"
     }
 }
-################################################################################
+        ###############################################################################

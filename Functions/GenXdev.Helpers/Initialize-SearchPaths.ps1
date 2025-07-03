@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Initializes and configures system search paths for package management.
@@ -14,7 +14,7 @@ The workspace folder path to use for node modules and PowerShell paths.
 
 .EXAMPLE
 Initialize-SearchPaths -WorkspaceFolder "C:\workspace"
-#>
+        ###############################################################################>
 function Initialize-SearchPaths {
 
     [CmdletBinding()]
@@ -93,4 +93,4 @@ process {
     end {
     }
 }
-################################################################################
+        ###############################################################################

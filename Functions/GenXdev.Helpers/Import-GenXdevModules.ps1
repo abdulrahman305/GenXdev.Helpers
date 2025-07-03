@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Imports all GenXdev PowerShell modules into the global scope.
@@ -14,12 +14,12 @@ When enabled, provides detailed debug output for modules that fail to import.
 
 .EXAMPLE
 Import-GenXdevModules -DebugFailedModuleDefinitions
-# Imports modules with debug output for failures
+        ###############################################################################Imports modules with debug output for failures
 
 .EXAMPLE
 reloadgenxdev
-# Imports all modules using the alias
-#>
+        ###############################################################################Imports all modules using the alias
+        ###############################################################################>
 function Import-GenXdevModules {
 
     [CmdletBinding()]
@@ -145,4 +145,4 @@ process {
         )
     }
 }
-################################################################################
+        ###############################################################################

@@ -1,8 +1,8 @@
-################################################################################
+###############################################################################
 Pester\Describe "Show-GenXDevCmdlets" {
 
     Pester\BeforeAll {
-        # get the script path for analysis
+    # get the script path for analysis
         $Script:scriptPath = GenXdev.FileSystem\Expand-Path `
             "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\Show-GenXDevCmdlets.ps1"
     }
@@ -27,4 +27,4 @@ Pester\Describe "Show-GenXDevCmdlets" {
         }
     }
 }
-################################################################################
+###############################################################################

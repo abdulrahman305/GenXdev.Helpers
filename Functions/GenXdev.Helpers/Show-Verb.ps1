@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Shows a short alphabetical list of all PowerShell verbs.
@@ -13,16 +13,16 @@ If omitted, all approved verbs are shown.
 
 .EXAMPLE
 Show-Verb
-# Shows all approved PowerShell verbs
+        ###############################################################################Shows all approved PowerShell verbs
 
 .EXAMPLE
 Show-Verb -Verb "Get*"
-# Shows all approved verbs starting with "Get"
+        ###############################################################################Shows all approved verbs starting with "Get"
 
 .EXAMPLE
 showverbs "Set*", "Get*"
-# Shows all approved verbs starting with "Set" or "Get" using the alias
-#>
+        ###############################################################################Shows all approved verbs starting with "Set" or "Get" using the alias
+        ###############################################################################>
 function Show-Verb {
 
     [CmdletBinding()]
@@ -79,4 +79,4 @@ process {
     end {
     }
 }
-################################################################################
+        ###############################################################################

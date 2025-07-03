@@ -1,15 +1,15 @@
-################################################################################
+###############################################################################
 Pester\Describe "Copy-IdenticalParamValues.Tests" {
 
     Pester\It "Should pass PSScriptAnalyzer rules" {
 
-        # Define module name based on the folder structure
+# Define module name based on the folder structure
         $FullModuleName = "GenXdev.Helpers"
 
-        # get the script path for analysis
+# get the script path for analysis
         $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\$FullModuleName\Copy-IdenticalParamValues.ps1"
 
-        # run analyzer with explicit settings
+# run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
             -Path $scriptPath
 
@@ -31,4 +31,4 @@ $message
 "@;
     }
 }
-################################################################################
+###############################################################################

@@ -1,16 +1,16 @@
-################################################################################
+###############################################################################
 Pester\Describe "Get-ImageGeolocation.Tests" {
 
 
     Pester\It "Should pass PSScriptAnalyzer rules" {
 
-        # Define the full module name variable
+# Define the full module name variable
         $FullModuleName = "GenXdev.Helpers"
 
-        # get the script path for analysis
+# get the script path for analysis
         $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\$FullModuleName\Get-ImageGeolocation.ps1"
 
-        # run analyzer with explicit settings
+# run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
             -Path $scriptPath
 
@@ -32,4 +32,4 @@ $message
 "@;
     }
 }
-################################################################################
+###############################################################################

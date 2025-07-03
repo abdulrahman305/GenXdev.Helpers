@@ -1,4 +1,4 @@
-###############################################################################
+        ###############################################################################
 
 <#
 .SYNOPSIS
@@ -12,7 +12,7 @@ The scriptblock string
 
 .PARAMETER spaces
 The minimum number of spaces for each line
-#>
+        ###############################################################################>
 function alignScript([string] $script, [int] $spaces = 0) {
 
     $lines = @($script.Replace("`r`n", "`n").Replace("`t", "    ").Split("`n"));

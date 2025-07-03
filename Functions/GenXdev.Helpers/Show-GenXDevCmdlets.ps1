@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Displays GenXdev PowerShell modules with their cmdlets and aliases.
@@ -32,7 +32,7 @@ Lists all cmdlets starting with "Get" in the Console module as a table
 .EXAMPLE
 cmds get -m console
 Lists all cmdlets starting with "Get" in the Console module
-#>
+        ###############################################################################>
 function Show-GenXDevCmdlets {
 
     [CmdletBinding()]
@@ -234,4 +234,4 @@ process {
         }
     }
 }
-################################################################################
+        ###############################################################################

@@ -1,4 +1,4 @@
-###############################################################################
+        ###############################################################################
 
 <#
 .SYNOPSIS
@@ -6,7 +6,7 @@ Returns a reversed dictionary for all languages supported by Google Search
 
 .DESCRIPTION
 Returns a reversed dictionary for all languages supported by Google Search
-#>
+        ###############################################################################>
 function Get-WebLanguageDictionary {
 
     $result = Microsoft.PowerShell.Utility\New-Object System.Collections.Generic.Dictionary"[String, string]"

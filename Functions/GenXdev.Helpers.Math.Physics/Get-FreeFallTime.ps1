@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Calculates the time it takes for an object to fall a specified distance.
@@ -17,14 +17,14 @@ is 53 m/s, which is the approximate terminal velocity of a human in free fall.
 
 .EXAMPLE
 Get-FreeFallTime -HeightInMeters 100
-# Returns the time in seconds for an object to fall 100 meters with default
-# terminal velocity
+        ###############################################################################Returns the time in seconds for an object to fall 100 meters with default
+        ###############################################################################terminal velocity
 
 .EXAMPLE
 Get-FreeFallTime 500 45
-# Returns the time in seconds for an object to fall 500 meters with a terminal
-# velocity of 45 m/s
-#>
+        ###############################################################################Returns the time in seconds for an object to fall 500 meters with a terminal
+        ###############################################################################velocity of 45 m/s
+        ###############################################################################>
 Function Get-FreeFallTime {
 
     [OutputType([double], [int])]

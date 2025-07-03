@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Copies parameter values from bound parameters to a new hashtable based on
@@ -42,7 +42,7 @@ function Test-Function {
 - Switch parameters are only included if explicitly set to $true
 - Default values are only applied to non-switch parameters
 - Common PowerShell parameters are automatically filtered out
-#>
+        ###############################################################################>
 function Copy-IdenticalParamValues {
 
     [CmdletBinding()]
@@ -101,7 +101,9 @@ function Copy-IdenticalParamValues {
             "Confirm",
             "OutVariable",
             "ProgressAction",
-            "ErrorVariable"
+            "ErrorVariable",
+            "Passthru",
+            "PassThru"
         )
 
         # initialize results hashtable
@@ -204,4 +206,4 @@ process {
         $results
     }
 }
-################################################################################
+        ###############################################################################

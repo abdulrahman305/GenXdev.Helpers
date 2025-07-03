@@ -1,13 +1,13 @@
-################################################################################
+###############################################################################
 Pester\Describe "Invoke-OnEachGenXdevModule.Tests" {
 
     Pester\It "Should pass PSScriptAnalyzer rules" {
 
-        # get the script path for analysis
+# get the script path for analysis
         $FullModuleName = "GenXdev.Helpers"
         $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\$FullModuleName\Invoke-OnEachGenXdevModule.ps1"
 
-        # run analyzer with explicit settings
+# run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
             -Path $scriptPath
 
@@ -29,4 +29,4 @@ $message
 "@;
     }
 }
-################################################################################
+###############################################################################

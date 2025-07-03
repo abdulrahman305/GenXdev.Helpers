@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Converts an object to a JSON string with extended options.
@@ -36,7 +36,7 @@ Converts pipeline input to compressed JSON format without whitespace.
 tojsonex $data
 
 Uses the alias to convert an object to JSON format.
-#>
+        ###############################################################################>
 function ConvertTo-JsonEx {
 
     [CmdletBinding()]
@@ -82,4 +82,4 @@ function ConvertTo-JsonEx {
     end {
     }
 }
-################################################################################
+        ###############################################################################

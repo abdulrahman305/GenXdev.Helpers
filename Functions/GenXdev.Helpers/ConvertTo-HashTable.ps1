@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Converts a PSCustomObject to a HashTable recursively.
@@ -20,7 +20,7 @@ $object = [PSCustomObject]@{
     }
 }
 $hashTable = GenXdev.Helpers\ConvertTo-HashTable -InputObject $object
-#>
+        ###############################################################################>
 function ConvertTo-HashTable {
 
     [CmdletBinding(DefaultParameterSetName = "Default")]
@@ -36,7 +36,7 @@ function ConvertTo-HashTable {
             HelpMessage = "The PSCustomObject to convert into a HashTable"
         )]
         [ValidateNotNull()]
-        [object[]] $InputObject
+        [System.Object[]] $InputObject
         ########################################################################
     )
 
@@ -124,4 +124,4 @@ function ConvertTo-HashTable {
         Microsoft.PowerShell.Utility\Write-Verbose "Completed HashTable conversion"
     }
 }
-################################################################################
+        ###############################################################################

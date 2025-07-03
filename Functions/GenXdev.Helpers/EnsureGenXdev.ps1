@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Ensures all GenXdev modules are properly loaded by invoking all Ensure*
@@ -15,7 +15,7 @@ EnsureGenXdev
 
 This command runs all available Ensure* cmdlets to initialize the GenXdev
 environment.
-#>
+        ###############################################################################>
 function EnsureGenXdev {
 
     [CmdletBinding()]
@@ -40,9 +40,10 @@ function EnsureGenXdev {
 
     process {
 
-        # get all ensure cmdlets and execute each one
+        # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
         GenXdev.Helpers\Show-GenXDevCmdlets Ensure* -PassThru |
         Microsoft.PowerShell.Core\ForEach-Object name |
+        Microsoft.PowerShell.Core\Where-Object { $_ -ne "EnsureGenXdev" } |
         Microsoft.PowerShell.Core\ForEach-Object {
 
             try {
@@ -73,4 +74,4 @@ function EnsureGenXdev {
     end {
     }
 }
-################################################################################
+        ###############################################################################

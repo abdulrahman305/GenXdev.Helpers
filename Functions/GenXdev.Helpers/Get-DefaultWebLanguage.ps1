@@ -1,4 +1,4 @@
-################################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Gets the default web language key based on the system's current language settings.
@@ -10,7 +10,7 @@ corresponding web language dictionary key used by translation services.
 .EXAMPLE
 Get-DefaultWebLanguage
 Returns "English" for an English system, "Dutch" for a Dutch system, etc.
-#>
+        ###############################################################################>
 function Get-DefaultWebLanguage {
 
     [CmdletBinding()]
@@ -52,4 +52,4 @@ process {
         return "English"
     }
 }
-################################################################################
+        ###############################################################################
