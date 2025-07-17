@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Converts a PSCustomObject to a HashTable recursively.
@@ -20,10 +20,10 @@ $object = [PSCustomObject]@{
     }
 }
 $hashTable = GenXdev.Helpers\ConvertTo-HashTable -InputObject $object
-        ###############################################################################>
+#>
 function ConvertTo-HashTable {
 
-    [CmdletBinding(DefaultParameterSetName = "Default")]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseFullyQualifiedCmdletNames', '')]
     [OutputType([hashtable], [System.Collections.IEnumerable], [System.ValueType], [string])]
     param (
@@ -32,8 +32,8 @@ function ConvertTo-HashTable {
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true,
-            ParameterSetName = "Default",
-            HelpMessage = "The PSCustomObject to convert into a HashTable"
+            ParameterSetName = 'Default',
+            HelpMessage = 'The PSCustomObject to convert into a HashTable'
         )]
         [ValidateNotNull()]
         [System.Object[]] $InputObject
@@ -42,7 +42,7 @@ function ConvertTo-HashTable {
 
     begin {
 
-        Microsoft.PowerShell.Utility\Write-Verbose "Starting PSCustomObject to HashTable conversion"
+        Microsoft.PowerShell.Utility\Write-Verbose 'Starting PSCustomObject to HashTable conversion'
     }
 
     process {
@@ -52,7 +52,7 @@ function ConvertTo-HashTable {
             # return empty hashtable if input is null
             if ($null -eq $InputObject) {
 
-                Microsoft.PowerShell.Utility\Write-Verbose "Input object is null, returning empty hashtable"
+                Microsoft.PowerShell.Utility\Write-Verbose 'Input object is null, returning empty hashtable'
                 return @{}
             }
 
@@ -121,7 +121,6 @@ function ConvertTo-HashTable {
 
     end {
 
-        Microsoft.PowerShell.Utility\Write-Verbose "Completed HashTable conversion"
+        Microsoft.PowerShell.Utility\Write-Verbose 'Completed HashTable conversion'
     }
 }
-        ###############################################################################

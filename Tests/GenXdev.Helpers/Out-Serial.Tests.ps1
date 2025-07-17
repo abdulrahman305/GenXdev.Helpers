@@ -1,19 +1,19 @@
-###############################################################################
-Pester\Describe "Out-Serial" {
+﻿###############################################################################
+Pester\Describe 'Out-Serial' {
 
-    Pester\It "Should pass PSScriptAnalyzer rules" {
+    Pester\It 'Should pass PSScriptAnalyzer rules' {
 
-# Define the module name
-        $FullModuleName = "GenXdev.Helpers"
+        # Define the module name
+        $FullModuleName = 'GenXdev.Helpers'
 
-# get the script path for analysis
+        # get the script path for analysis
         $scriptPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\Functions\$FullModuleName\Out-Serial.ps1"
 
-# run analyzer with explicit settings
+        # run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
             -Path $scriptPath
 
-        [string] $message = ""
+        [string] $message = ''
         $analyzerResults | Microsoft.PowerShell.Core\ForEach-Object {
 
             $message = $message + @"

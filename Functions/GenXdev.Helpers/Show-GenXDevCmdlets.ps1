@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Displays GenXdev PowerShell modules with their cmdlets and aliases.
@@ -25,6 +25,9 @@ When specified displays only aliases of cmdlets who have them.
 .PARAMETER ShowTable
 When specified, displays results in a table format with Name and Description.
 
+.PARAMETER OnlyReturnModuleNames
+Only return unique module names instead of displaying cmdlet details.
+
 .EXAMPLE
 Show-GenXDevCmdlets -CmdletName "Get" -ModuleName "Console" -ShowTable
 Lists all cmdlets starting with "Get" in the Console module as a table
@@ -32,13 +35,17 @@ Lists all cmdlets starting with "Get" in the Console module as a table
 .EXAMPLE
 cmds get -m console
 Lists all cmdlets starting with "Get" in the Console module
-        ###############################################################################>
+
+.EXAMPLE
+Show-GenXDevCmdlets -OnlyReturnModuleNames
+Returns only unique module names
+#>
 function Show-GenXDevCmdlets {
 
     [CmdletBinding()]
-    [Alias("cmds")]
+    [Alias('cmds')]
     [OutputType([System.Collections.ArrayList], [void])]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
 
     param(
         ########################################################################
@@ -46,23 +53,23 @@ function Show-GenXDevCmdlets {
             Mandatory = $false,
             Position = 0,
             ValueFromRemainingArguments = $false,
-            HelpMessage = "Search pattern to filter cmdlets"
+            HelpMessage = 'Search pattern to filter cmdlets'
         )]
-        [Alias("Filter", "CmdLet", "Cmd", "FunctionName", "Name")]
+        [Alias('Filter', 'CmdLet', 'Cmd', 'FunctionName', 'Name')]
         [SupportsWildcards()]
-        [string] $CmdletName = "*",
+        [string] $CmdletName = '*',
         ########################################################################
         [parameter(
             Mandatory = $false,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
             Position = 1,
-            HelpMessage = "GenXdev module names to search"
+            HelpMessage = 'GenXdev module names to search'
         )]
         [ValidateNotNullOrEmpty()]
-        [Alias("Module", "ModuleName")]
-        [ValidatePattern("^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$")]
-        [string[]] $BaseModuleName = @("GenXdev*"),
+        [Alias('Module', 'ModuleName')]
+        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$')]
+        [string[]] $BaseModuleName = @('GenXdev*'),
         ########################################################################
         [Parameter(Mandatory = $false)]
         [switch] $NoLocal,
@@ -77,47 +84,61 @@ function Show-GenXDevCmdlets {
         #######################################################################
         [Parameter(
             Mandatory = $false,
-            HelpMessage = "Open GitHub documentation instead of console output"
+            HelpMessage = 'Open GitHub documentation instead of console output'
         )]
         [switch] $Online,
         #######################################################################
         [Parameter(
             Mandatory = $false,
-            HelpMessage = "When specified displays only aliases of cmdlets"
+            HelpMessage = 'When specified displays only aliases of cmdlets'
         )]
-        [Alias("aliases", "nonboring", "notlame", "handyonces")]
+        [Alias('aliases', 'nonboring', 'notlame', 'handyonces')]
         [switch] $OnlyAliases,
         #######################################################################
         [Parameter(
             Mandatory = $false,
-            HelpMessage = "Display results in table format"
+            HelpMessage = 'Display results in table format'
         )]
-        [Alias("table", "grid")]
+        [Alias('table', 'grid')]
         [switch] $ShowTable,
         #######################################################################
-        [switch] $PassThru
+        [switch] $PassThru,
+        #######################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Only return unique module names'
+        )]
+        [switch] $OnlyReturnModuleNames
     )
 
     begin {
-        Microsoft.PowerShell.Utility\Write-Verbose "Initializing Show-GenXDevCmdlets"
+        Microsoft.PowerShell.Utility\Write-Verbose 'Initializing Show-GenXDevCmdlets'
 
         # initialize results collection
         $results = [System.Collections.ArrayList]::new()
 
-        if (-not ($CmdletName.Contains("*") -or $CmdletName.Contains("?"))) {
+        if (-not ($CmdletName.Contains('*') -or $CmdletName.Contains('?'))) {
 
             $CmdletName = "*$CmdletName*"
         }
     }
 
 
-process {
+    process {
         try {
+            # copy identical parameters between functions for passing to Get-GenXDevCmdlets
             $invocationParams = GenXdev.Helpers\Copy-IdenticalParamValues `
-                -FunctionName "GenXdev.Helpers\Get-GenXDevCmdlets" `
-                -BoundParameters $PSBoundParameters
+                -FunctionName 'GenXdev.Helpers\Get-GenXDevCmdlets' `
+                -BoundParameters $PSBoundParameters `
+                -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable `
+                    -Scope Local `
+                    -ErrorAction SilentlyContinue)
 
-            $invocationParams.CmdletName = $CmdletName
+            # if only module names are requested, return them directly
+            if ($OnlyReturnModuleNames) {
+                Microsoft.PowerShell.Utility\Write-Verbose 'Returning unique module names directly'
+                return GenXdev.Helpers\Get-GenXDevCmdlets @invocationParams -OnlyReturnModuleNames
+            }
 
             # get cmdlets using Get-GenXDevCmdlets
             $cmdlets = GenXdev.Helpers\Get-GenXDevCmdlets @invocationParams
@@ -126,8 +147,7 @@ process {
 
                 # handle online documentation
                 if ($Online) {
-                    if (@("GenXdev.Local", "GenXdev.Scripts").IndexOf($cmdlet.BaseModule) -ge 0) {
-
+                    if (@('GenXdev.Local', 'GenXdev.Scripts').IndexOf($cmdlet.BaseModule) -ge 0) {
                         Microsoft.PowerShell.Utility\Write-Verbose "Opening documentation for $($cmdlet.ModuleName)"
                         Microsoft.PowerShell.Management\Start-Process `
                             "https://github.com/genXdev/$($cmdlet.ModuleName)/blob/main/README.md#$($cmdlet.Name)" `
@@ -153,12 +173,12 @@ process {
                 if ($OnlyAliases) {
 
                     $cmdletData.Aliases = @($cmdletData.Aliases.Split(',') |
-                        Microsoft.PowerShell.Core\ForEach-Object { if ($_.Trim() -notlike "*-*") { $_.Trim() } } |
-                        Microsoft.PowerShell.Utility\Select-Object -First 1) -join ', '
+                            Microsoft.PowerShell.Core\ForEach-Object { if ($_.Trim() -notlike '*-*') { $_.Trim() } } |
+                            Microsoft.PowerShell.Utility\Select-Object -First 1) -join ', '
 
                     if ([string]::IsNullOrWhiteSpace($cmdletData.Aliases)) {
 
-                        $cmdletData.Aliases = ""
+                        $cmdletData.Aliases = ''
                         continue
                     }
                 }
@@ -175,11 +195,11 @@ process {
     end {
         if ($PassThru) {
 
-            Microsoft.PowerShell.Utility\Write-Verbose "Returning results as output"
+            Microsoft.PowerShell.Utility\Write-Verbose 'Returning results as output'
             return $results
         }
         if ($results.Count -eq 0) {
-            Microsoft.PowerShell.Utility\Write-Verbose "No results found matching criteria"
+            Microsoft.PowerShell.Utility\Write-Verbose 'No results found matching criteria'
             return
         }
 
@@ -189,15 +209,15 @@ process {
 
                 # display as table
                 $results |
-                Microsoft.PowerShell.Utility\Select-Object ModuleName, Aliases, Description |
-                Microsoft.PowerShell.Utility\Format-Table -AutoSize
+                    Microsoft.PowerShell.Utility\Select-Object ModuleName, Aliases, Description |
+                    Microsoft.PowerShell.Utility\Format-Table -AutoSize
             }
             else {
 
                 # display as table
                 $results |
-                Microsoft.PowerShell.Utility\Select-Object ModuleName, Name, Aliases, Description |
-                Microsoft.PowerShell.Utility\Format-Table -AutoSize
+                    Microsoft.PowerShell.Utility\Select-Object ModuleName, Name, Aliases, Description |
+                    Microsoft.PowerShell.Utility\Format-Table -AutoSize
             }
         }
         else {
@@ -209,29 +229,28 @@ process {
 
                         if ($OnlyAliases) {
 
-                            $_.Aliases.Split(",") |
-                            Microsoft.PowerShell.Utility\Select-Object -First 1 |
-                            Microsoft.PowerShell.Core\ForEach-Object {
+                            $_.Aliases.Split(',') |
+                                Microsoft.PowerShell.Utility\Select-Object -First 1 |
+                                Microsoft.PowerShell.Core\ForEach-Object {
 
-                                if ($_.Trim() -notlike "*-*") {
+                                    if ($_.Trim() -notlike '*-*') {
 
-                                    $_.Trim()
+                                        $_.Trim()
+                                    }
                                 }
                             }
-                        }
-                        elseif (-not [string]::IsNullOrWhiteSpace($_.Aliases)) {
+                            elseif (-not [string]::IsNullOrWhiteSpace($_.Aliases)) {
 
-                            "$($_.Name) --> $($_.Aliases)"
-                        }
-                        else {
+                                "$($_.Name) --> $($_.Aliases)"
+                            }
+                            else {
 
-                            $_.Name
-                        }
-                    })
+                                $_.Name
+                            }
+                        })
 
-                [string]::Join(", ", $all) | Microsoft.PowerShell.Utility\Write-Host -ForegroundColor White
+                    [string]::Join(', ', $all) | Microsoft.PowerShell.Utility\Write-Host -ForegroundColor White
+                }
             }
         }
     }
-}
-        ###############################################################################

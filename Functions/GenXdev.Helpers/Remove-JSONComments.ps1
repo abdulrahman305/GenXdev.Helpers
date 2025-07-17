@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Removes comments from JSON content.
@@ -26,12 +26,12 @@ Remove-JSONComments -Json $jsonContent
 
 .EXAMPLE
 $jsonContent | Remove-JSONComments
-        ###############################################################################>
+#>
 function Remove-JSONComments {
 
-    [CmdletBinding(DefaultParameterSetName = "Default")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseSingularNouns", "")]
+    [CmdletBinding(DefaultParameterSetName = 'Default')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '')]
+    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
     [OutputType([System.String])]
     param(
         ########################################################################
@@ -39,8 +39,8 @@ function Remove-JSONComments {
             Mandatory = $true,
             Position = 0,
             ValueFromPipeline = $true,
-            ParameterSetName = "Default",
-            HelpMessage = "JSON content to process as string array"
+            ParameterSetName = 'Default',
+            HelpMessage = 'JSON content to process as string array'
         )]
         [string[]] $Json
     )
@@ -48,11 +48,11 @@ function Remove-JSONComments {
     begin {
 
         # inform user that processing is starting
-        Microsoft.PowerShell.Utility\Write-Verbose "Starting JSON comment removal process"
+        Microsoft.PowerShell.Utility\Write-Verbose 'Starting JSON comment removal process'
     }
 
 
-process {
+    process {
 
         # remove comments from json using the helper class
         [GenXdev.Helpers.Serialization]::RemoveJSONComments($Json)
@@ -61,7 +61,6 @@ process {
     end {
 
         # inform user that processing is complete
-        Microsoft.PowerShell.Utility\Write-Verbose "Completed JSON comment removal process"
+        Microsoft.PowerShell.Utility\Write-Verbose 'Completed JSON comment removal process'
     }
 }
-        ###############################################################################

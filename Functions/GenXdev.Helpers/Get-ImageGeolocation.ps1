@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Extracts geolocation data from an image file.
@@ -23,7 +23,7 @@ Get-ImageGeolocation -ImagePath "C:\Photos\vacation.jpg"
 
 .EXAMPLE
 "C:\Photos\vacation.jpg" | Get-ImageGeolocation
-        ###############################################################################>
+#>
 function Get-ImageGeolocation {
 
     [CmdletBinding()]
@@ -36,7 +36,7 @@ function Get-ImageGeolocation {
             Position = 0,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
-            HelpMessage = "Path to the image file to analyze"
+            HelpMessage = 'Path to the image file to analyze'
         )]
         [ValidateNotNullOrEmpty()]
         [string]$ImagePath
@@ -65,7 +65,7 @@ function Get-ImageGeolocation {
         try {
 
             # load the image file
-            Microsoft.PowerShell.Utility\Write-Verbose "Loading image file"
+            Microsoft.PowerShell.Utility\Write-Verbose 'Loading image file'
 
             $image = [System.Drawing.Image]::FromFile($ImagePath)
 
@@ -73,7 +73,7 @@ function Get-ImageGeolocation {
             $propertyItems = $image.PropertyItems
 
             # extract gps metadata properties
-            Microsoft.PowerShell.Utility\Write-Verbose "Extracting GPS metadata"
+            Microsoft.PowerShell.Utility\Write-Verbose 'Extracting GPS metadata'
 
             $latitudeRef = $propertyItems |
                 Microsoft.PowerShell.Core\Where-Object { $PSItem.Id -eq 0x0001 }
@@ -92,10 +92,10 @@ function Get-ImageGeolocation {
 
                 # calculate actual latitude and longitude values
                 $lat = [BitConverter]::ToUInt32($latitude.Value, 0) /
-                    [BitConverter]::ToUInt32($latitude.Value, 4)
+                [BitConverter]::ToUInt32($latitude.Value, 4)
 
                 $lon = [BitConverter]::ToUInt32($longitude.Value, 0) /
-                    [BitConverter]::ToUInt32($longitude.Value, 4)
+                [BitConverter]::ToUInt32($longitude.Value, 4)
 
                 # adjust for south and west hemispheres
                 if ($latitudeRef.Value -eq [byte][char]'S') {
@@ -120,7 +120,7 @@ function Get-ImageGeolocation {
             else {
 
                 Microsoft.PowerShell.Utility\Write-Verbose (
-                    "No GPS metadata found in image"
+                    'No GPS metadata found in image'
                 )
 
                 return $null
@@ -144,4 +144,3 @@ function Get-ImageGeolocation {
     end {
     }
 }
-        ###############################################################################

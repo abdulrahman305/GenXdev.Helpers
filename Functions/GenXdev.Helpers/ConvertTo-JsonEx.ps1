@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Converts an object to a JSON string with extended options.
@@ -36,12 +36,12 @@ Converts pipeline input to compressed JSON format without whitespace.
 tojsonex $data
 
 Uses the alias to convert an object to JSON format.
-        ###############################################################################>
+#>
 function ConvertTo-JsonEx {
 
     [CmdletBinding()]
     [OutputType([System.String])]
-    [Alias("tojsonex")]
+    [Alias('tojsonex')]
 
     param(
         ########################################################################
@@ -49,13 +49,13 @@ function ConvertTo-JsonEx {
             Position = 0,
             Mandatory = $true,
             ValueFromPipeline = $true,
-            HelpMessage = "The object to convert to JSON"
+            HelpMessage = 'The object to convert to JSON'
         )]
         [object] $Object,
         ########################################################################
         [parameter(
             Mandatory = $false,
-            HelpMessage = "Compress the JSON output by removing whitespace"
+            HelpMessage = 'Compress the JSON output by removing whitespace'
         )]
         [switch] $Compress
         ########################################################################
@@ -64,14 +64,14 @@ function ConvertTo-JsonEx {
     begin {
 
         # output verbose information about starting the json conversion process
-        Microsoft.PowerShell.Utility\Write-Verbose ("Starting JSON conversion " +
-            "process")
+        Microsoft.PowerShell.Utility\Write-Verbose ('Starting JSON conversion ' +
+            'process')
     }
 
     process {
 
         # output verbose information about the conversion settings being used
-        Microsoft.PowerShell.Utility\Write-Verbose ("Converting object to " +
+        Microsoft.PowerShell.Utility\Write-Verbose ('Converting object to ' +
             "JSON with compression: $Compress")
 
         # convert the object to json using the custom serializer with
@@ -82,4 +82,3 @@ function ConvertTo-JsonEx {
     end {
     }
 }
-        ###############################################################################

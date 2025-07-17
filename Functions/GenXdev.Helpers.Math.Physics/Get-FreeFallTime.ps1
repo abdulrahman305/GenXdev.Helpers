@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Calculates the time it takes for an object to fall a specified distance.
@@ -17,15 +17,15 @@ is 53 m/s, which is the approximate terminal velocity of a human in free fall.
 
 .EXAMPLE
 Get-FreeFallTime -HeightInMeters 100
-        ###############################################################################Returns the time in seconds for an object to fall 100 meters with default
-        ###############################################################################terminal velocity
+Returns the time in seconds for an object to fall 100 meters with default
+terminal velocity
 
 .EXAMPLE
 Get-FreeFallTime 500 45
-        ###############################################################################Returns the time in seconds for an object to fall 500 meters with a terminal
-        ###############################################################################velocity of 45 m/s
-        ###############################################################################>
-Function Get-FreeFallTime {
+Returns the time in seconds for an object to fall 500 meters with a terminal
+velocity of 45 m/s
+#>
+function Get-FreeFallTime {
 
     [OutputType([double], [int])]
     [CmdletBinding()]
@@ -34,14 +34,14 @@ Function Get-FreeFallTime {
         [parameter(
             Position = 0,
             Mandatory = $true,
-            HelpMessage = "The initial height of the falling object in meters"
+            HelpMessage = 'The initial height of the falling object in meters'
         )]
         [double]$HeightInMeters,
         ########################################################################
         [parameter(
             Position = 1,
             Mandatory = $false,
-            HelpMessage = "The terminal velocity of the falling object in m/s"
+            HelpMessage = 'The terminal velocity of the falling object in m/s'
         )]
         [double]$TerminalVelocityInMs = 53  # Default human terminal velocity in m/s
         ########################################################################
@@ -88,7 +88,7 @@ Function Get-FreeFallTime {
 
             # add safety check to prevent infinite loops
             if ($time -gt 1000) {
-                Microsoft.PowerShell.Utility\Write-Error "Calculation timeout"
+                Microsoft.PowerShell.Utility\Write-Error 'Calculation timeout'
                 return 0
             }
         }

@@ -1,4 +1,4 @@
-Function Get-FreeFallHeight {
+﻿Function Get-FreeFallHeight {
     param (
         [double]$DurationInSeconds,
         [double]$TerminalVelocityInMs = 53  # Default human terminal velocity in m/s
@@ -27,7 +27,7 @@ Function Get-FreeFallHeight {
 
         # Add safety check
         if ($time -gt 1000) {
-            Microsoft.PowerShell.Utility\Write-Error "Calculation timeout"
+            Microsoft.PowerShell.Utility\Write-Error 'Calculation timeout'
             return 0
         }
     }

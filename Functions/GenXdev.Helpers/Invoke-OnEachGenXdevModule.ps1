@@ -1,14 +1,14 @@
-function Invoke-OnEachGenXdevModule {
+﻿function Invoke-OnEachGenXdevModule {
 
     [CmdletBinding()]
-    [Alias("foreach-genxdev-module-do")]
+    [Alias('foreach-genxdev-module-do')]
     param(
         [Parameter(
             Mandatory = $true,
             Position = 0,
-            HelpMessage = "The script block to execute for each GenXdev module"
+            HelpMessage = 'The script block to execute for each GenXdev module'
         )]
-        [Alias("ScriptBlock")]
+        [Alias('ScriptBlock')]
         [scriptblock] $Script,
 
         [Parameter(
@@ -16,12 +16,12 @@ function Invoke-OnEachGenXdevModule {
             Position = 1,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
-            HelpMessage = "Filter to apply to module names"
+            HelpMessage = 'Filter to apply to module names'
         )]
         [ValidateNotNullOrEmpty()]
-        [Alias("Module", "ModuleName")]
-        [ValidatePattern("^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$")]
-        [string[]] $BaseModuleName = @("GenXdev*"),
+        [Alias('Module', 'ModuleName')]
+        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$')]
+        [string[]] $BaseModuleName = @('GenXdev*'),
 
         [Parameter(Mandatory = $false)]
         [switch] $NoLocal,
@@ -39,7 +39,7 @@ function Invoke-OnEachGenXdevModule {
 
         if ($FromScripts) {
 
-            $BaseModuleName = @("GenXdev.Scripts")
+            $BaseModuleName = @('GenXdev.Scripts')
         }
     }
 
@@ -51,8 +51,8 @@ function Invoke-OnEachGenXdevModule {
             function goNext {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.200.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.200.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.202.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.202.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 
@@ -71,7 +71,7 @@ function Invoke-OnEachGenXdevModule {
                     ))) {
                     $location = (Microsoft.PowerShell.Management\Get-Location).Path
                     try {
-                        if ($module.Name -like "GenXdev.Scripts") {
+                        if ($module.Name -like 'GenXdev.Scripts') {
 
                             Microsoft.PowerShell.Management\Set-Location $ScriptsPath
                         }
@@ -79,20 +79,20 @@ function Invoke-OnEachGenXdevModule {
                             [version] $version = $null
                             Microsoft.PowerShell.Management\Set-Location "$($module.FullName)"
 
-                            $newLocation = Microsoft.PowerShell.Management\Get-ChildItem ".\*.*.*" -dir -ErrorAction SilentlyContinue |
-                            Microsoft.PowerShell.Core\Where-Object {
-                                [Version]::TryParse($_.Name, [ref]$version)
-                            } |
-                            Microsoft.PowerShell.Utility\Sort-Object {
+                            $newLocation = Microsoft.PowerShell.Management\Get-ChildItem '.\*.*.*' -dir -ErrorAction SilentlyContinue |
+                                Microsoft.PowerShell.Core\Where-Object {
+                                    [Version]::TryParse($_.Name, [ref]$version)
+                                } |
+                                Microsoft.PowerShell.Utility\Sort-Object {
 
-                                [Version]::new($_.Name)
+                                    [Version]::new($_.Name)
 
-                            } -Descending |
-                            Microsoft.PowerShell.Utility\Select-Object -First 1 |
-                            Microsoft.PowerShell.Core\ForEach-Object {
+                                } -Descending |
+                                Microsoft.PowerShell.Utility\Select-Object -First 1 |
+                                Microsoft.PowerShell.Core\ForEach-Object {
 
-                                $_.FullName
-                            }
+                                    $_.FullName
+                                }
 
                             if ($null -eq $newLocation) {
 
@@ -111,10 +111,10 @@ function Invoke-OnEachGenXdevModule {
                 }
             }
 
-            if ($ModuleName -like "GenXdev.Scripts") {
+            if ($ModuleName -like 'GenXdev.Scripts') {
 
                 goNext -module @{
-                    Name     = "GenXdev.Scripts"
+                    Name     = 'GenXdev.Scripts'
                     FullName = $ScriptsPath
                 }
 
@@ -122,20 +122,20 @@ function Invoke-OnEachGenXdevModule {
             }
 
             @(Microsoft.PowerShell.Management\Get-ChildItem "$modulesPath\GenXdev*" -dir -Force -ErrorAction SilentlyContinue) |
-            Microsoft.PowerShell.Utility\Sort-Object { $_.Name.Length } -Descending |
-            Microsoft.PowerShell.Core\ForEach-Object {
+                Microsoft.PowerShell.Utility\Sort-Object { $_.Name.Length } -Descending |
+                Microsoft.PowerShell.Core\ForEach-Object {
 
-                if ($_.Name -like $ModuleName) {
+                    if ($_.Name -like $ModuleName) {
 
-                    try {
-                        goNext -module $_
-                    }
-                    catch {
+                        try {
+                            goNext -module $_
+                        }
+                        catch {
 
-                        Microsoft.PowerShell.Utility\Write-Error $_.Exception.Message
+                            Microsoft.PowerShell.Utility\Write-Error $_.Exception.Message
+                        }
                     }
                 }
-            }
         }
     }
 

@@ -1,4 +1,4 @@
-        ###############################################################################
+﻿###############################################################################
 
 
 <#
@@ -38,47 +38,47 @@ Text to sent to serial port.
 .PARAMETER AddCRLinefeeds
 Add linefeeds to input text parts.
 
-        ###############################################################################>
+#>
 function Out-Serial {
     param (
         [Parameter(Mandatory = $false,
-            HelpMessage = "The port to use (for example, COM1).")]
+            HelpMessage = 'The port to use (for example, COM1).')]
         [string]$Portname = 'COM5',
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "The baud rate.")]
+            HelpMessage = 'The baud rate.')]
         [int]$BaudRate = 9600,
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "Limits the nr of bytes to read.")]
+            HelpMessage = 'Limits the nr of bytes to read.')]
         [uint]$MaxBytesToRead = 0,
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "Enables reading with a specified timeout in milliseconds.")]
+            HelpMessage = 'Enables reading with a specified timeout in milliseconds.')]
         [uint]$ReadTimeout,
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "Enables writing with a specified timeout in milliseconds.")]
+            HelpMessage = 'Enables writing with a specified timeout in milliseconds.')]
         [uint]$WriteTimeout,
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "One of the System.IO.Ports.SerialPort.Parity values.")]
+            HelpMessage = 'One of the System.IO.Ports.SerialPort.Parity values.')]
         [string]$Parity = 'None',
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "The data bits value.")]
+            HelpMessage = 'The data bits value.')]
         [int]$DataBits = 8,
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "One of the System.IO.Ports.SerialPort.StopBits values.")]
+            HelpMessage = 'One of the System.IO.Ports.SerialPort.StopBits values.')]
         [string]$StopBits = 'One',
 
         [Parameter(Mandatory, ValueFromPipeline,
-            HelpMessage = "Text to sent to serial port.")]
+            HelpMessage = 'Text to sent to serial port.')]
         [object]$Text,
 
         [Parameter(Mandatory = $false,
-            HelpMessage = "Add linefeeds to input text parts.")]
+            HelpMessage = 'Add linefeeds to input text parts.')]
         [switch]$AddCRLinefeeds = $false
     )
     begin {
@@ -88,7 +88,7 @@ function Out-Serial {
         $serialPort.Open()
     }
 
-process {
+    process {
         try {
             if ($Text -is [string]) {
                 if ($AddCRLinefeeds) {

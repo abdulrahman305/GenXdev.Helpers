@@ -1,13 +1,13 @@
-###############################################################################
-Pester\Describe "Show-GenXDevCmdlets" {
+﻿###############################################################################
+Pester\Describe 'Show-GenXDevCmdlets' {
 
     Pester\BeforeAll {
-    # get the script path for analysis
+        # get the script path for analysis
         $Script:scriptPath = GenXdev.FileSystem\Expand-Path `
             "$PSScriptRoot\..\..\Functions\GenXdev.Helpers\Show-GenXDevCmdlets.ps1"
     }
 
-    Pester\It "Should pass PSScriptAnalyzer rules" {
+    Pester\It 'Should pass PSScriptAnalyzer rules' {
 
         # run analyzer with explicit settings
         $analyzerResults = GenXdev.Coding\Invoke-GenXdevScriptAnalyzer `
@@ -20,7 +20,7 @@ Pester\Describe "Show-GenXDevCmdlets" {
             $analyzerResults | Microsoft.PowerShell.Core\ForEach-Object {
 
                 # suppress the PSUseSingularNouns rule for this test
-                if ($_.RuleName -ne "PSUseSingularNouns") {
+                if ($_.RuleName -ne 'PSUseSingularNouns') {
                     $_.RuleName | Pester\Should -Be $_.Message
                 }
             }

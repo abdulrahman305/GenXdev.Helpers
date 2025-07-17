@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Shows a short alphabetical list of all PowerShell verbs.
@@ -13,27 +13,27 @@ If omitted, all approved verbs are shown.
 
 .EXAMPLE
 Show-Verb
-        ###############################################################################Shows all approved PowerShell verbs
+Shows all approved PowerShell verbs
 
 .EXAMPLE
 Show-Verb -Verb "Get*"
-        ###############################################################################Shows all approved verbs starting with "Get"
+Shows all approved verbs starting with "Get"
 
 .EXAMPLE
 showverbs "Set*", "Get*"
-        ###############################################################################Shows all approved verbs starting with "Set" or "Get" using the alias
-        ###############################################################################>
+Shows all approved verbs starting with "Set" or "Get" using the alias
+#>
 function Show-Verb {
 
     [CmdletBinding()]
-    [Alias("showverbs")]
+    [Alias('showverbs')]
     param(
         ########################################################################
         [parameter(
             Position = 0,
             ValueFromPipeline,
             ValueFromPipelineByPropertyName,
-            HelpMessage = "One or more verb patterns to filter (supports wildcards)",
+            HelpMessage = 'One or more verb patterns to filter (supports wildcards)',
             Mandatory = $False
         )]
         [SupportsWildcards()]
@@ -46,7 +46,7 @@ function Show-Verb {
     }
 
 
-process {
+    process {
 
         # if no specific verbs requested, get all approved verbs
         if ($Verb.Length -eq 0) {
@@ -56,27 +56,26 @@ process {
         else {
             # filter verbs based on provided patterns
             $verbs = Microsoft.PowerShell.Utility\Get-Verb |
-            Microsoft.PowerShell.Core\ForEach-Object -ErrorAction SilentlyContinue {
+                Microsoft.PowerShell.Core\ForEach-Object -ErrorAction SilentlyContinue {
 
-                $existingVerb = $PSItem
+                    $existingVerb = $PSItem
 
-                foreach ($verb in $Verb) {
+                    foreach ($verb in $Verb) {
 
-                    if ($existingVerb.Verb -like $verb) {
+                        if ($existingVerb.Verb -like $verb) {
 
-                        $existingVerb
+                            $existingVerb
+                        }
                     }
                 }
-            }
         }
 
         # sort verbs alphabetically and return as comma-separated string
         ($verbs |
-        Microsoft.PowerShell.Utility\Sort-Object { $PSItem.Verb } |
-        Microsoft.PowerShell.Core\ForEach-Object Verb -ErrorAction SilentlyContinue) -Join ", "
+            Microsoft.PowerShell.Utility\Sort-Object { $PSItem.Verb } |
+            Microsoft.PowerShell.Core\ForEach-Object Verb -ErrorAction SilentlyContinue) -Join ', '
     }
 
     end {
     }
 }
-        ###############################################################################

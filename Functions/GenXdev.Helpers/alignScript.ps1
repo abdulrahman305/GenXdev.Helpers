@@ -1,4 +1,4 @@
-        ###############################################################################
+﻿###############################################################################
 
 <#
 .SYNOPSIS
@@ -12,10 +12,10 @@ The scriptblock string
 
 .PARAMETER spaces
 The minimum number of spaces for each line
-        ###############################################################################>
+#>
 function alignScript([string] $script, [int] $spaces = 0) {
 
-    $lines = @($script.Replace("`r`n", "`n").Replace("`t", "    ").Split("`n"));
+    $lines = @($script.Replace("`r`n", "`n").Replace("`t", '    ').Split("`n"));
 
     [int] $NrOfSpacesToTrim = [int]::MaxValue;
 
@@ -23,7 +23,7 @@ function alignScript([string] $script, [int] $spaces = 0) {
 
         $c = 0;
         $s = $PSItem
-        while (($s.Length -gt 0) -and ($s.substring(0, 1) -eq " ")) {
+        while (($s.Length -gt 0) -and ($s.substring(0, 1) -eq ' ')) {
 
             $c++;
             if ($s.Length -gt 1) {
@@ -32,7 +32,7 @@ function alignScript([string] $script, [int] $spaces = 0) {
             }
             else {
 
-                $s = "";
+                $s = '';
             }
         }
 
@@ -49,7 +49,7 @@ function alignScript([string] $script, [int] $spaces = 0) {
             [int] $c = $NrOfSpacesToTrim;
             $a = $PSItem
 
-            while (($a.Length -gt 0) -and ($a.substring(0, 1) -eq " ") -and ($c -gt 0)) {
+            while (($a.Length -gt 0) -and ($a.substring(0, 1) -eq ' ') -and ($c -gt 0)) {
 
                 $c--;
 
@@ -59,7 +59,7 @@ function alignScript([string] $script, [int] $spaces = 0) {
                 }
                 else {
 
-                    $a = "";
+                    $a = '';
                 }
             }
 

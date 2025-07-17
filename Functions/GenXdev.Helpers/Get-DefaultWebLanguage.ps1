@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Gets the default web language key based on the system's current language settings.
@@ -10,7 +10,7 @@ corresponding web language dictionary key used by translation services.
 .EXAMPLE
 Get-DefaultWebLanguage
 Returns "English" for an English system, "Dutch" for a Dutch system, etc.
-        ###############################################################################>
+#>
 function Get-DefaultWebLanguage {
 
     [CmdletBinding()]
@@ -24,7 +24,7 @@ function Get-DefaultWebLanguage {
     }
 
 
-process {
+    process {
         # get the dictionary of supported languages
         $webLanguages = GenXdev.Helpers\Get-WebLanguageDictionary
 
@@ -48,8 +48,7 @@ process {
         }
 
         # default to English if no match found
-        Microsoft.PowerShell.Utility\Write-Verbose "No matching language found, defaulting to English"
-        return "English"
+        Microsoft.PowerShell.Utility\Write-Verbose 'No matching language found, defaulting to English'
+        return 'English'
     }
 }
-        ###############################################################################
