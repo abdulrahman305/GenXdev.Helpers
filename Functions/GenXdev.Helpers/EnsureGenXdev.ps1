@@ -38,22 +38,6 @@ function EnsureGenXdev {
     process {
 
 
-        $fp = GenXdev.FileSystem\Expand-Path '~\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1' -CreateDirectory
-
-        if (-not (Microsoft.PowerShell.Management\Test-Path -Path $fp)) {
-
-            @"
-            # Pass command and arguments on to pwsh.exe
-            if (`$args.Count -gt 0) {
-                `$command = `$args[0]
-                `$arguments = `$args[1..(`$args.Count - 1)] -join ' '
-                Start-Process pwsh.exe -ArgumentList "-Command", "`"$command $arguments`""
-            } else {
-                Start-Process pwsh.exe
-            }
-"@ | Microsoft.PowerShell.Utility\Out-File -FilePath $fp -Force
-        }
-
         # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
         GenXdev.Helpers\Show-GenXDevCmdlets Ensure* -PassThru |
             Microsoft.PowerShell.Core\ForEach-Object name |

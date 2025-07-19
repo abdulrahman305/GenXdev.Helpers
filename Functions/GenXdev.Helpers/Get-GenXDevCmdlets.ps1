@@ -1,4 +1,4 @@
-﻿###############################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Retrieves and lists all GenXdev cmdlets and their details.
@@ -220,7 +220,7 @@ function Get-GenXDevCmdlets {
                         $cmd = $cmd.ResolvedCommand
                     }
 
-                    $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.202.2025\Functions\*\$($cmd.Name).ps1" -PassThru | Microsoft.PowerShell.Core\ForEach-Object FullName
+                    $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.208.2025\Functions\*\$($cmd.Name).ps1" -PassThru | Microsoft.PowerShell.Core\ForEach-Object FullName
 
                     if ($null -eq $functionPath) { return }
 
