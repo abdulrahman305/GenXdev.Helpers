@@ -66,6 +66,7 @@ Update-Module
 | [Get-DefaultWebLanguage](#Get-DefaultWebLanguage) |  | Gets the default web language key based on the system's current language settings. |
 | [Get-GenXDevCmdlets](#Get-GenXDevCmdlets) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#Get-ImageGeolocation) |  | Extracts geolocation data from an image file. |
+| [Get-ImageMetadata](#Get-ImageMetadata) |  | Extracts comprehensive metadata from an image file. |
 | [Get-WebLanguageDictionary](#Get-WebLanguageDictionary) |  | Returns a reversed dictionary for all languages supported by Google Search |
 | [Import-GenXdevModules](#Import-GenXdevModules) | reloadgenxdev | Imports all GenXdev PowerShell modules into the global scope. |
 | [Initialize-SearchPaths](#Initialize-SearchPaths) |  | Initializes and configures system search paths for package management. |
@@ -668,6 +669,79 @@ OUTPUTS
     -------------------------- EXAMPLE 2 --------------------------
     
     PS > "C:\Photos\vacation.jpg" | Get-ImageGeolocation
+    
+    
+    
+    
+    
+    
+    
+RELATED LINKS 
+
+<br/><hr/><hr/><br/>
+ 
+NAME
+    Get-ImageMetadata
+    
+SYNOPSIS
+    Extracts comprehensive metadata from an image file.
+    
+    
+SYNTAX
+    Get-ImageMetadata [-ImagePath] <String> [<CommonParameters>]
+    
+    
+DESCRIPTION
+    This function reads EXIF, IPTC and other metadata from an image file. It extracts
+    a wide range of information including camera details, exposure settings, GPS coordinates,
+    dates, copyright information, and more. It supports images that contain metadata
+    in their EXIF data (JPEG, TIFF) as well as PNG metadata.
+    
+
+PARAMETERS
+    -ImagePath <String>
+        The full path to the image file to analyze. The file must be a valid image format
+        that supports metadata (JPEG, TIFF, PNG, etc.).
+        
+        Required?                    true
+        Position?                    1
+        Default value                
+        Accept pipeline input?       true (ByValue, ByPropertyName)
+        Aliases                      
+        Accept wildcard characters?  false
+        
+    <CommonParameters>
+        This cmdlet supports the common parameters: Verbose, Debug,
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see
+        about_CommonParameters (https://go.microsoft.com/fwlink/?LinkID=113216). 
+    
+INPUTS
+    
+OUTPUTS
+    System.Collections.Hashtable
+    Returns a hashtable containing all available metadata categories including:
+    - Basic (dimensions, format, etc.)
+    - Camera (make, model, etc.)
+    - Exposure (aperture, shutter speed, ISO, etc.)
+    - GPS (latitude, longitude, etc.)
+    - DateTime (when taken, modified, etc.)
+    - Author (artist, copyright, etc.)
+    - Additional (software, comments, etc.)
+    
+    
+    -------------------------- EXAMPLE 1 --------------------------
+    
+    PS > Get-ImageMetadata -ImagePath "C:\Photos\vacation.jpg"
+    
+    
+    
+    
+    
+    
+    -------------------------- EXAMPLE 2 --------------------------
+    
+    PS > "C:\Photos\vacation.jpg" | Get-ImageMetadata
     
     
     

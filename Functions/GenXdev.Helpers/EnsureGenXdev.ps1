@@ -37,11 +37,12 @@ function EnsureGenXdev {
 
     process {
 
+        GenXdev.Coding\EnsureVSCodeInstallation
 
         # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
         GenXdev.Helpers\Show-GenXDevCmdlets Ensure* -PassThru |
             Microsoft.PowerShell.Core\ForEach-Object name |
-            Microsoft.PowerShell.Core\Where-Object { $_ -ne 'EnsureGenXdev' } |
+            Microsoft.PowerShell.Core\Where-Object { @('EnsureGenXdev','EnsureVSCodeInstallation').IndexOf($_) -lt 0 } |
             Microsoft.PowerShell.Core\ForEach-Object {
 
                 try {

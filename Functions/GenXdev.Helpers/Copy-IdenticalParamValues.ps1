@@ -137,7 +137,7 @@ function Copy-IdenticalParamValues {
         $functionInfo = Microsoft.PowerShell.Core\Get-Command -Name $FunctionName -ErrorAction SilentlyContinue
 
         # validate function exists
-        if ($null -eq $functionInfo) {
+        if ($null -eq $functionInfo -or $null -eq $functionInfo.Parameters) {
 
             Microsoft.PowerShell.Utility\Write-Error "Function '$FunctionName' not found"
             return

@@ -46,7 +46,7 @@ function Get-ImageGeolocation {
     begin {
 
         # check if image path exists
-        if (-not (Microsoft.PowerShell.Management\Test-Path $ImagePath)) {
+        if (-not (Microsoft.PowerShell.Management\Test-Path -LiteralPath $ImagePath)) {
 
             Microsoft.PowerShell.Utility\Write-Error (
                 "The specified image path '$ImagePath' does not exist."

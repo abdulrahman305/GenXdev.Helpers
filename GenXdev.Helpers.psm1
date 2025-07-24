@@ -19,6 +19,7 @@ if ($major -ne 10) {
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Get-DefaultWebLanguage.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Get-GenXDevCmdlets.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Get-ImageGeolocation.ps1"
+. "$PSScriptRoot\Functions\GenXdev.Helpers\Get-ImageMetadata.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Get-WebLanguageDictionary.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Import-GenXdevModules.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Initialize-SearchPaths.ps1"
