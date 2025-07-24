@@ -905,7 +905,7 @@ NAME
     Invoke-OnEachGenXdevModule
     
 SYNTAX
-    Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [<CommonParameters>]
+    Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeGenXdevMainModule] [<CommonParameters>]
     
     
 PARAMETERS
@@ -921,6 +921,16 @@ PARAMETERS
         Accept wildcard characters?  false
         
     -FromScripts
+        
+        Required?                    false
+        Position?                    Named
+        Accept pipeline input?       false
+        Parameter set name           (All)
+        Aliases                      None
+        Dynamic?                     false
+        Accept wildcard characters?  false
+        
+    -IncludeGenXdevMainModule
         
         Required?                    false
         Position?                    Named

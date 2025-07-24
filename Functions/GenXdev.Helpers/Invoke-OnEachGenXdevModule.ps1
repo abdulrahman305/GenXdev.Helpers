@@ -30,7 +30,10 @@ function Invoke-OnEachGenXdevModule {
         [switch] $OnlyPublished,
 
         [Parameter(Mandatory = $false)]
-        [switch] $FromScripts
+        [switch] $FromScripts,
+
+        [Parameter(Mandatory = $false)]
+        [switch] $IncludeGenXdevMainModule
     )
 
     begin {
@@ -51,8 +54,8 @@ function Invoke-OnEachGenXdevModule {
             function goNext {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.212.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.212.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.214.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.214.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 
@@ -60,7 +63,7 @@ function Invoke-OnEachGenXdevModule {
                     $readmeFilePath = $null
                 }
 
-                if (($module.Name -like 'GenXdev.*') -and
+                if (($module.Name -like ($IncludeGenXdevMainModule ? 'GenXdev*' : 'GenXdev.*')) -and
                         ((-not $NoLocal) -or ($module.Name -notlike '*.Local*')) -and
                         ((-not $OnlyPublished) -or (
                                     ($module.Name -notlike '*Local*') -and
@@ -121,7 +124,7 @@ function Invoke-OnEachGenXdevModule {
                 continue;
             }
 
-            @(Microsoft.PowerShell.Management\Get-ChildItem "$modulesPath\GenXdev*" -dir -Force -ErrorAction SilentlyContinue) |
+            @(Microsoft.PowerShell.Management\Get-ChildItem ("$modulesPath\"+($IncludeGenXdevMainModule ? 'GenXdev*' : 'GenXdev.*')) -dir -Force -ErrorAction SilentlyContinue) |
                 Microsoft.PowerShell.Utility\Sort-Object { $_.Name.Length } -Descending |
                 Microsoft.PowerShell.Core\ForEach-Object {
 
