@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+    <ViewDefinitions>
+        <!-- Default table view for ImageSearchResult -->
+        <View>
+            <Name>ImageSearchResult-Table</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.ImageSearchResult</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                        <Width>30</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Size</Label>
+                        <Width>10</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Dimensions</Label>
+                        <Width>12</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Faces</Label>
+                        <Width>6</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Objects</Label>
+                        <Width>7</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Type</Label>
+                        <Width>15</Width>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Description</Label>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Size</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Dimensions</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>FaceCount</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>ObjectCount</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>PictureType</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>ShortDescription</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <!-- Wide table view for more details -->
+        <View>
+            <Name>ImageSearchResult-Wide</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.ImageSearchResult</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Name</Label>
+                        <Width>25</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Size</Label>
+                        <Width>10</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Dimensions</Label>
+                        <Width>12</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Modified</Label>
+                        <Width>20</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>F</Label>
+                        <Width>3</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>O</Label>
+                        <Width>3</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>E</Label>
+                        <Width>3</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>N</Label>
+                        <Width>3</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Type</Label>
+                        <Width>15</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Path</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Name</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Size</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Dimensions</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.LastWriteTime -gt [DateTime]::MinValue) {
+                                        $_.LastWriteTime.ToString("MM/dd/yyyy HH:mm")
+                                    } else {
+                                        "Unknown"
+                                    }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.FaceCount -gt 0) { $_.FaceCount } else { "-" }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.ObjectCount -gt 0) { $_.ObjectCount } else { "-" }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.HasExplicitContent) { "!" } else { "-" }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    if ($_.HasNudity) { "!" } else { "-" }
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>PictureType</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Directory</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <!-- List view for detailed information -->
+        <View>
+            <Name>ImageSearchResult-List</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.ImageSearchResult</TypeName>
+            </ViewSelectedBy>
+            <ListControl>
+                <ListEntries>
+                    <ListEntry>
+                        <ListItems>
+                            <ListItem>
+                                <Label>Name</Label>
+                                <PropertyName>Name</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Path</Label>
+                                <PropertyName>Path</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Size</Label>
+                                <PropertyName>Size</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Dimensions</Label>
+                                <PropertyName>Dimensions</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Last Modified</Label>
+                                <ScriptBlock>
+                                    if ($_.LastWriteTime -gt [DateTime]::MinValue) {
+                                        $_.LastWriteTime.ToString("dddd, MMMM dd, yyyy h:mm:ss tt")
+                                    } else {
+                                        "Unknown"
+                                    }
+                                </ScriptBlock>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Picture Type</Label>
+                                <PropertyName>PictureType</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Description</Label>
+                                <PropertyName>ShortDescription</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Faces Detected</Label>
+                                <PropertyName>FaceCount</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Objects Detected</Label>
+                                <PropertyName>ObjectCount</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Has Explicit Content</Label>
+                                <PropertyName>HasExplicitContent</PropertyName>
+                            </ListItem>
+                            <ListItem>
+                                <Label>Has Nudity</Label>
+                                <PropertyName>HasNudity</PropertyName>
+                            </ListItem>
+                        </ListItems>
+                    </ListEntry>
+                </ListEntries>
+            </ListControl>
+        </View>
+
+        <!-- People detection results table -->
+        <View>
+            <Name>PeopleResult-Table</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.PeopleResult</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Success</Label>
+                        <Width>8</Width>
+                        <Alignment>Center</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Count</Label>
+                        <Width>6</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Faces Detected</Label>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Success</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Count</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    $_.ToString()
+                                </ScriptBlock>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <!-- Face predictions table -->
+        <View>
+            <Name>FacePrediction-Table</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.FacePrediction</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>User ID</Label>
+                        <Width>20</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Confidence</Label>
+                        <Width>12</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>X Min</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Y Min</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>X Max</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Y Max</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>UserId</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    "{0:P1}" -f $_.Confidence
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>XMin</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>YMin</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>XMax</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>YMax</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <!-- Objects detection results table -->
+        <View>
+            <Name>ObjectsResult-Table</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.ObjectsResult</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Count</Label>
+                        <Width>6</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Objects Detected</Label>
+                        <Alignment>Left</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Count</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    $_.ToString()
+                                </ScriptBlock>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+
+        <!-- Detected objects table -->
+        <View>
+            <Name>DetectedObject-Table</Name>
+            <ViewSelectedBy>
+                <TypeName>GenXdev.Helpers.DetectedObject</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader>
+                        <Label>Label</Label>
+                        <Width>15</Width>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Confidence</Label>
+                        <Width>12</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>X Min</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Y Min</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>X Max</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Y Max</Label>
+                        <Width>8</Width>
+                        <Alignment>Right</Alignment>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>Label</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <ScriptBlock>
+                                    "{0:P1}" -f $_.Confidence
+                                </ScriptBlock>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>XMin</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>YMin</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>XMax</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>YMax</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
