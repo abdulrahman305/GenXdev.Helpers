@@ -55,32 +55,32 @@ Update-Module
 
 # Cmdlet Index
 ### GenXdev.Helpers<hr/>
+### GenXdev.Helpers
 | Command | Aliases | Description |
 | --- | --- | --- |
-| [alignScript](#alignscript) |  | Returns a string (with altered indentation) of a provided scriptblock string |
-| [ConvertTo-HashTable](#convertto-hashtable) |  | Converts a PSCustomObject to a HashTable recursively. |
+| [alignScript](#alignscript) | &nbsp; | Returns a string (with altered indentation) of a provided scriptblock string |
+| [ConvertTo-HashTable](#convertto-hashtable) | &nbsp; | Converts a PSCustomObject to a HashTable recursively. |
 | [ConvertTo-JsonEx](#convertto-jsonex) | tojsonex | Converts an object to a JSON string with extended options. |
-| [Copy-IdenticalParamValues](#copy-identicalparamvalues) |  |  |
-| [EnsureGenXdev](#ensuregenxdev) |  |  |
-| [Get-DefaultWebLanguage](#get-defaultweblanguage) |  | Gets the default web language key based on the system's current language settings. |
+| [Copy-IdenticalParamValues](#copy-identicalparamvalues) | &nbsp; |  |
+| [EnsureGenXdev](#ensuregenxdev) | &nbsp; |  |
+| [Get-DefaultWebLanguage](#get-defaultweblanguage) | &nbsp; | Gets the default web language key based on the system's current language settings. |
 | [Get-GenXDevCmdlets](#get-genxdevcmdlets) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
-| [Get-ImageGeolocation](#get-imagegeolocation) |  | Extracts geolocation data from an image file. |
-| [Get-ImageMetadata](#get-imagemetadata) |  | Extracts comprehensive metadata from an image file. |
-| [Get-WebLanguageDictionary](#get-weblanguagedictionary) |  | Returns a reversed dictionary for all languages supported by Google Search |
+| [Get-ImageGeolocation](#get-imagegeolocation) | &nbsp; | Extracts geolocation data from an image file. |
+| [Get-ImageMetadata](#get-imagemetadata) | &nbsp; | Extracts comprehensive metadata from an image file. |
+| [Get-WebLanguageDictionary](#get-weblanguagedictionary) | &nbsp; | Returns a reversed dictionary for all languages supported by Google Search |
 | [Import-GenXdevModules](#import-genxdevmodules) | reloadgenxdev | Imports all GenXdev PowerShell modules into the global scope. |
-| [Initialize-SearchPaths](#initialize-searchpaths) |  | Initializes and configures system search paths for package management. |
-| [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do |  |
-| [Out-Serial](#out-serial) |  | Sends a string to a serial port |
-| [Remove-JSONComments](#remove-jsoncomments) |  | Removes comments from JSON content. |
+| [Initialize-SearchPaths](#initialize-searchpaths) | &nbsp; | Initializes and configures system search paths for package management. |
+| [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do | &nbsp; |
+| [Out-Serial](#out-serial) | &nbsp; | Sends a string to a serial port |
+| [Remove-JSONComments](#remove-jsoncomments) | &nbsp; | Removes comments from JSON content. |
 | [Show-GenXDevCmdlets](#show-genxdevcmdlets) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
 | [Show-Verb](#show-verb) | showverbs | Shows a short alphabetical list of all PowerShell verbs. |
 
 ### GenXdev.Helpers.Math.Physics
 | Command | Aliases | Description |
 | --- | --- | --- |
-
-| [Get-FreeFallHeight](#get-freefallheight) |  |  |
-| [Get-FreeFallTime](#get-freefalltime) |  | Calculates the time it takes for an object to fall a specified distance. |
+| [Get-FreeFallHeight](#get-freefallheight) | &nbsp; |  |
+| [Get-FreeFallTime](#get-freefalltime) | &nbsp; | Calculates the time it takes for an object to fall a specified distance. |
 
 <br/><hr/><hr/><br/>
 
@@ -312,7 +312,7 @@ Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String>
 
 ### SYNTAX 
 ````PowerShell 
-EnsureGenXdev [<CommonParameters>] 
+EnsureGenXdev [-Force] [-DownloadLMStudioModels] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
@@ -322,6 +322,20 @@ EnsureGenXdev [<CommonParameters>]
     the execution are caught and displayed as informational messages.  
 
 ### PARAMETERS 
+    -Force [<SwitchParameter>]  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -DownloadLMStudioModels [<SwitchParameter>]  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,  

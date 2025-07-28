@@ -23,6 +23,8 @@ function EnsureGenXdev {
     [Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssignments','')]
 
     param(
+        [Switch] $Force,
+        [Switch] $DownloadLMStudioModels
     )
 
     begin {
@@ -77,6 +79,8 @@ function EnsureGenXdev {
             'Coding',
             'ToolUse'
         )
+
+        if (-not $DownloadLMStudioModels) { return }
 
         foreach ($LLMQueryType in $queryTypes) {
 
