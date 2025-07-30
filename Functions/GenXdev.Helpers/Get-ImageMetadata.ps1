@@ -34,7 +34,7 @@ function Get-ImageMetadata {
 
     [CmdletBinding()]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
-    [OutputType([System.Collections.Hashtable])]
+    [OutputType([GenXdev.Helpers.ImageSearchResultMetadata])]
 
     param (
         ########################################################################
@@ -51,6 +51,7 @@ function Get-ImageMetadata {
     )
 
     begin {
+        [GenXdev.Helpers.ImageSearchResultMetadata] $metadata = [GenXdev.Helpers.ImageSearchResultMetadata]::new();
 
         # check if image path exists
         if (-not (Microsoft.PowerShell.Management\Test-Path -LiteralPath $ImagePath)) {
@@ -197,17 +198,6 @@ function Get-ImageMetadata {
 
         try {
 
-            # Initialize the metadata hashtable with categories
-            $metadata = @{
-                Basic    = @{}
-                Camera   = @{}
-                Exposure = @{}
-                GPS      = @{}
-                DateTime = @{}
-                Author   = @{}
-                Other    = @{}
-            }
-
             # Load the image file
             Microsoft.PowerShell.Utility\Write-Verbose 'Loading image file'
             $image = [System.Drawing.Image]::FromFile($ImagePath)
@@ -255,21 +245,30 @@ function Get-ImageMetadata {
                         # Date/time strings
                         {$_ -match 'DateTime'} {
                             $value = [System.Text.Encoding]::ASCII.GetString($item.Value).TrimEnd([char]0)
-                            $metadata.DateTime[$tagName] = $value
+                            try {
+                                $metadata.DateTime."$tagName" = $value
+                            }
+                            catch {
+
+                            }
                         }
 
                         # String values
                         {$_ -in 'Make','Model','Software','Artist','Copyright','UserComment'} {
                             $value = [System.Text.Encoding]::ASCII.GetString($item.Value).TrimEnd([char]0)
+                            try {
+                                if ($_ -in 'Make','Model') {
+                                    $metadata.Camera."$tagName" = $value
+                                }
+                                elseif ($_ -in 'Artist','Copyright') {
+                                    $metadata.Author."$tagName" = $value
+                                }
+                                else {
+                                    $metadata.Other."$tagName" = $value
+                                }
+                            }
+                            catch {
 
-                            if ($_ -in 'Make','Model') {
-                                $metadata.Camera[$tagName] = $value
-                            }
-                            elseif ($_ -in 'Artist','Copyright') {
-                                $metadata.Author[$tagName] = $value
-                            }
-                            else {
-                                $metadata.Other[$tagName] = $value
                             }
                         }
 
@@ -292,17 +291,32 @@ function Get-ImageMetadata {
                             else {
                                 $value = $item.Value[0]
                             }
-                            $metadata.Exposure[$tagName] = $value
+                            try {
+                                $metadata.Exposure."$tagName" = $value
+                            }
+                            catch {
+
+                            }
                         }
 
                         # Default catch-all
                         default {
-                            $metadata.Other[$tagName] = "Binary data"
+                            try {
+                                $metadata.Other."$tagName" = "Binary data"
+                            }
+                            catch {
+
+                            }
                         }
                     }
                 }
                 catch {
-                    $metadata.Other["Error_$tagName"] = "Failed to parse: $_"
+                    try {
+                        $metadata.Other["Error_$tagName"] = "Failed to parse: $_"
+                    }
+                    catch {
+
+                    }
                 }
             }
 
