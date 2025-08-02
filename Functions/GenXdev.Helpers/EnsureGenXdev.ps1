@@ -61,7 +61,7 @@ function EnsureGenXdev {
                         -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
 
                     $command = Microsoft.PowerShell.Core\Get-Command -Name $_
-                    & $command @params -Confirm:$False
+                    & $command @params
                 } catch {
 
                     # capture and display any execution failures

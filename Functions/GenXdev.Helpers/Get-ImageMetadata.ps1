@@ -54,7 +54,7 @@ function Get-ImageMetadata {
         [GenXdev.Helpers.ImageSearchResultMetadata] $metadata = [GenXdev.Helpers.ImageSearchResultMetadata]::new();
 
         # check if image path exists
-        if (-not (Microsoft.PowerShell.Management\Test-Path -LiteralPath $ImagePath)) {
+        if (-not (Microsoft.PowerShell.Management\Test-Path w $ImagePath)) {
 
             Microsoft.PowerShell.Utility\Write-Error (
                 "The specified image path '$ImagePath' does not exist."
@@ -200,7 +200,9 @@ function Get-ImageMetadata {
 
             # Load the image file
             Microsoft.PowerShell.Utility\Write-Verbose 'Loading image file'
+
             $image = [System.Drawing.Image]::FromFile($ImagePath)
+            # $image = [SizLabors.ImageSharp.Image]::Load($ImagePath)
 
             # Set basic image information
             $metadata.Basic.Width = $image.Width

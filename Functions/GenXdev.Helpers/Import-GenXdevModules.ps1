@@ -60,11 +60,11 @@ function Import-GenXdevModules {
         try {
             # navigate to modules parent directory
             Microsoft.PowerShell.Utility\Write-Verbose 'Changing to parent module directory'
-            Microsoft.PowerShell.Management\Set-Location "$PSScriptRoot\..\..\..\.."
+            Microsoft.PowerShell.Management\Set-Location -LiteralPath "$PSScriptRoot\..\..\..\.."
 
             # find and process each genxdev module
             Microsoft.PowerShell.Utility\Write-Verbose 'Scanning for GenXdev modules'
-            Microsoft.PowerShell.Management\Get-ChildItem '.\GenXdev*' -dir |
+            Microsoft.PowerShell.Management\Get-ChildItem -LiteralPath '.\' -Filter "GenXdev*" -dir |
                 Microsoft.PowerShell.Core\ForEach-Object {
 
                     $name = $PSItem.Name

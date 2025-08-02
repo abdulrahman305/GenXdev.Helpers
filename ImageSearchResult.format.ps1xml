@@ -1362,10 +1362,6 @@
                                 <Label>Success</Label>
                                 <PropertyName>Success</PropertyName>
                             </ListItem>
-                            <ListItem>
-                                <Label>Processed At</Label>
-                                <PropertyName>Processed_At</PropertyName>
-                            </ListItem>
                         </ListItems>
                     </ListEntry>
                 </ListEntries>

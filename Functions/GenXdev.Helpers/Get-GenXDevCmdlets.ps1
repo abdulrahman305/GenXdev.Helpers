@@ -113,7 +113,7 @@ function Get-GenXDevCmdlets {
             $CmdletName = GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($ScriptFilePath))\$CmdletName.ps1"
 
             # process all ps1 files in scripts directory
-            Microsoft.PowerShell.Management\Get-ChildItem $CmdletName -File -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
+            Microsoft.PowerShell.Management\Get-ChildItem -LiteralPath $CmdletName -File -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
 
                 # skip test files to avoid processing test code
                 if ($_.Name -like '*.Tests.ps1') { return }
@@ -220,11 +220,13 @@ function Get-GenXDevCmdlets {
                         $cmd = $cmd.ResolvedCommand
                     }
 
-                    $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.224.2025\Functions\*\$($cmd.Name).ps1" -PassThru | Microsoft.PowerShell.Core\ForEach-Object FullName
+                    $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.226.2025\Functions\*\$($cmd.Name).ps1" -PassThru |
+                        Microsoft.PowerShell.Core\ForEach-Object FullName |
+                        Microsoft.PowerShell.Utility\Select-Object -first 1
 
                     if ($null -eq $functionPath) { return }
 
-                    Microsoft.PowerShell.Management\Get-ChildItem ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
+                    Microsoft.PowerShell.Management\Get-ChildItem -LiteralPath ($functionPath) -File -Recurse -ErrorAction SilentlyContinue | Microsoft.PowerShell.Core\ForEach-Object {
 
                         if ($_.Name -like '_AssertGenXdevUnitTests.ps1') { return }
 
@@ -276,7 +278,7 @@ function Get-GenXDevCmdlets {
             [string] $BaseModule = $module.Name
 
             # process each function file in module
-            @(Microsoft.PowerShell.Management\Get-ChildItem .\Functions\*.ps1 -File -Recurse `
+            @(Microsoft.PowerShell.Management\Get-ChildItem -LiteralPath .\Functions -Filter "*.ps1" -File -Recurse `
                     -ErrorAction SilentlyContinue) | Microsoft.PowerShell.Core\ForEach-Object {
 
                 if ($_.Name -like '*EnsureTypes*') {
