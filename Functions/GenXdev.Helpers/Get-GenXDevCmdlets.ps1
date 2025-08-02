@@ -220,7 +220,7 @@ function Get-GenXDevCmdlets {
                         $cmd = $cmd.ResolvedCommand
                     }
 
-                    $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.226.2025\Functions\*\$($cmd.Name).ps1" -PassThru |
+                    $functionPath = GenXdev.FileSystem\Find-Item "$PSScriptRoot\..\..\..\..\..\Modules\$($BaseModule)\1.228.2025\Functions\*\$($cmd.Name).ps1" -PassThru |
                         Microsoft.PowerShell.Core\ForEach-Object FullName |
                         Microsoft.PowerShell.Utility\Select-Object -first 1
 
