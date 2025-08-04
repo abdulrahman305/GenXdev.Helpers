@@ -54,8 +54,8 @@ function Invoke-OnEachGenXdevModule {
             function goNext {
                 param($module)
 
-                $licenseFilePath = "$($module.FullName)\1.228.2025\LICENSE"
-                $readmeFilePath = "$($module.FullName)\1.228.2025\README.md"
+                $licenseFilePath = "$($module.FullName)\1.230.2025\LICENSE"
+                $readmeFilePath = "$($module.FullName)\1.230.2025\README.md"
 
                 if ($module.FullName -eq $scriptsPath) {
 

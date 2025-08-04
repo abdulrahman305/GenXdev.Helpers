@@ -195,14 +195,31 @@ function Get-ImageMetadata {
     }
 
     process {
-
+        $image = $null
         try {
 
             # Load the image file
             Microsoft.PowerShell.Utility\Write-Verbose 'Loading image file'
 
-            $image = [System.Drawing.Image]::FromFile($ImagePath)
-            # $image = [SizLabors.ImageSharp.Image]::Load($ImagePath)
+            $actualPath = $ImagePath
+
+            if ([IO.Path]::GetExtension($ImagePath).ToLowerInvariant() -eq '.webp') {
+
+                # If the path is a script, execute it to get the actual image path
+                $actualPath = [IO.Path]::GetTempFileName()+".png";
+
+                [GenXdev.Helpers.WebP]::ConvertToPng($ImagePath, $actualPath)
+            }
+            try {
+                $image = [System.Drawing.Image]::FromFile($actualPath)
+            }
+            finally {
+                if ($actualPath -ne $ImagePath) {
+
+                    # Clean up temporary file if created
+                    Microsoft.PowerShell.Management\Remove-Item -LiteralPath $actualPath -Force -ErrorAction Ignore
+                }
+            }
 
             # Set basic image information
             $metadata.Basic.Width = $image.Width
@@ -437,13 +454,13 @@ function Get-ImageMetadata {
                 }
             }
 
-            return $metadata
+            return
         }
         catch {
             Microsoft.PowerShell.Utility\Write-Error (
                 "Failed to process image metadata: $_"
             )
-            return $null
+            return
         }
         finally {
             if ($image) {
@@ -453,5 +470,6 @@ function Get-ImageMetadata {
     }
 
     end {
+        return $metadata;
     }
 }
