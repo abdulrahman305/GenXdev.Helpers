@@ -1,37 +1,123 @@
-﻿Function Get-FreeFallHeight {
-    param (
-        [double]$DurationInSeconds,
-        [double]$TerminalVelocityInMs = 53  # Default human terminal velocity in m/s
+﻿################################################################################
+<#
+.SYNOPSIS
+Calculates the height fallen during free fall for a given time duration.
+
+.DESCRIPTION
+This function calculates the distance fallen during free fall using a
+numerical method that accounts for air resistance and terminal velocity. The
+calculation uses small time steps to accurately model the physics of falling
+objects with realistic terminal velocity constraints.
+
+.PARAMETER DurationInSeconds
+The time duration of the fall in seconds for which to calculate the height.
+
+.PARAMETER TerminalVelocityInMs
+The terminal velocity in meters per second. Defaults to 53 m/s which is the
+typical terminal velocity for a human in free fall.
+
+.EXAMPLE
+Get-FreeFallHeight -DurationInSeconds 10 -TerminalVelocityInMs 53
+
+Calculates the height fallen in 10 seconds with default human terminal velocity.
+
+.EXAMPLE
+Get-FreeFallHeight 5
+
+Calculates the height fallen in 5 seconds using positional parameter and
+default terminal velocity.
+#>
+function Get-FreeFallHeight {
+
+    [CmdletBinding()]
+    [OutputType([double])]
+
+    param(
+        ################################################################################
+        [parameter(
+            Mandatory = $true,
+            Position = 0,
+            HelpMessage = "The time duration of the fall in seconds"
+        )]
+        [double] $DurationInSeconds,
+        ################################################################################
+        [parameter(
+            Mandatory = $false,
+            Position = 1,
+            HelpMessage = ("The terminal velocity in meters per second " +
+                          "(default: 53 m/s for human)")
+        )]
+        [double] $TerminalVelocityInMs = 53
+        ################################################################################
     )
 
-    # Define the acceleration due to gravity in m/s^2
-    $gravity = 9.81
+    begin {
 
-    # Calculate height using numerical method with small time steps
-    $dt = 0.01  # Time step in seconds
-    $time = 0
-    $height = 0
-    $velocity = 0
+        # define the acceleration due to gravity in meters per second squared
+        $gravity = 9.81
 
-    while ($time -lt $DurationInSeconds) {
-        # Apply simplified air resistance model
-        if ($velocity -ge $TerminalVelocityInMs) {
-            $velocity = $TerminalVelocityInMs
-        }
-        else {
-            $velocity += $gravity * $dt
-        }
+        # set up numerical integration parameters for accurate calculation
+        $dt = 0.01
 
-        $height += $velocity * $dt
-        $time += $dt
+        # initialize time tracking variable
+        $time = 0
 
-        # Add safety check
-        if ($time -gt 1000) {
-            Microsoft.PowerShell.Utility\Write-Error 'Calculation timeout'
-            return 0
-        }
+        # initialize height accumulator
+        $height = 0
+
+        # initialize velocity tracker
+        $velocity = 0
+
+        Microsoft.PowerShell.Utility\Write-Verbose (
+            "Starting free fall calculation for ${DurationInSeconds} seconds " +
+            "with terminal velocity ${TerminalVelocityInMs} m/s"
+        )
     }
 
-    return [Math]::Round($height, 2)
+    process {
+
+        # perform numerical integration using small time steps
+        while ($time -lt $DurationInSeconds) {
+
+            # apply air resistance model by capping velocity at terminal velocity
+            if ($velocity -ge $TerminalVelocityInMs) {
+
+                # maintain constant terminal velocity when reached
+                $velocity = $TerminalVelocityInMs
+            }
+            else {
+
+                # accelerate under gravity when below terminal velocity
+                $velocity += $gravity * $dt
+            }
+
+            # calculate distance traveled in this time step
+            $height += $velocity * $dt
+
+            # advance time by one step
+            $time += $dt
+
+            # prevent infinite loops with safety timeout
+            if ($time -gt 1000) {
+
+                Microsoft.PowerShell.Utility\Write-Error (
+                    'Calculation timeout exceeded 1000 seconds'
+                )
+
+                return [double]0
+            }
+        }
+
+        Microsoft.PowerShell.Utility\Write-Verbose (
+            "Calculated fall height: ${height} meters"
+        )
+    }
+
+    end {
+
+        # return the calculated height rounded to 2 decimal places as double
+        return [double][Math]::Round($height, 2)
+    }
 }
+################################################################################
 

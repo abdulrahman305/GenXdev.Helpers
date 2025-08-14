@@ -12,9 +12,41 @@ their script positions. Provides filtering and various display options.
 Pattern to filter cmdlets by name. Wildcards (*) are supported and automatically
 added if not present. Example: "Get" becomes "*Get*"
 
+.PARAMETER CmdletName
+Search pattern to filter cmdlets. Supports wildcards (*) and exact matching.
+When ExactMatch is false, automatically wraps simple strings with wildcards.
+
+.PARAMETER DefinitionMatches
+Regular expression to match cmdlet definitions. Used to filter cmdlets based
+on their function content or implementation details.
+
 .PARAMETER ModuleName
-Array of module names to filter on. The "GenXdev." prefix is optional.
-Supports wildcards (*). Filters modules based on these names.
+One or more GenXdev module names to search. Can omit GenXdev prefix. Supports
+wildcards and validates module name patterns for GenXdev modules.
+
+.PARAMETER NoLocal
+Skip searching in local module paths. When specified, only searches in
+published or system module locations.
+
+.PARAMETER OnlyPublished
+Limit search to published module paths only. Excludes local development
+modules and focuses on released versions.
+
+.PARAMETER FromScripts
+Search in script files instead of module files. Changes the search target
+from PowerShell modules to standalone script files.
+
+.PARAMETER IncludeScripts
+Includes the scripts directory in addition to regular modules. Expands the
+search scope to cover both modules and scripts simultaneously.
+
+.PARAMETER OnlyReturnModuleNames
+Only return unique module names instead of full cmdlet details. Provides a
+summary view of available modules rather than detailed cmdlet information.
+
+.PARAMETER ExactMatch
+Perform exact matching instead of wildcard matching. When specified, disables
+automatic wildcard wrapping for simple search patterns.
 
 .PARAMETER Online
 When specified, opens the GitHub documentation page instead of console output.
@@ -48,39 +80,78 @@ function Show-GenXDevCmdlets {
     [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
 
     param(
-        ########################################################################
-        [parameter(
-            Mandatory = $false,
+         ###############################################################################
+        [Parameter(
             Position = 0,
-            ValueFromRemainingArguments = $false,
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
             HelpMessage = 'Search pattern to filter cmdlets'
         )]
+        [ValidateNotNullOrEmpty()]
         [Alias('Filter', 'CmdLet', 'Cmd', 'FunctionName', 'Name')]
         [SupportsWildcards()]
-        [string] $CmdletName = '*',
-        ########################################################################
-        [parameter(
+        [string] $CmdletName,
+        ###############################################################################
+        [Parameter(
+            Position = 1,
             Mandatory = $false,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
-            Position = 1,
+            HelpMessage = 'Regular expression to match cmdlet definitions'
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $DefinitionMatches,
+        ###############################################################################
+        [Parameter(
+            Position = 2,
+            Mandatory = $false,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
             HelpMessage = 'GenXdev module names to search'
         )]
         [ValidateNotNullOrEmpty()]
-        [Alias('Module', 'ModuleName')]
+        [Alias('Module', 'BaseModuleName', 'SubModuleName')]
         [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$')]
-        [string[]] $BaseModuleName = @('GenXdev*'),
-        ########################################################################
-        [Parameter(Mandatory = $false)]
+        [SupportsWildcards()]
+        [string[]] $ModuleName,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Skip searching in local module paths'
+        )]
         [switch] $NoLocal,
-        ########################################################################
-
-        [Parameter(Mandatory = $false)]
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Only search in published module paths'
+        )]
         [switch] $OnlyPublished,
-        ########################################################################
-
-        [Parameter(Mandatory = $false)]
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Search in script files instead of modules'
+        )]
         [switch] $FromScripts,
+        ###############################################################################
+        [Parameter(
+            ParameterSetName = "ModuleName",
+            Mandatory = $false,
+            HelpMessage = ('Includes the scripts directory in addition to ' +
+                          'regular modules')
+        )]
+        [switch] $IncludeScripts,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Only return unique module names'
+        )]
+        [switch] $OnlyReturnModuleNames,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Perform exact matching instead of wildcard matching'
+        )]
+        [switch] $ExactMatch,
         #######################################################################
         [Parameter(
             Mandatory = $false,
@@ -102,13 +173,7 @@ function Show-GenXDevCmdlets {
         [Alias('table', 'grid')]
         [switch] $ShowTable,
         #######################################################################
-        [switch] $PassThru,
-        #######################################################################
-        [Parameter(
-            Mandatory = $false,
-            HelpMessage = 'Only return unique module names'
-        )]
-        [switch] $OnlyReturnModuleNames
+        [switch] $PassThru
     )
 
     begin {
@@ -141,9 +206,9 @@ function Show-GenXDevCmdlets {
             }
 
             # get cmdlets using Get-GenXDevCmdlets
-            $cmdlets = GenXdev.Helpers\Get-GenXDevCmdlets @invocationParams
+            [GenXdev.Helpers.GenXdevCmdletInfo[]] $cmdlets = GenXdev.Helpers\Get-GenXDevCmdlets @invocationParams
 
-            foreach ($cmdlet in $cmdlets) {
+            foreach ($cmdletData in $cmdlets) {
 
                 # handle online documentation
                 if ($Online) {
@@ -155,18 +220,6 @@ function Show-GenXDevCmdlets {
                         return
                     }
                     continue
-                }
-
-                # prepare cmdlet data
-                $cmdletData = @{
-                    Name               = $cmdlet.Name
-                    Aliases            = $cmdlet.Aliases
-                    ModuleName         = $cmdlet.ModuleName
-                    BaseModule         = $cmdlet.BaseModule
-                    ScriptFilePath     = $cmdlet.ScriptFilePath
-                    ScriptTestFilePath = $cmdlet.ScriptTestFilePath
-                    LineNumber         = $cmdlet.LineNo
-                    Description        = $cmdlet.Description
                 }
 
                 # filter aliases if OnlyAliases specified

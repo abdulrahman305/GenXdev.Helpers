@@ -11,7 +11,7 @@
         <TableHeaders>
           <TableColumnHeader>
             <Label>Name</Label>
-            <Width>20</Width>
+            <Width>26</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Priority</Label>
@@ -19,7 +19,7 @@
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Status</Label>
-            <Width>18</Width>
+            <Width>14</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Last Updated</Label>
@@ -39,7 +39,7 @@
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>done %</Label>
-            <Width>10</Width>
+            <Width>6</Width>
           </TableColumnHeader>
         </TableHeaders>
         <TableRowEntries>
@@ -64,7 +64,7 @@
                 <ScriptBlock>if ($_.State) {"$($_.State.Selected.Count)"} else { "" }</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
-                <ScriptBlock>if ($_.State) {"$($_.State.Done.Count)"} else { "" }</ScriptBlock>
+                <ScriptBlock>if ($_.State) {"$($_.State.RefactoredIndex+1)"} else { "" }</ScriptBlock>
               </TableColumnItem>
               <TableColumnItem>
                 <ScriptBlock>if ($_.State) { $_.State.PercentageComplete } else { "" }</ScriptBlock>

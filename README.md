@@ -70,7 +70,7 @@ Update-Module
 | [Get-WebLanguageDictionary](#get-weblanguagedictionary) | &nbsp; | Returns a reversed dictionary for all languages supported by Google Search |
 | [Import-GenXdevModules](#import-genxdevmodules) | reloadgenxdev | Imports all GenXdev PowerShell modules into the global scope. |
 | [Initialize-SearchPaths](#initialize-searchpaths) | &nbsp; | Initializes and configures system search paths for package management. |
-| [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do | &nbsp; |
+| [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do | Executes a script block on each GenXdev module in the workspace. |
 | [Out-Serial](#out-serial) | &nbsp; | Sends a string to a serial port |
 | [Remove-JSONComments](#remove-jsoncomments) | &nbsp; | Removes comments from JSON content. |
 | [Show-GenXDevCmdlets](#show-genxdevcmdlets) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
@@ -79,7 +79,7 @@ Update-Module
 ### GenXdev.Helpers.Math.Physics
 | Command | Aliases | Description |
 | --- | --- | --- |
-| [Get-FreeFallHeight](#get-freefallheight) | &nbsp; |  |
+| [Get-FreeFallHeight](#get-freefallheight) | &nbsp; | Calculates the height fallen during free fall for a given time duration. |
 | [Get-FreeFallTime](#get-freefalltime) | &nbsp; | Calculates the time it takes for an object to fall a specified distance. |
 
 <br/><hr/><hr/><br/>
@@ -384,31 +384,46 @@ Get-DefaultWebLanguage [<CommonParameters>]
 
 ### SYNTAX 
 ````PowerShell 
-Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
+Get-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
     Searches through installed GenXdev modules and script files to find cmdlets,  
     their aliases, and descriptions. Can filter by name pattern and module name.  
+    Supports filtering by cmdlet definitions and provides flexible search options  
+    across both local and published module paths.  
 
 ### PARAMETERS 
     -CmdletName <String>  
+        Search pattern to filter cmdlets. Supports wildcards (*) and exact matching.  
+        When ExactMatch is false, automatically wraps simple strings with wildcards.  
         Required?                    false  
         Position?                    1  
-        Default value                *  
+        Default value                  
         Accept pipeline input?       true (ByPropertyName)  
         Aliases                        
         Accept wildcard characters?  true  
-    -BaseModuleName <String[]>  
-        One or more GenXdev module names to search. Can omit GenXdev prefix.  
+    -DefinitionMatches <String>  
+        Regular expression to match cmdlet definitions. Used to filter cmdlets based  
+        on their function content or implementation details.  
         Required?                    false  
         Position?                    2  
-        Default value                @('GenXdev*')  
+        Default value                  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
         Aliases                        
         Accept wildcard characters?  false  
+    -ModuleName <String[]>  
+        One or more GenXdev module names to search. Can omit GenXdev prefix. Supports  
+        wildcards and validates module name patterns for GenXdev modules.  
+        Required?                    false  
+        Position?                    3  
+        Default value                  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Aliases                        
+        Accept wildcard characters?  true  
     -NoLocal [<SwitchParameter>]  
-        Skip searching in local module paths.  
+        Skip searching in local module paths. When specified, only searches in  
+        published or system module locations.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -416,7 +431,8 @@ Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoL
         Aliases                        
         Accept wildcard characters?  false  
     -OnlyPublished [<SwitchParameter>]  
-        Limit search to published module paths only.  
+        Limit search to published module paths only. Excludes local development  
+        modules and focuses on released versions.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -424,7 +440,17 @@ Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoL
         Aliases                        
         Accept wildcard characters?  false  
     -FromScripts [<SwitchParameter>]  
-        Search in script files instead of module files.  
+        Search in script files instead of module files. Changes the search target  
+        from PowerShell modules to standalone script files.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -IncludeScripts [<SwitchParameter>]  
+        Includes the scripts directory in addition to regular modules. Expands the  
+        search scope to cover both modules and scripts simultaneously.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -432,7 +458,8 @@ Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoL
         Aliases                        
         Accept wildcard characters?  false  
     -OnlyReturnModuleNames [<SwitchParameter>]  
-        Only return unique module names instead of full cmdlet details.  
+        Only return unique module names instead of full cmdlet details. Provides a  
+        summary view of available modules rather than detailed cmdlet information.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -440,6 +467,8 @@ Get-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoL
         Aliases                        
         Accept wildcard characters?  false  
     -ExactMatch [<SwitchParameter>]  
+        Perform exact matching instead of wildcard matching. When specified, disables  
+        automatic wildcard wrapping for simple search patterns.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -642,61 +671,79 @@ Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>]
    Invoke-OnEachGenXdevModule           --> foreach-genxdev-module-do  
 ```` 
 
+### SYNOPSIS 
+    Executes a script block on each GenXdev module in the workspace.  
+
 ### SYNTAX 
 ````PowerShell 
-Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-BaseModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeGenXdevMainModule] [<CommonParameters>] 
+Invoke-OnEachGenXdevModule [-Script] <ScriptBlock> [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-IncludeGenXdevMainModule] [<CommonParameters>] 
 ```` 
 
+### DESCRIPTION 
+    This function iterates through GenXdev modules in the workspace and executes  
+    a provided script block against each module. It can filter modules by name  
+    pattern, exclude local modules, include only published modules, or process  
+    scripts instead of modules. The function automatically navigates to the  
+    correct module directory before executing the script block.  
+
 ### PARAMETERS 
-    -BaseModuleName <string[]>  
-        Filter to apply to module names  
-        Required?                    false  
-        Position?                    1  
-        Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Parameter set name           (All)  
-        Aliases                      Module, ModuleName  
-        Dynamic?                     false  
-        Accept wildcard characters?  false  
-    -FromScripts  
-        Required?                    false  
-        Position?                    Named  
-        Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      None  
-        Dynamic?                     false  
-        Accept wildcard characters?  false  
-    -IncludeGenXdevMainModule  
-        Required?                    false  
-        Position?                    Named  
-        Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      None  
-        Dynamic?                     false  
-        Accept wildcard characters?  false  
-    -NoLocal  
-        Required?                    false  
-        Position?                    Named  
-        Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      None  
-        Dynamic?                     false  
-        Accept wildcard characters?  false  
-    -OnlyPublished  
-        Required?                    false  
-        Position?                    Named  
-        Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      None  
-        Dynamic?                     false  
-        Accept wildcard characters?  false  
-    -Script <scriptblock>  
-        The script block to execute for each GenXdev module  
+    -Script <ScriptBlock>  
+        The script block to execute for each GenXdev module. The module object is  
+        passed as an argument to the script block.  
         Required?                    true  
-        Position?                    0  
+        Position?                    1  
+        Default value                  
         Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      ScriptBlock  
-        Dynamic?                     false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -ModuleName <String[]>  
+        Filter to apply to module names. Supports wildcards and multiple patterns.  
+        Defaults to 'GenXdev*' to include all GenXdev modules.  
+        Required?                    false  
+        Position?                    2  
+        Default value                @('GenXdev*')  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Aliases                        
+        Accept wildcard characters?  true  
+    -NoLocal [<SwitchParameter>]  
+        Excludes local development modules from processing.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -OnlyPublished [<SwitchParameter>]  
+        Includes only published modules that have LICENSE and README.md files.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -FromScripts [<SwitchParameter>]  
+        Process scripts directory instead of module directories.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -IncludeScripts [<SwitchParameter>]  
+        Includes the scripts directory in addition to regular modules.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -IncludeGenXdevMainModule [<SwitchParameter>]  
+        Includes the main GenXdev module in addition to sub-modules.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -863,7 +910,7 @@ Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
 
 ### SYNTAX 
 ````PowerShell 
-Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [-OnlyReturnModuleNames] [<CommonParameters>] 
+Show-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
@@ -873,20 +920,35 @@ Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-No
 
 ### PARAMETERS 
     -CmdletName <String>  
+        Search pattern to filter cmdlets. Supports wildcards (*) and exact matching.  
+        When ExactMatch is false, automatically wraps simple strings with wildcards.  
         Required?                    false  
         Position?                    1  
-        Default value                *  
-        Accept pipeline input?       false  
+        Default value                  
+        Accept pipeline input?       true (ByPropertyName)  
         Aliases                        
         Accept wildcard characters?  true  
-    -BaseModuleName <String[]>  
+    -DefinitionMatches <String>  
+        Regular expression to match cmdlet definitions. Used to filter cmdlets based  
+        on their function content or implementation details.  
         Required?                    false  
         Position?                    2  
-        Default value                @('GenXdev*')  
+        Default value                  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
         Aliases                        
         Accept wildcard characters?  false  
+    -ModuleName <String[]>  
+        One or more GenXdev module names to search. Can omit GenXdev prefix. Supports  
+        wildcards and validates module name patterns for GenXdev modules.  
+        Required?                    false  
+        Position?                    3  
+        Default value                  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Aliases                        
+        Accept wildcard characters?  true  
     -NoLocal [<SwitchParameter>]  
+        Skip searching in local module paths. When specified, only searches in  
+        published or system module locations.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -894,6 +956,8 @@ Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-No
         Aliases                        
         Accept wildcard characters?  false  
     -OnlyPublished [<SwitchParameter>]  
+        Limit search to published module paths only. Excludes local development  
+        modules and focuses on released versions.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -901,6 +965,35 @@ Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-No
         Aliases                        
         Accept wildcard characters?  false  
     -FromScripts [<SwitchParameter>]  
+        Search in script files instead of module files. Changes the search target  
+        from PowerShell modules to standalone script files.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -IncludeScripts [<SwitchParameter>]  
+        Includes the scripts directory in addition to regular modules. Expands the  
+        search scope to cover both modules and scripts simultaneously.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -OnlyReturnModuleNames [<SwitchParameter>]  
+        Only return unique module names instead of full cmdlet details. Provides a  
+        summary view of available modules rather than detailed cmdlet information.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -ExactMatch [<SwitchParameter>]  
+        Perform exact matching instead of wildcard matching. When specified, disables  
+        automatic wildcard wrapping for simple search patterns.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -932,14 +1025,6 @@ Show-GenXDevCmdlets [[-CmdletName] <String>] [[-BaseModuleName] <String[]>] [-No
         Aliases                        
         Accept wildcard characters?  false  
     -PassThru [<SwitchParameter>]  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -OnlyReturnModuleNames [<SwitchParameter>]  
-        Only return unique module names instead of displaying cmdlet details.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -1001,28 +1086,43 @@ Show-Verb [[-Verb] <String[]>] [<CommonParameters>]
    Get-FreeFallHeight  
 ```` 
 
+### SYNOPSIS 
+    Calculates the height fallen during free fall for a given time duration.  
+
 ### SYNTAX 
 ````PowerShell 
-Get-FreeFallHeight [[-DurationInSeconds] <double>] [[-TerminalVelocityInMs] <double>] 
+Get-FreeFallHeight [-DurationInSeconds] <Double> [[-TerminalVelocityInMs] <Double>] [<CommonParameters>] 
 ```` 
 
+### DESCRIPTION 
+    This function calculates the distance fallen during free fall using a  
+    numerical method that accounts for air resistance and terminal velocity. The  
+    calculation uses small time steps to accurately model the physics of falling  
+    objects with realistic terminal velocity constraints.  
+
 ### PARAMETERS 
-    -DurationInSeconds <double>  
-        Required?                    false  
-        Position?                    0  
-        Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      None  
-        Dynamic?                     false  
-        Accept wildcard characters?  false  
-    -TerminalVelocityInMs <double>  
-        Required?                    false  
+    -DurationInSeconds <Double>  
+        The time duration of the fall in seconds for which to calculate the height.  
+        Required?                    true  
         Position?                    1  
+        Default value                0  
         Accept pipeline input?       false  
-        Parameter set name           (All)  
-        Aliases                      None  
-        Dynamic?                     false  
+        Aliases                        
         Accept wildcard characters?  false  
+    -TerminalVelocityInMs <Double>  
+        The terminal velocity in meters per second. Defaults to 53 m/s which is the  
+        typical terminal velocity for a human in free fall.  
+        Required?                    false  
+        Position?                    2  
+        Default value                53  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
 <br/><hr/><hr/><br/>
  
@@ -1071,3 +1171,7 @@ Get-FreeFallTime [-HeightInMeters] <Double> [[-TerminalVelocityInMs] <Double>] [
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
 <br/><hr/><hr/><br/>
+ 
+
+&nbsp;<hr/>
+###	GenXdev.Helpers<hr/>
