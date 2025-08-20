@@ -11,6 +11,8 @@ if ($major -ne 10) {
 }
 
 
+
+. "$PSScriptRoot\Functions\GenXdev.Helpers\_EnsureTypes.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\alignScript.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\ConvertTo-HashTable.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\ConvertTo-JsonEx.ps1"
