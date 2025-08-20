@@ -1,11 +1,11 @@
-﻿###############################################################################
+###############################################################################
 <#
 .SYNOPSIS
 Displays GenXdev PowerShell modules with their cmdlets and aliases.
 
 .DESCRIPTION
 Lists all installed GenXdev PowerShell modules and their associated cmdlets and
-aliases. Uses Get-GenXDevCmdlets to retrieve cmdlet information and optionally
+aliases. Uses Get-GenXDevCmdlet to retrieve cmdlet information and optionally
 their script positions. Provides filtering and various display options.
 
 .PARAMETER Filter
@@ -61,7 +61,7 @@ When specified, displays results in a table format with Name and Description.
 Only return unique module names instead of displaying cmdlet details.
 
 .EXAMPLE
-Show-GenXDevCmdlets -CmdletName "Get" -ModuleName "Console" -ShowTable
+Show-GenXdevCmdlet -CmdletName "Get" -ModuleName "Console" -ShowTable
 Lists all cmdlets starting with "Get" in the Console module as a table
 
 .EXAMPLE
@@ -69,15 +69,14 @@ cmds get -m console
 Lists all cmdlets starting with "Get" in the Console module
 
 .EXAMPLE
-Show-GenXDevCmdlets -OnlyReturnModuleNames
+Show-GenXdevCmdlet -OnlyReturnModuleNames
 Returns only unique module names
 #>
-function Show-GenXDevCmdlets {
+function Show-GenXdevCmdlet {
 
     [CmdletBinding()]
     [Alias('cmds')]
     [OutputType([System.Collections.ArrayList], [void])]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '')]
 
     param(
          ###############################################################################
@@ -111,7 +110,7 @@ function Show-GenXDevCmdlets {
         )]
         [ValidateNotNullOrEmpty()]
         [Alias('Module', 'BaseModuleName', 'SubModuleName')]
-        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$')]
+        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.[\w\*\[\]\?]*)+)+$')]
         [SupportsWildcards()]
         [string[]] $ModuleName,
         ###############################################################################
@@ -177,7 +176,7 @@ function Show-GenXDevCmdlets {
     )
 
     begin {
-        Microsoft.PowerShell.Utility\Write-Verbose 'Initializing Show-GenXDevCmdlets'
+        Microsoft.PowerShell.Utility\Write-Verbose 'Initializing Show-GenXdevCmdlet'
 
         # initialize results collection
         $results = [System.Collections.ArrayList]::new()
@@ -191,9 +190,9 @@ function Show-GenXDevCmdlets {
 
     process {
         try {
-            # copy identical parameters between functions for passing to Get-GenXDevCmdlets
+            # copy identical parameters between functions for passing to Get-GenXDevCmdlet
             $invocationParams = GenXdev.Helpers\Copy-IdenticalParamValues `
-                -FunctionName 'GenXdev.Helpers\Get-GenXDevCmdlets' `
+                -FunctionName 'GenXdev.Helpers\Get-GenXDevCmdlet' `
                 -BoundParameters $PSBoundParameters `
                 -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable `
                     -Scope Local `
@@ -202,11 +201,11 @@ function Show-GenXDevCmdlets {
             # if only module names are requested, return them directly
             if ($OnlyReturnModuleNames) {
                 Microsoft.PowerShell.Utility\Write-Verbose 'Returning unique module names directly'
-                return GenXdev.Helpers\Get-GenXDevCmdlets @invocationParams -OnlyReturnModuleNames
+                return GenXdev.Helpers\Get-GenXDevCmdlet @invocationParams -OnlyReturnModuleNames
             }
 
-            # get cmdlets using Get-GenXDevCmdlets
-            [GenXdev.Helpers.GenXdevCmdletInfo[]] $cmdlets = GenXdev.Helpers\Get-GenXDevCmdlets @invocationParams
+            # get cmdlets using Get-GenXDevCmdlet
+            [GenXdev.Helpers.GenXdevCmdletInfo[]] $cmdlets = GenXdev.Helpers\Get-GenXDevCmdlet @invocationParams
 
             foreach ($cmdletData in $cmdlets) {
 

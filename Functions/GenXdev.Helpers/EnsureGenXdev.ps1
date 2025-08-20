@@ -1,4 +1,4 @@
-###############################################################################
+﻿###############################################################################
 <#
 .SYNOPSIS
 Ensures all GenXdev modules are properly loaded by invoking all Ensure*
@@ -10,27 +10,72 @@ executes each one to guarantee that all required GenXdev modules and
 dependencies are properly loaded and available for use. Any failures during
 the execution are caught and displayed as informational messages.
 
+Optionally, it can also download and load all NuGet packages defined in the
+packages.json manifest file, and initialize LMStudio models for AI functionality.
+
+.PARAMETER Force
+Forces the execution of ensure operations even if they appear to be already
+completed.
+
+.PARAMETER DownloadLMStudioModels
+Downloads and initializes LMStudio models for various AI query types.
+
+.PARAMETER DownloadAllNugetPackages
+Downloads and loads all NuGet packages defined in the packages.json manifest
+file.
+
 .EXAMPLE
 EnsureGenXdev
 
 This command runs all available Ensure* cmdlets to initialize the GenXdev
 environment.
+
+.EXAMPLE
+EnsureGenXdev -DownloadAllNugetPackages
+
+This command runs all Ensure* cmdlets and also downloads and loads all NuGet
+packages defined in the packages.json manifest file.
+
+.EXAMPLE
+EnsureGenXdev -DownloadLMStudioModels -DownloadAllNugetPackages
+
+This command runs all Ensure* cmdlets, downloads NuGet packages, and initializes
+LMStudio models for AI functionality.
 #>
 function EnsureGenXdev {
 
     [CmdletBinding()]
     # PSScriptAnalyzer rule exception: SideBySide and ShowWindow are used by Get-Variable
-    [Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssignments','')]
+    [Diagnostics.CodeAnalysis.SuppressMessage('PSUseDeclaredVarsMoreThanAssignments', '')]
 
     param(
+        ###########################################################################
+        [parameter(
+            Mandatory = $false,
+            HelpMessage = "Forces the execution of ensure operations even if they appear to be already completed"
+        )]
         [Switch] $Force,
-        [Switch] $DownloadLMStudioModels
+        ###########################################################################
+        [parameter(
+            Mandatory = $false,
+            HelpMessage = "Downloads and initializes LMStudio models for various AI query types"
+        )]
+        [Switch] $DownloadLMStudioModels,
+        ###########################################################################
+        [parameter(
+            Mandatory = $false,
+            HelpMessage = "Downloads and loads all NuGet packages defined in the packages.json manifest file"
+        )]
+        [Switch] $DownloadAllNugetPackages
+        ###########################################################################
     )
 
     begin {
 
-        $SideBySide = $true;
-        $ShowWindow = $true;
+        # initialize variables for local scope
+        $sideBySide = $true
+        $showWindow = $true
+
         # retrieve all ensure cmdlets from genxdev helpers module
         Microsoft.PowerShell.Utility\Write-Verbose (
             'Retrieving all Ensure* cmdlets from GenXdev.Helpers module'
@@ -39,30 +84,42 @@ function EnsureGenXdev {
 
     process {
 
+        # ensure vs code installation is available
         GenXdev.Coding\EnsureVSCodeInstallation
 
         # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
-        GenXdev.Helpers\Show-GenXDevCmdlets Ensure* -PassThru |
+        GenXdev.Helpers\Get-GenXDevCmdlet Ensure* -PassThru |
             Microsoft.PowerShell.Core\ForEach-Object name |
-            Microsoft.PowerShell.Core\Where-Object { @('EnsureGenXdev','EnsureVSCodeInstallation').IndexOf($_) -lt 0 } |
+            Microsoft.PowerShell.Core\Where-Object {
+
+                # exclude self and other specific cmdlets to prevent recursion
+                (@('EnsureGenXdev', 'EnsureVSCodeInstallation').IndexOf($_) -lt 0) -and
+                ($_ -ne "EnsureNuGetAssembly")
+
+            } |
             Microsoft.PowerShell.Core\ForEach-Object {
 
                 try {
 
+                    # skip empty or whitespace entries
                     if ([string]::IsNullOrWhiteSpace($_)) { return }
 
                     # execute the current ensure cmdlet
                     Microsoft.PowerShell.Utility\Write-Verbose (
                         "Executing cmdlet: $_"
                     )
+
+                    # copy identical parameter values for the target function
                     $params = GenXdev.Helpers\Copy-IdenticalParamValues `
                         -BoundParameters $PSBoundParameters `
                         -FunctionName $_ `
                         -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
 
+                    # get the command and invoke it with the copied parameters
                     $command = Microsoft.PowerShell.Core\Get-Command -Name $_
                     & $command @params
-                } catch {
+                }
+                catch {
 
                     # capture and display any execution failures
                     $errorMessage = "Failed to ensure GenXdev module: $_"
@@ -71,6 +128,62 @@ function EnsureGenXdev {
                 }
             }
 
+        # download all NuGet packages if requested
+        if ($DownloadAllNugetPackages) {
+            try {
+                Microsoft.PowerShell.Utility\Write-Verbose (
+                    'Processing all NuGet packages from packages.json'
+                )
+
+                # construct path to packages.json in GenXdev.PackageManagement module
+                $packagesJsonPath = GenXdev.FileSystem\Expand-Path (
+                    "$PSScriptRoot\..\..\packages.json"
+                )
+
+                # check if the packages configuration file exists
+                if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $packagesJsonPath) {
+                    Microsoft.PowerShell.Utility\Write-Verbose (
+                        "Loading packages from: $packagesJsonPath"
+                    )
+
+                    # load and parse the package configuration
+                    $packages = Microsoft.PowerShell.Management\Get-Content -LiteralPath $packagesJsonPath -ErrorAction Stop |
+                        Microsoft.PowerShell.Utility\ConvertFrom-Json -ErrorAction Stop -AsHashtable
+
+                    # iterate through each package key and ensure it's loaded
+                    foreach ($packageKey in $packages.Keys) {
+                        try {
+                            Microsoft.PowerShell.Utility\Write-Verbose (
+                                "Ensuring NuGet package: $packageKey"
+                            )
+
+                            # ensure the specific nuget assembly is loaded
+                            GenXdev.Helpers\EnsureNuGetAssembly -PackageKey $packageKey
+                        }
+                        catch {
+                            # capture and display package loading failures
+                            $errorMessage = (
+                                "Failed to ensure NuGet package: $packageKey - $($_.Exception.Message)"
+                            )
+                            Microsoft.PowerShell.Utility\Write-Host -Message $errorMessage -ForegroundColor Cyan
+                        }
+                    }
+                }
+                else {
+                    # warn when packages configuration is not found
+                    Microsoft.PowerShell.Utility\Write-Warning (
+                        "packages.json not found at: $packagesJsonPath"
+                    )
+                }
+            }
+            catch {
+                # capture and display general nuget processing failures
+                $errorMessage = "Failed to process NuGet packages: $($_.Exception.Message)"
+                Microsoft.PowerShell.Utility\Write-Host -Message $errorMessage -ForegroundColor Cyan
+            }
+        }
+
+        # define the types of ai queries that require model initialization
         $queryTypes = @(
             'SimpleIntelligence',
             'Knowledge',
@@ -80,25 +193,38 @@ function EnsureGenXdev {
             'ToolUse'
         )
 
+        # exit early if lmstudio models are not requested
         if (-not $DownloadLMStudioModels) { return }
 
-        foreach ($LLMQueryType in $queryTypes) {
+        # initialize lmstudio models for each query type
+        foreach ($llmQueryType in $queryTypes) {
 
             # invoke GenXdev.AI\Initialize-LMStudioModel with copied parameters
             try {
                 Microsoft.PowerShell.Utility\Write-Verbose (
                     'Executing GenXdev.AI\Initialize-LMStudioModel'
                 )
+
+                # copy identical parameter values for the ai initialization function
                 $params = GenXdev.Helpers\Copy-IdenticalParamValues `
                     -BoundParameters $PSBoundParameters `
                     -FunctionName 'GenXdev.AI\Initialize-LMStudioModel' `
                     -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
 
-                GenXdev.AI\Initialize-LMStudioModel @params -LLMQueryType $LLMQueryType
-            } catch {
-                $errorMessage = 'Failed to initialize LMStudio model: GenXdev.AI\Initialize-LMStudioModel'
+                # initialize the lmstudio model for the current query type
+                GenXdev.AI\Initialize-LMStudioModel @params -LLMQueryType $llmQueryType
+            }
+            catch {
+                # capture and display ai model initialization failures
+                $errorMessage = (
+                    'Failed to initialize LMStudio model: GenXdev.AI\Initialize-LMStudioModel'
+                )
                 Microsoft.PowerShell.Utility\Write-Host -Message $errorMessage -ForegroundColor Cyan
             }
         }
     }
+
+    end {
+    }
 }
+###############################################################################

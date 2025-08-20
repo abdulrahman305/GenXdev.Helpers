@@ -51,7 +51,7 @@ function Import-GenXdevModules {
         )
 
         # capture initial function count
-        [int] $functionCountBefore = @(GenXdev.Helpers\Get-GenXDevCmdlets).Length
+        [int] $functionCountBefore = @(GenXdev.Helpers\Get-GenXDevCmdlet).Length
     }
 
 
@@ -129,7 +129,7 @@ function Import-GenXdevModules {
     end {
 
         # calculate and display function count changes
-        [int] $functionCountAfter = @(GenXdev.Helpers\Get-GenXDevCmdlets).Length
+        [int] $functionCountAfter = @(GenXdev.Helpers\Get-GenXDevCmdlet).Length
         $functionsAdded = $functionCountAfter - $functionCountBefore
 
         $text = $functionsAdded -lt 0 ? (

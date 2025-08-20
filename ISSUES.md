@@ -7,7 +7,7 @@
 
 ---
 
-### Function Reviewed: `Get-GenXDevCmdlets`
+### Function Reviewed: `Get-GenXDevCmdlet`
 
 #### Practical Critique & Improvement Suggestions
 

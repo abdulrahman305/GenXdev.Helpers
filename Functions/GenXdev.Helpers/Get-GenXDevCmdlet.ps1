@@ -46,19 +46,18 @@ Perform exact matching instead of wildcard matching. When specified, disables
 automatic wildcard wrapping for simple search patterns.
 
 .EXAMPLE
-Get-GenXDevCmdlets -CmdletName "Get-*" -ModuleName "Console" -NoLocal
+Get-GenXDevCmdlet -CmdletName "Get-*" -ModuleName "Console" -NoLocal
 
 .EXAMPLE
 gcmds Get-*
 
 .EXAMPLE
-Get-GenXDevCmdlets -OnlyReturnModuleNames
+Get-GenXDevCmdlet -OnlyReturnModuleNames
 #>
-function Get-GenXDevCmdlets {
+function Get-GenXDevCmdlet {
 
     [CmdletBinding()]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', 'Get-GenXDevCmdlets')]
-    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidTrailingWhitespace', '')]
+    [OutputType([GenXdev.Helpers.GenXdevCmdletInfo], [string])]
     [Alias('gcmds')]
 
     param(
@@ -93,7 +92,7 @@ function Get-GenXDevCmdlets {
         )]
         [ValidateNotNullOrEmpty()]
         [Alias('Module', 'BaseModuleName', 'SubModuleName')]
-        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.\w+)+)+$')]
+        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.[\w\*\[\]\?]*)+)+$')]
         [SupportsWildcards()]
         [string[]] $ModuleName,
         ###############################################################################
@@ -140,6 +139,9 @@ function Get-GenXDevCmdlets {
 
         # store current location to restore later and prevent side effects
         $originalLocation = Microsoft.PowerShell.Management\Get-Location
+
+        # initialize collection to store found cmdlets
+        $cmdletCollection = [System.Collections.Generic.List[GenXdev.Helpers.GenXdevCmdletInfo]]::new()
 
         # output verbose information about search parameters
         Microsoft.PowerShell.Utility\Write-Verbose (
@@ -543,8 +545,9 @@ function Get-GenXDevCmdlets {
                                 "GenXdev.Scripts" :
                                 [IO.Path]::GetFileName([IO.Path]::GetDirectoryName($_.FullName))
                         )
-                    # create and return cmdlet information object
-                    [GenXdev.Helpers.GenXdevCmdletInfo]@{
+
+                    # create cmdlet information object and add to collection
+                    $cmdletInfo = [GenXdev.Helpers.GenXdevCmdletInfo]@{
                         Name               = $cName
                         ModuleName         = $moduleN
                         BaseModule         = $($Module.Name)
@@ -558,6 +561,9 @@ function Get-GenXDevCmdlets {
                                 (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\..\..\Tests\$moduleN\$($cName).Tests.ps1")
                         )
                     }
+
+                    # add to collection
+                    $null = $cmdletCollection.Add($cmdletInfo)
                 }
                 catch {
 
@@ -579,6 +585,23 @@ function Get-GenXDevCmdlets {
         Microsoft.PowerShell.Utility\Write-Verbose (
             "Completed cmdlet search and restored original location"
         )
+
+        # return results based on OnlyReturnModuleNames parameter
+        if ($OnlyReturnModuleNames) {
+
+            # return unique BaseModule names
+            $cmdletCollection |
+            Microsoft.PowerShell.Core\ForEach-Object { $_.BaseModule } |
+            Microsoft.PowerShell.Utility\Select-Object -Unique |
+            Microsoft.PowerShell.Utility\Sort-Object {
+                "$($_.BaseModule.Length.ToString("00_"))$($_.BaseModule)"
+            } -Descending
+
+        } else {
+
+            # return full cmdlet information objects
+            $cmdletCollection
+        }
     }
 }
 ###############################################################################

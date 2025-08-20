@@ -206,9 +206,34 @@ function Get-ImageMetadata {
             if ([IO.Path]::GetExtension($ImagePath).ToLowerInvariant() -eq '.webp') {
 
                 # If the path is a script, execute it to get the actual image path
-                $actualPath = [IO.Path]::GetTempFileName()+".png";
+                $actualPath = [IO.Path]::GetTempFileName() + ".png";
 
-                [GenXdev.Helpers.WebP]::ConvertToPng($ImagePath, $actualPath)
+                GenXdev.Helpers\EnsureNuGetAssembly -PackageKey "SixLabors.ImageSharp"
+                GenXdev.Helpers\EnsureNuGetAssembly -PackageKey "Shorthand.ImageSharp.WebP"
+                GenXdev.Helpers\EnsureNuGetAssembly -PackageKey "SixLabors.ImageSharp.Drawing"
+
+                try {
+                    $webpImage = [SixLabors.ImageSharp.Image]::Load($ImagePath)
+                    try {
+                        # Use Save method with PNG encoder and file stream
+                        $pngEncoder = [SixLabors.ImageSharp.Formats.Png.PngEncoder]::new()
+                        $fileStream = [System.IO.File]::Create($actualPath)
+                        try {
+                            $webpImage.Save($fileStream, $pngEncoder)
+                        }
+                        finally {
+                            $fileStream.Close()
+                        }
+                    }
+                    finally {
+                        if ($webpImage -and ($webpImage -is [IDisposable])) {
+                            $webpImage.Dispose()
+                        }
+                    }
+                }
+                catch {
+                    Microsoft.PowerShell.Utility\Write-Warning "Error converting WebP to PNG: $($_.Exception.Message)"
+                }
             }
             try {
                 $image = [System.Drawing.Image]::FromFile($actualPath)
@@ -262,7 +287,7 @@ function Get-ImageMetadata {
                         }
 
                         # Date/time strings
-                        {$_ -match 'DateTime'} {
+                        { $_ -match 'DateTime' } {
                             $value = [System.Text.Encoding]::ASCII.GetString($item.Value).TrimEnd([char]0)
                             try {
                                 $metadata.DateTime."$tagName" = $value
@@ -273,13 +298,13 @@ function Get-ImageMetadata {
                         }
 
                         # String values
-                        {$_ -in 'Make','Model','Software','Artist','Copyright','UserComment'} {
+                        { $_ -in 'Make', 'Model', 'Software', 'Artist', 'Copyright', 'UserComment' } {
                             $value = [System.Text.Encoding]::ASCII.GetString($item.Value).TrimEnd([char]0)
                             try {
-                                if ($_ -in 'Make','Model') {
+                                if ($_ -in 'Make', 'Model') {
                                     $metadata.Camera."$tagName" = $value
                                 }
-                                elseif ($_ -in 'Artist','Copyright') {
+                                elseif ($_ -in 'Artist', 'Copyright') {
                                     $metadata.Author."$tagName" = $value
                                 }
                                 else {
@@ -292,14 +317,16 @@ function Get-ImageMetadata {
                         }
 
                         # Numeric values for exposure
-                        {$_ -in 'FNumber','ExposureTime','ISOSpeedRatings','FocalLength','ExposureProgram','MeteringMode','Flash'} {
-                            if ($item.Type -eq 5) { # Rational type
+                        { $_ -in 'FNumber', 'ExposureTime', 'ISOSpeedRatings', 'FocalLength', 'ExposureProgram', 'MeteringMode', 'Flash' } {
+                            if ($item.Type -eq 5) {
+                                # Rational type
                                 if ($item.Value.Length -ge 8) {
                                     $numerator = [BitConverter]::ToUInt32($item.Value, 0)
                                     $denominator = [BitConverter]::ToUInt32($item.Value, 4)
                                     if ($denominator -ne 0) {
                                         $value = [math]::Round($numerator / $denominator, 2)
-                                    } else {
+                                    }
+                                    else {
                                         $value = 0
                                     }
                                 }
@@ -349,7 +376,8 @@ function Get-ImageMetadata {
 
             if ($latitude -and $longitude -and $latitudeRef -and $longitudeRef) {
                 # Parse latitude
-                if ($latitude.Value.Length -ge 24) { # 3 rational values (3 * 8 bytes)
+                if ($latitude.Value.Length -ge 24) {
+                    # 3 rational values (3 * 8 bytes)
                     $latDegNum = [BitConverter]::ToUInt32($latitude.Value, 0)
                     $latDegDen = [BitConverter]::ToUInt32($latitude.Value, 4)
                     $latMinNum = [BitConverter]::ToUInt32($latitude.Value, 8)
@@ -365,7 +393,7 @@ function Get-ImageMetadata {
 
                         # Apply reference direction
                         if ($latitudeRef.Value -eq [byte][char]'S') {
-                            $latDecimal = -$latDecimal
+                            $latDecimal = - $latDecimal
                         }
 
                         $metadata.GPS.Latitude = $latDecimal
@@ -381,7 +409,7 @@ function Get-ImageMetadata {
                             $lat = $latNum / $latDen
                             # Apply reference direction
                             if ($latitudeRef.Value -eq [byte][char]'S') {
-                                $lat = -$lat
+                                $lat = - $lat
                             }
                             $metadata.GPS.Latitude = $lat
                         }
@@ -408,7 +436,7 @@ function Get-ImageMetadata {
 
                         # Apply reference direction
                         if ($longitudeRef.Value -eq [byte][char]'W') {
-                            $lonDecimal = -$lonDecimal
+                            $lonDecimal = - $lonDecimal
                         }
 
                         $metadata.GPS.Longitude = $lonDecimal
@@ -424,7 +452,7 @@ function Get-ImageMetadata {
                             $lon = $lonNum / $lonDen
                             # Apply reference direction
                             if ($longitudeRef.Value -eq [byte][char]'W') {
-                                $lon = -$lon
+                                $lon = - $lon
                             }
                             $metadata.GPS.Longitude = $lon
                         }
@@ -444,7 +472,7 @@ function Get-ImageMetadata {
                         $alt = $altNum / $altDen
                         # If altitudeRef is 1, altitude is below sea level
                         if ($altitudeRef.Value -eq 1) {
-                            $alt = -$alt
+                            $alt = - $alt
                         }
                         $metadata.GPS.Altitude = $alt
                     }

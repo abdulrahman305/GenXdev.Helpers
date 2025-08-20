@@ -15,7 +15,7 @@
 
 ## MIT License
 
-```text
+````text
 MIT License
 
 Copyright (c) 2025 GenXdev
@@ -43,28 +43,28 @@ SOFTWARE.
 [![WinOS - Windows-10 or later](https://img.shields.io/badge/WinOS-Windows--10--10.0.19041--SP0-brightgreen)](https://www.microsoft.com/en-us/windows/get-windows-10)
 
 ### INSTALLATION
-````PowerShell
+```PowerShell
 Install-Module "GenXdev.Helpers"
 Import-Module "GenXdev.Helpers"
-````
+```
 ### UPDATE
-````PowerShell
+```PowerShell
 Update-Module
-````
-<br/><hr/><hr/><br/>
+```
+
+<br/><hr/><br/>
 
 # Cmdlet Index
-### GenXdev.Helpers<hr/>
 ### GenXdev.Helpers
 | Command | Aliases | Description |
-| --- | --- | --- |
+| :--- | :--- | :--- |
 | [alignScript](#alignscript) | &nbsp; | Returns a string (with altered indentation) of a provided scriptblock string |
 | [ConvertTo-HashTable](#convertto-hashtable) | &nbsp; | Converts a PSCustomObject to a HashTable recursively. |
 | [ConvertTo-JsonEx](#convertto-jsonex) | tojsonex | Converts an object to a JSON string with extended options. |
-| [Copy-IdenticalParamValues](#copy-identicalparamvalues) | &nbsp; |  |
-| [EnsureGenXdev](#ensuregenxdev) | &nbsp; |  |
+| [EnsureGenXdev](#ensuregenxdev) | &nbsp; | &nbsp; |
+| [EnsureNuGetAssembly](#ensurenugetassembly) | &nbsp; | Downloads and loads .NET assemblies from NuGet packages based on package key or ID. |
 | [Get-DefaultWebLanguage](#get-defaultweblanguage) | &nbsp; | Gets the default web language key based on the system's current language settings. |
-| [Get-GenXDevCmdlets](#get-genxdevcmdlets) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
+| [Get-GenXDevCmdlet](#get-genxdevcmdlet) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#get-imagegeolocation) | &nbsp; | Extracts geolocation data from an image file. |
 | [Get-ImageMetadata](#get-imagemetadata) | &nbsp; | Extracts comprehensive metadata from an image file. |
 | [Get-WebLanguageDictionary](#get-weblanguagedictionary) | &nbsp; | Returns a reversed dictionary for all languages supported by Google Search |
@@ -73,16 +73,16 @@ Update-Module
 | [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do | Executes a script block on each GenXdev module in the workspace. |
 | [Out-Serial](#out-serial) | &nbsp; | Sends a string to a serial port |
 | [Remove-JSONComments](#remove-jsoncomments) | &nbsp; | Removes comments from JSON content. |
-| [Show-GenXDevCmdlets](#show-genxdevcmdlets) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
+| [Show-GenXDevCmdlet](#show-genxdevcmdlet) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
 | [Show-Verb](#show-verb) | showverbs | Shows a short alphabetical list of all PowerShell verbs. |
 
 ### GenXdev.Helpers.Math.Physics
 | Command | Aliases | Description |
-| --- | --- | --- |
+| :--- | :--- | :--- |
 | [Get-FreeFallHeight](#get-freefallheight) | &nbsp; | Calculates the height fallen during free fall for a given time duration. |
 | [Get-FreeFallTime](#get-freefalltime) | &nbsp; | Calculates the time it takes for an object to fall a specified distance. |
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
 
 
 # Cmdlets
@@ -91,7 +91,7 @@ Update-Module
 ###	GenXdev.Helpers<hr/> 
 
 ##	alignScript 
-````PowerShell 
+```PowerShell 
 
    alignScript  
 ```` 
@@ -100,7 +100,7 @@ Update-Module
     Returns a string (with altered indentation) of a provided scriptblock string  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>] 
 ```` 
 
@@ -130,11 +130,11 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	ConvertTo-HashTable 
-````PowerShell 
+```PowerShell 
 
    ConvertTo-HashTable  
 ```` 
@@ -143,7 +143,7 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
     Converts a PSCustomObject to a HashTable recursively.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>] 
 ```` 
 
@@ -167,11 +167,11 @@ ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	ConvertTo-JsonEx 
-````PowerShell 
+```PowerShell 
 
    ConvertTo-JsonEx                     --> tojsonex  
 ```` 
@@ -180,7 +180,7 @@ ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>]
     Converts an object to a JSON string with extended options.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 ConvertTo-JsonEx [-Object] <Object> [-Compress] [<CommonParameters>] 
 ```` 
 
@@ -219,89 +219,11 @@ ConvertTo-JsonEx [-Object] <Object> [-Compress] [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
- 
-
-##	Copy-IdenticalParamValues 
-````PowerShell 
-
-   Copy-IdenticalParamValues  
-```` 
-
-### SYNOPSIS 
-    Copies parameter values from bound parameters to a new hashtable based on  
-    another function's possible parameters.  
-
-### SYNTAX 
-````PowerShell 
-Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String> [[-DefaultValues] <PSVariable[]>] [<CommonParameters>] 
-```` 
-
-### DESCRIPTION 
-    This function creates a new hashtable containing only the parameter values that  
-    match the parameters defined in the specified target function.  
-    This can then be used to invoke the function using splatting.  
-    Switch parameters are only included in the result if they were explicitly provided  
-    and set to $true in the bound parameters. Non-present switch parameters are  
-    excluded from the result to maintain proper parameter semantics.  
-
-### PARAMETERS 
-    -BoundParameters <Object[]>  
-        The bound parameters from which to copy values, typically $PSBoundParameters.  
-        Required?                    true  
-        Position?                    1  
-        Default value                  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -FunctionName <String>  
-        The name of the function whose parameter set will be used as a filter.  
-        Required?                    true  
-        Position?                    2  
-        Default value                  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -DefaultValues <PSVariable[]>  
-        Default values for non-switch parameters that are not present in BoundParameters.  
-        Required?                    false  
-        Position?                    3  
-        Default value                @()  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    <CommonParameters>  
-        This cmdlet supports the common parameters: Verbose, Debug,  
-        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
-        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
-        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
-
-### NOTES 
-````PowerShell 
-
-       - Switch parameters are only included if explicitly set to $true  
-       - Default values are only applied to non-switch parameters  
-       - Common PowerShell parameters are automatically filtered out  
-   -------------------------- EXAMPLE 1 --------------------------  
-   PS C:\> function Test-Function {  
-       [CmdletBinding()]  
-       param(  
-           [Parameter(Mandatory = $true)]  
-           [string] $Path,  
-           [Parameter(Mandatory = $false)]  
-           [switch] $Recurse  
-       )  
-   $params = GenXdev.Helpers\Copy-IdenticalParamValues -BoundParameters $PSBoundParameters `  
-           -FunctionName 'Get-ChildItem'  
-       Get-ChildItem @params  
-   }  
-```` 
-
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	EnsureGenXdev 
-````PowerShell 
+```PowerShell 
 
    EnsureGenXdev  
 ```` 
@@ -311,8 +233,8 @@ Copy-IdenticalParamValues [-BoundParameters] <Object[]> [-FunctionName] <String>
     cmdlets.  
 
 ### SYNTAX 
-````PowerShell 
-EnsureGenXdev [-Force] [-DownloadLMStudioModels] [<CommonParameters>] 
+```PowerShell 
+EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
@@ -320,9 +242,13 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [<CommonParameters>]
     executes each one to guarantee that all required GenXdev modules and  
     dependencies are properly loaded and available for use. Any failures during  
     the execution are caught and displayed as informational messages.  
+    Optionally, it can also download and load all NuGet packages defined in the  
+    packages.json manifest file, and initialize LMStudio models for AI functionality.  
 
 ### PARAMETERS 
     -Force [<SwitchParameter>]  
+        Forces the execution of ensure operations even if they appear to be already  
+        completed.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -330,6 +256,16 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [<CommonParameters>]
         Aliases                        
         Accept wildcard characters?  false  
     -DownloadLMStudioModels [<SwitchParameter>]  
+        Downloads and initializes LMStudio models for various AI query types.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -DownloadAllNugetPackages [<SwitchParameter>]  
+        Downloads and loads all NuGet packages defined in the packages.json manifest  
+        file.  
         Required?                    false  
         Position?                    named  
         Default value                False  
@@ -342,11 +278,94 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
+ 
+
+##	EnsureNuGetAssembly 
+```PowerShell 
+
+   EnsureNuGetAssembly  
+```` 
+
+### SYNOPSIS 
+    Downloads and loads .NET assemblies from NuGet packages based on package key or ID.  
+
+### SYNTAX 
+```PowerShell 
+EnsureNuGetAssembly [-PackageKey] <String> [-ManifestPath <String>] [-Version <String>] [-TypeName <String>] [-ForceLatest] [-Destination <String>] [<CommonParameters>] 
+```` 
+
+### DESCRIPTION 
+    This function ensures that the specified NuGet package assemblies are downloaded  
+    and loaded into the current PowerShell session. It supports automatic detection  
+    and loading with fallback to a JSON manifest for configuration overrides,  
+    handling edge cases like stub dependencies (e.g., SQLite). Installation uses  
+    the dotnet CLI exclusively for reliable package management and loads assemblies  
+    directly from the global NuGet cache without copying. Lazy loading checks if  
+    the type is already available before proceeding.  
+
+### PARAMETERS 
+    -PackageKey <String>  
+        The unique identifier for the package, either a key from the packages.json  
+        manifest or the direct NuGet PackageId.  
+        Required?                    true  
+        Position?                    1  
+        Default value                  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -ManifestPath <String>  
+        Optional path to the packages.json manifest. Defaults to module root if omitted.  
+        Required?                    false  
+        Position?                    named  
+        Default value                  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -Version <String>  
+        Optional specific version to install and load. If omitted, uses highest from  
+        JSON or latest from NuGet.  
+        Required?                    false  
+        Position?                    named  
+        Default value                  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -TypeName <String>  
+        Optional .NET type name to verify after loading (e.g., 'Microsoft.Data.Sqlite.SQLiteConnection').  
+        Required?                    false  
+        Position?                    named  
+        Default value                  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -ForceLatest [<SwitchParameter>]  
+        Switch to fallback to latest version if specified version fails.  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -Destination <String>  
+        Optional custom destination path for package installation. Defaults to persistent local or global cache.  
+        Required?                    false  
+        Position?                    named  
+        Default value                  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+
+<br/><hr/><br/>
  
 
 ##	Get-DefaultWebLanguage 
-````PowerShell 
+```PowerShell 
 
    Get-DefaultWebLanguage  
 ```` 
@@ -355,7 +374,7 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [<CommonParameters>]
     Gets the default web language key based on the system's current language settings.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Get-DefaultWebLanguage [<CommonParameters>] 
 ```` 
 
@@ -370,21 +389,21 @@ Get-DefaultWebLanguage [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
-##	Get-GenXDevCmdlets 
-````PowerShell 
+##	Get-GenXDevCmdlet 
+```PowerShell 
 
-   Get-GenXDevCmdlets                   --> gcmds  
+   Get-GenXDevCmdlet                    --> gcmds  
 ```` 
 
 ### SYNOPSIS 
     Retrieves and lists all GenXdev cmdlets and their details.  
 
 ### SYNTAX 
-````PowerShell 
-Get-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
+```PowerShell 
+Get-GenXDevCmdlet [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
@@ -481,11 +500,11 @@ Get-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-M
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Get-ImageGeolocation 
-````PowerShell 
+```PowerShell 
 
    Get-ImageGeolocation  
 ```` 
@@ -494,7 +513,7 @@ Get-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-M
     Extracts geolocation data from an image file.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Get-ImageGeolocation [-ImagePath] <String> [<CommonParameters>] 
 ```` 
 
@@ -520,11 +539,11 @@ Get-ImageGeolocation [-ImagePath] <String> [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Get-ImageMetadata 
-````PowerShell 
+```PowerShell 
 
    Get-ImageMetadata  
 ```` 
@@ -533,7 +552,7 @@ Get-ImageGeolocation [-ImagePath] <String> [<CommonParameters>]
     Extracts comprehensive metadata from an image file.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Get-ImageMetadata [-ImagePath] <String> [<CommonParameters>] 
 ```` 
 
@@ -559,11 +578,11 @@ Get-ImageMetadata [-ImagePath] <String> [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Get-WebLanguageDictionary 
-````PowerShell 
+```PowerShell 
 
    Get-WebLanguageDictionary  
 ```` 
@@ -572,7 +591,7 @@ Get-ImageMetadata [-ImagePath] <String> [<CommonParameters>]
     Returns a reversed dictionary for all languages supported by Google Search  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Get-WebLanguageDictionary [<CommonParameters>] 
 ```` 
 
@@ -586,11 +605,11 @@ Get-WebLanguageDictionary [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Import-GenXdevModules 
-````PowerShell 
+```PowerShell 
 
    Import-GenXdevModules                --> reloadgenxdev  
 ```` 
@@ -599,7 +618,7 @@ Get-WebLanguageDictionary [<CommonParameters>]
     Imports all GenXdev PowerShell modules into the global scope.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>] 
 ```` 
 
@@ -624,11 +643,11 @@ Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Initialize-SearchPaths 
-````PowerShell 
+```PowerShell 
 
    Initialize-SearchPaths  
 ```` 
@@ -637,7 +656,7 @@ Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>]
     Initializes and configures system search paths for package management.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>] 
 ```` 
 
@@ -662,11 +681,11 @@ Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Invoke-OnEachGenXdevModule 
-````PowerShell 
+```PowerShell 
 
    Invoke-OnEachGenXdevModule           --> foreach-genxdev-module-do  
 ```` 
@@ -675,7 +694,7 @@ Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>]
     Executes a script block on each GenXdev module in the workspace.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Invoke-OnEachGenXdevModule [-Script] <ScriptBlock> [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-IncludeGenXdevMainModule] [<CommonParameters>] 
 ```` 
 
@@ -751,11 +770,11 @@ Invoke-OnEachGenXdevModule [-Script] <ScriptBlock> [[-ModuleName] <String[]>] [-
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Out-Serial 
-````PowerShell 
+```PowerShell 
 
    Out-Serial  
 ```` 
@@ -764,7 +783,7 @@ Invoke-OnEachGenXdevModule [-Script] <ScriptBlock> [[-ModuleName] <String[]>] [-
     Sends a string to a serial port  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>] 
 ```` 
 
@@ -858,11 +877,11 @@ Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Remove-JSONComments 
-````PowerShell 
+```PowerShell 
 
    Remove-JSONComments  
 ```` 
@@ -871,7 +890,7 @@ Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt
     Removes comments from JSON content.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Remove-JSONComments [-Json] <String[]> [<CommonParameters>] 
 ```` 
 
@@ -896,26 +915,26 @@ Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
-##	Show-GenXDevCmdlets 
-````PowerShell 
+##	Show-GenXDevCmdlet 
+```PowerShell 
 
-   Show-GenXDevCmdlets                  --> cmds  
+   Show-GenXdevCmdlet                   --> cmds  
 ```` 
 
 ### SYNOPSIS 
     Displays GenXdev PowerShell modules with their cmdlets and aliases.  
 
 ### SYNTAX 
-````PowerShell 
-Show-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [<CommonParameters>] 
+```PowerShell 
+Show-GenXdevCmdlet [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
     Lists all installed GenXdev PowerShell modules and their associated cmdlets and  
-    aliases. Uses Get-GenXDevCmdlets to retrieve cmdlet information and optionally  
+    aliases. Uses Get-GenXDevCmdlet to retrieve cmdlet information and optionally  
     their script positions. Provides filtering and various display options.  
 
 ### PARAMETERS 
@@ -1037,11 +1056,11 @@ Show-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Show-Verb 
-````PowerShell 
+```PowerShell 
 
    Show-Verb                            --> showverbs  
 ```` 
@@ -1050,7 +1069,7 @@ Show-GenXDevCmdlets [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-
     Shows a short alphabetical list of all PowerShell verbs.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Show-Verb [[-Verb] <String[]>] [<CommonParameters>] 
 ```` 
 
@@ -1074,14 +1093,14 @@ Show-Verb [[-Verb] <String[]>] [<CommonParameters>]
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 &nbsp;<hr/>
 ###	GenXdev.Helpers.Math.Physics<hr/> 
 
 ##	Get-FreeFallHeight 
-````PowerShell 
+```PowerShell 
 
    Get-FreeFallHeight  
 ```` 
@@ -1090,7 +1109,7 @@ Show-Verb [[-Verb] <String[]>] [<CommonParameters>]
     Calculates the height fallen during free fall for a given time duration.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Get-FreeFallHeight [-DurationInSeconds] <Double> [[-TerminalVelocityInMs] <Double>] [<CommonParameters>] 
 ```` 
 
@@ -1124,11 +1143,11 @@ Get-FreeFallHeight [-DurationInSeconds] <Double> [[-TerminalVelocityInMs] <Doubl
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 ##	Get-FreeFallTime 
-````PowerShell 
+```PowerShell 
 
    Get-FreeFallTime  
 ```` 
@@ -1137,7 +1156,7 @@ Get-FreeFallHeight [-DurationInSeconds] <Double> [[-TerminalVelocityInMs] <Doubl
     Calculates the time it takes for an object to fall a specified distance.  
 
 ### SYNTAX 
-````PowerShell 
+```PowerShell 
 Get-FreeFallTime [-HeightInMeters] <Double> [[-TerminalVelocityInMs] <Double>] [<CommonParameters>] 
 ```` 
 
@@ -1170,7 +1189,7 @@ Get-FreeFallTime [-HeightInMeters] <Double> [[-TerminalVelocityInMs] <Double>] [
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 
-<br/><hr/><hr/><br/>
+<br/><hr/><br/>
  
 
 &nbsp;<hr/>
