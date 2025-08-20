@@ -14,10 +14,10 @@
     ]
   },
   "SqliteClient": {
-    "PackageId": "Microsoft.Data.Sqlite",
-    "Version": "9.0.8",
+    "PackageId": "System.Data.Sqlite",
+    "Version": "2.0.1",
     "Assemblies": [
-      "Microsoft.Data.Sqlite.dll"
+      "System.Data.Sqlite.dll"
     ]
   },
   "BouncyCastle": {
