@@ -12,7 +12,7 @@
 RootModule = 'GenXdev.Helpers.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.242.2025'
+ModuleVersion = '1.244.2025'
 
 # Supported PSEditions
 CompatiblePSEditions = 'Core'
@@ -109,8 +109,9 @@ FileList = 'GenXdev.Helpers.Math.Physics.psm1', 'GenXdev.Helpers.psd1',
                'Tests\GenXdev.Helpers\ConvertTo-HashTable.Tests.ps1', 
                'Tests\GenXdev.Helpers\Get-GenXDevCmdlet.Tests.ps1', 
                'Properties\PublishProfiles\FolderProfile.pubxml', 
-               'lib\EmbedIO.dll', 'lib\GenXdev.Helpers.deps.json', 
-               'lib\GenXdev.Helpers.dll', 'lib\getfilesiginforedist.dll', 
+               'lib\BouncyCastle.Cryptography.dll', 'lib\EmbedIO.dll', 
+               'lib\GenXdev.Helpers.deps.json', 'lib\GenXdev.Helpers.dll', 
+               'lib\getfilesiginforedist.dll', 
                'lib\getfilesiginforedistwrapper.dll', 'lib\JWT.dll', 'lib\LICENSE', 
                'lib\license.txt', 'lib\Microsoft.ApplicationInsights.dll', 
                'lib\Microsoft.Extensions.Configuration.UserSecrets.dll', 

@@ -134,7 +134,7 @@ function Invoke-OnEachGenXdevModule {
 
     process {
 
-        $allGenXdevModules = @(GenXdev.FileSystem\Find-Item "$modulesPath\GenXdev*\1.242.2025\GenXdev*.psm1" -PassThru -NoRecurse | Microsoft.PowerShell.Core\ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.FullName) }) +
+        $allGenXdevModules = @(GenXdev.FileSystem\Find-Item "$modulesPath\GenXdev*\1.244.2025\GenXdev*.psm1" -PassThru -NoRecurse | Microsoft.PowerShell.Core\ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.FullName) }) +
             @("GenXdev.Scripts")
 
         $genXdevModules = $allGenXdevModules
@@ -193,11 +193,11 @@ function Invoke-OnEachGenXdevModule {
 
                 # construct expected license file path for published modules
                 $licenseFilePath = (
-                    "$($ModuleObj.FullName)\1.242.2025\LICENSE")
+                    "$($ModuleObj.FullName)\1.244.2025\LICENSE")
 
                 # construct expected readme file path for published modules
                 $readmeFilePath = (
-                    "$($ModuleObj.FullName)\1.242.2025\README.md")
+                    "$($ModuleObj.FullName)\1.244.2025\README.md")
 
                 # skip license and readme checks for scripts directory
                 if ($ModuleObj.FullName -eq $scriptsPath) {
