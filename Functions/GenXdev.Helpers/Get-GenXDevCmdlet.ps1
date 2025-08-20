@@ -118,7 +118,7 @@ function Get-GenXDevCmdlet {
             ParameterSetName = "ModuleName",
             Mandatory = $false,
             HelpMessage = ('Includes the scripts directory in addition to ' +
-                          'regular modules')
+                'regular modules')
         )]
         [switch] $IncludeScripts,
         ###############################################################################
@@ -184,44 +184,45 @@ function Get-GenXDevCmdlet {
                     # search all powershell scripts recursively in scripts folder
                     Microsoft.PowerShell.Management\Get-ChildItem .\*.ps1 -Recurse
 
-                } elseif ($isSubModule) {
+                }
+                elseif ($isSubModule) {
 
                     # get all subdirectories under Functions to process each submodule
-                    Microsoft.PowerShell.Management\Get-ChildItem .\Functions\* -Directory |
-                    Microsoft.PowerShell.Core\ForEach-Object {
-                        $subModuleDir = $_
-
-                        # temporarily change to submodule directory
-                        Microsoft.PowerShell.Management\Push-Location $subModuleDir.FullName
-
-                        # get all powershell files in this submodule directory
-                        Microsoft.PowerShell.Management\Get-ChildItem .\*.ps1 |
+                    Microsoft.PowerShell.Management\Get-ChildItem .\Functions\* -Directory -ErrorAction SilentlyContinue |
                         Microsoft.PowerShell.Core\ForEach-Object {
-                            # add a property to track the actual submodule name
-                            $_ | Microsoft.PowerShell.Utility\Add-Member -NotePropertyName 'ActualSubModuleName' -NotePropertyValue $subModuleDir.Name -Force
-                            $_
+                            $subModuleDir = $_
+
+                            # temporarily change to submodule directory
+                            Microsoft.PowerShell.Management\Push-Location $subModuleDir.FullName
+
+                            # get all powershell files in this submodule directory
+                            Microsoft.PowerShell.Management\Get-ChildItem .\*.ps1 -ErrorAction SilentlyContinue |
+                                Microsoft.PowerShell.Core\ForEach-Object {
+                                    # add a property to track the actual submodule name
+                                    $_ | Microsoft.PowerShell.Utility\Add-Member -NotePropertyName 'ActualSubModuleName' -NotePropertyValue $subModuleDir.Name -Force
+                                    $_
+                                }
+
+                                # restore previous location
+                                Microsoft.PowerShell.Management\Pop-Location
+                            }
                         }
+                        else {
 
-                        # restore previous location
-                        Microsoft.PowerShell.Management\Pop-Location
-                    }
-                }
-                else {
+                            # search all function files recursively, excluding private ones
+                            Microsoft.PowerShell.Management\Get-ChildItem .\Functions\*.ps1 -Recurse -ErrorAction SilentlyContinue |
+                                Microsoft.PowerShell.Core\Where-Object {
 
-                    # search all function files recursively, excluding private ones
-                    Microsoft.PowerShell.Management\Get-ChildItem .\Functions\*.ps1 -Recurse |
-                    Microsoft.PowerShell.Core\Where-Object {
+                                    # exclude files starting with underscore (private functions)
+                                    $_.Name -notlike "_*"
+                                }
+                            }
+                        ) |
+                            Microsoft.PowerShell.Core\ForEach-Object {
 
-                        # exclude files starting with underscore (private functions)
-                        $_.Name -notlike "_*"
-                    }
-                }
-             ) |
-            Microsoft.PowerShell.Core\ForEach-Object {
-
-                try {
-                    ###############################################################################
-                    <#
+                                try {
+                                    ###############################################################################
+                                    <#
                     .SYNOPSIS
                     Helper function to extract function descriptions from sourcecode.
 
@@ -236,70 +237,70 @@ function Get-GenXDevCmdlet {
                     .PARAMETER FunctionContent
                     The content of the function to parse for extracting the synopsis.
                     #>
-                    function Get-FunctionDescription {
+                                    function Get-FunctionDescription {
 
-                        [CmdletBinding()]
-                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionDescription')]
-                        [OutputType([string])]
+                                        [CmdletBinding()]
+                                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionDescription')]
+                                        [OutputType([string])]
 
-                        param(
-                            [Parameter(
-                                Position = 0,
-                                Mandatory = $true
-                            )]
-                            [string]$FileName,
+                                        param(
+                                            [Parameter(
+                                                Position = 0,
+                                                Mandatory = $true
+                                            )]
+                                            [string]$FileName,
 
-                            [Parameter(
-                                Position = 1,
-                                Mandatory = $true
-                            )]
-                            [AllowEmptyString()]
-                            [AllowNull()]
-                            [string]$FunctionContent
-                        )
+                                            [Parameter(
+                                                Position = 1,
+                                                Mandatory = $true
+                                            )]
+                                            [AllowEmptyString()]
+                                            [AllowNull()]
+                                            [string]$FunctionContent
+                                        )
 
-                        # ensure function content is never null for string operations
-                        $FunctionContent = ($null -eq $FunctionContent) ? '' : $FunctionContent
+                                        # ensure function content is never null for string operations
+                                        $FunctionContent = ($null -eq $FunctionContent) ? '' : $FunctionContent
 
-                        # check if file is in scripts folder to determine parsing strategy
-                        $fromScripts = $FileName.StartsWith((GenXdev.FileSystem\Expand-Path `
-                                    -FilePath "$PSScriptRoot\..\..\..\..\..\Scripts\"))
+                                        # check if file is in scripts folder to determine parsing strategy
+                                        $fromScripts = $FileName.StartsWith((GenXdev.FileSystem\Expand-Path `
+                                                    -FilePath "$PSScriptRoot\..\..\..\..\..\Scripts\"))
 
-                        try {
+                                        try {
 
-                            # build regex pattern based on file location and structure
-                            $pattern = $fromScripts ?
-                            "\.SYNOPSIS\s*`r`n([^\r\n]*[\r\n]*)\r\n\r\n([^#][^>])*#>" :
-                                ("\.SYNOPSIS\s*`r`n([^\r\n]*[\r\n]*)\r\n\r\n([^#][^>])*#>\s*" +
-                            "function\s+$([IO.Path]::GetFileNameWithoutExtension($FileName))")
+                                            # build regex pattern based on file location and structure
+                                            $pattern = $fromScripts ?
+                                            "\.SYNOPSIS\s*`r`n([^\r\n]*[\r\n]*)\r\n\r\n([^#][^>])*#>" :
+                                            ("\.SYNOPSIS\s*`r`n([^\r\n]*[\r\n]*)\r\n\r\n([^#][^>])*#>\s*" +
+                                            "function\s+$([IO.Path]::GetFileNameWithoutExtension($FileName))")
 
-                            # extract synopsis using regex matching
-                            $match = [regex]::Match(
-                                $FunctionContent,
-                                $pattern,
-                                ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
-                                [System.Text.RegularExpressions.RegexOptions]::IgnorePatternWhitespace)
-                            )
+                                            # extract synopsis using regex matching
+                                            $match = [regex]::Match(
+                                                $FunctionContent,
+                                                $pattern,
+                                                ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
+                                                [System.Text.RegularExpressions.RegexOptions]::IgnorePatternWhitespace)
+                                            )
 
-                            # return the first capture group if match was successful
-                            if ($match.Success) {
-                                return $match.Groups[1].Value.Trim()
-                            }
-                        }
-                        catch {
+                                            # return the first capture group if match was successful
+                                            if ($match.Success) {
+                                                return $match.Groups[1].Value.Trim()
+                                            }
+                                        }
+                                        catch {
 
-                            # log verbose message on parsing failure
-                            Microsoft.PowerShell.Utility\Write-Verbose (
-                                "Failed to get description: $($_.Exception.Message)"
-                            )
-                        }
+                                            # log verbose message on parsing failure
+                                            Microsoft.PowerShell.Utility\Write-Verbose (
+                                                "Failed to get description: $($_.Exception.Message)"
+                                            )
+                                        }
 
-                        # return empty string if no description found
-                        return ''
-                    }
+                                        # return empty string if no description found
+                                        return ''
+                                    }
 
-                    ###############################################################################
-                    <#
+                                    ###############################################################################
+                                    <#
                     .SYNOPSIS
                     Helper function to extract function aliases from sourcecode.
 
@@ -314,95 +315,95 @@ function Get-GenXDevCmdlet {
                     .PARAMETER FunctionContent
                     The content of the function to parse for alias extraction.
                     #>
-                    function Get-FunctionAliases {
+                                    function Get-FunctionAliases {
 
-                        [CmdletBinding()]
-                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionAliases')]
-                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', 'Get-FunctionAliases')]
-                        [OutputType([string])]
+                                        [CmdletBinding()]
+                                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionAliases')]
+                                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', 'Get-FunctionAliases')]
+                                        [OutputType([string])]
 
-                        param(
-                            [Parameter(
-                                Position = 0,
-                                Mandatory = $true
-                            )]
-                            [string]$FileName,
+                                        param(
+                                            [Parameter(
+                                                Position = 0,
+                                                Mandatory = $true
+                                            )]
+                                            [string]$FileName,
 
-                            [Parameter(
-                                Position = 1,
-                                Mandatory = $true
-                            )]
-                            [AllowEmptyString()]
-                            [AllowNull()]
-                            [string]$FunctionContent
-                        )
+                                            [Parameter(
+                                                Position = 1,
+                                                Mandatory = $true
+                                            )]
+                                            [AllowEmptyString()]
+                                            [AllowNull()]
+                                            [string]$FunctionContent
+                                        )
 
-                        # ensure function content is never null for string operations
-                        $FunctionContent = $null -eq $FunctionContent ? '' : $FunctionContent
+                                        # ensure function content is never null for string operations
+                                        $FunctionContent = $null -eq $FunctionContent ? '' : $FunctionContent
 
-                        try {
+                                        try {
 
-                            # convert content to lowercase for case-insensitive searching
-                            $content = $FunctionContent.ToLowerInvariant();
+                                            # convert content to lowercase for case-insensitive searching
+                                            $content = $FunctionContent.ToLowerInvariant();
 
-                            # find the end of comment-based help section
-                            [int] $i = $content.IndexOf('#>');
+                                            # find the end of comment-based help section
+                                            [int] $i = $content.IndexOf('#>');
 
-                            # locate the function declaration after help section
-                            $i = $content.IndexOf(
-                                "function $([IO.Path]::GetFileNameWithoutExtension($FileName).ToLowerInvariant())", [Math]::Max(0, $i))
+                                            # locate the function declaration after help section
+                                            $i = $content.IndexOf(
+                                                "function $([IO.Path]::GetFileNameWithoutExtension($FileName).ToLowerInvariant())", [Math]::Max(0, $i))
 
-                            # fallback to cmdletbinding if function declaration not found
-                            if ($i -lt 0) {
-                                $i = $content.IndexOf('[cmdletbinding(', [Math]::Max(0, $i))
-                                if ($i -lt 0) {
-                                    $i = 0
-                                }
-                            }
+                                            # fallback to cmdletbinding if function declaration not found
+                                            if ($i -lt 0) {
+                                                $i = $content.IndexOf('[cmdletbinding(', [Math]::Max(0, $i))
+                                                if ($i -lt 0) {
+                                                    $i = 0
+                                                }
+                                            }
 
-                            # find the parameter section start
-                            $i2 = $content.IndexOf('param(', [Math]::Max(0, $i))
-                            if ($i2 -lt 0) {
+                                            # find the parameter section start
+                                            $i2 = $content.IndexOf('param(', [Math]::Max(0, $i))
+                                            if ($i2 -lt 0) {
 
-                                # fallback to first parameter attribute
-                                $i2 = $content.ToLowerInvariant().IndexOf('[parameter', [Math]::Max(0, $i))
-                            }
+                                                # fallback to first parameter attribute
+                                                $i2 = $content.ToLowerInvariant().IndexOf('[parameter', [Math]::Max(0, $i))
+                                            }
 
-                            # look for alias attribute between function and parameters
-                            $i = $content.IndexOf('[alias(', [Math]::Max(0, $i))
+                                            # look for alias attribute between function and parameters
+                                            $i = $content.IndexOf('[alias(', [Math]::Max(0, $i))
 
-                            # extract aliases if found in correct position
-                            if ($i -ge 0 -and $i2 -gt $i) {
+                                            # extract aliases if found in correct position
+                                            if ($i -ge 0 -and $i2 -gt $i) {
 
-                                # extract the alias definition content
-                                $aliases = $content.Substring($i + 7)
+                                                # extract the alias definition content
+                                                $aliases = $content.Substring($i + 7)
 
-                                # get content until closing parenthesis
-                                $aliases = $aliases.Substring(0, $aliases.IndexOf(')')).Replace(
-                                    "'", "`"")
+                                                # get content until closing parenthesis
+                                                $aliases = $aliases.Substring(0, $aliases.IndexOf(')')).Replace(
+                                                    "'", "`"")
 
-                                # clean up brackets and quotes from alias string
-                                $aliases = $aliases -replace "[\)\[\]\`"]", ''
+                                                # clean up brackets and quotes from alias string
+                                                $aliases = $aliases -replace "[\)\[\]\`"]", ''
 
-                                # split aliases and trim whitespace
-                                return (@($aliases -split ',') |
-                                Microsoft.PowerShell.Core\ForEach-Object { $_.Trim() })
-                            }
-                        }
-                        catch {
+                                                # split aliases and trim whitespace
+                                                return (@($aliases -split ',') |
+                                                        Microsoft.PowerShell.Core\ForEach-Object { $_.Trim() })
+                                                }
+                                            }
+                                            catch {
 
-                            # log verbose message on parsing failure
-                            Microsoft.PowerShell.Utility\Write-Verbose (
-                                "Failed to get aliases: $($_.Exception.Message)"
-                            )
-                        }
+                                                # log verbose message on parsing failure
+                                                Microsoft.PowerShell.Utility\Write-Verbose (
+                                                    "Failed to get aliases: $($_.Exception.Message)"
+                                                )
+                                            }
 
-                        # return empty string if no aliases found
-                        return [string]::Empty
-                    }
+                                            # return empty string if no aliases found
+                                            return [string]::Empty
+                                        }
 
-                    ###############################################################################
-                    <#
+                                        ###############################################################################
+                                        <#
                     .SYNOPSIS
                     Helper function to find the starting line number of a function.
 
@@ -414,165 +415,166 @@ function Get-GenXDevCmdlet {
                     .PARAMETER Content
                     The content to search for the function start position markers.
                     #>
-                    function Get-FunctionStartLine {
+                                        function Get-FunctionStartLine {
 
-                        [CmdletBinding()]
-                        [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionStartLine')]
-                        [OutputType([int])]
+                                            [CmdletBinding()]
+                                            [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionStartLine')]
+                                            [OutputType([int])]
 
-                        param(
-                            [Parameter(
-                                Position = 0,
-                                Mandatory = $true
-                            )]
-                            [AllowEmptyString()]
-                            [AllowNull()]
-                            [string]$Content
-                        )
+                                            param(
+                                                [Parameter(
+                                                    Position = 0,
+                                                    Mandatory = $true
+                                                )]
+                                                [AllowEmptyString()]
+                                                [AllowNull()]
+                                                [string]$Content
+                                            )
 
-                        # ensure content is never null for string operations
-                        $Content = ($null -eq $Content) ? '' : $Content
+                                            # ensure content is never null for string operations
+                                            $Content = ($null -eq $Content) ? '' : $Content
 
-                        # search for function start markers in order of preference
-                        $lineNo = $Content.IndexOf('#>')
-                        if ($lineNo -lt 0) { $lineNo = $Content.IndexOf('[CmdletBinding') }
-                        if ($lineNo -lt 0) { $lineNo = $Content.IndexOf('params') }
-                        if ($lineNo -lt 0) { $lineNo = $Content.IndexOf('begin {') }
-                        if ($lineNo -lt 0) {
-                            $lineNo = $Content.IndexOf('process {') }
-                        if ($lineNo -lt 0) { $lineNo = 0 }
-                        else {
-                            # calculate line number by counting newlines before marker
-                            $lineNo = $Content.Substring(0, $lineNo).Split("`n").Count + 1
-                        }
+                                            # search for function start markers in order of preference
+                                            $lineNo = $Content.IndexOf('#>')
+                                            if ($lineNo -lt 0) { $lineNo = $Content.IndexOf('[CmdletBinding') }
+                                            if ($lineNo -lt 0) { $lineNo = $Content.IndexOf('params') }
+                                            if ($lineNo -lt 0) { $lineNo = $Content.IndexOf('begin {') }
+                                            if ($lineNo -lt 0) {
+                                                $lineNo = $Content.IndexOf('process {') 
+                                            }
+                                            if ($lineNo -lt 0) { $lineNo = 0 }
+                                            else {
+                                                # calculate line number by counting newlines before marker
+                                                $lineNo = $Content.Substring(0, $lineNo).Split("`n").Count + 1
+                                            }
 
-                        return $lineNo
-                    }
+                                            return $lineNo
+                                        }
 
-                    # extract the cmdlet name from the current file being processed
-                    $cName = [IO.Path]::GetFileNameWithoutExtension($_.Name)
+                                        # extract the cmdlet name from the current file being processed
+                                        $cName = [IO.Path]::GetFileNameWithoutExtension($_.Name)
 
-                    # get command help information for the cmdlet
-                    $help = @(@($isScriptsFolder ?
-                        (Microsoft.PowerShell.Core\Get-Command -Name $_.FullName  -ErrorAction SilentlyContinue) :
-                        (Microsoft.PowerShell.Core\Get-Command -Name "$($Module.Name)\$($cName)"  -ErrorAction SilentlyContinue)) |
-                        Microsoft.PowerShell.Utility\Select-Object -first 1 -ErrorAction SilentlyContinue)
+                                        # get command help information for the cmdlet
+                                        $help = @(@($isScriptsFolder ?
+                                                (Microsoft.PowerShell.Core\Get-Command -Name $_.FullName -ErrorAction SilentlyContinue) :
+                                                (Microsoft.PowerShell.Core\Get-Command -Name "$($Module.Name)\$($cName)" -ErrorAction SilentlyContinue)) |
+                                                Microsoft.PowerShell.Utility\Select-Object -first 1 -ErrorAction SilentlyContinue)
 
-                    # determine description from help or extract from source code
-                    $description = (
-                        $help -and (-not [String]::IsNullOrWhiteSpace($help.ResolvedCommand.Description)) ?
-                        $help.ResolvedCommand.Description :
-                        (
-                            Get-FunctionDescription -FileName $_.FullName `
-                                -FunctionContent (
-                                    [IO.File]::ReadAllText($_.FullName )
-                                )
-                        )
-                    )
+                                            # determine description from help or extract from source code
+                                            $description = (
+                                                $help -and (-not [String]::IsNullOrWhiteSpace($help.ResolvedCommand.Description)) ?
+                                                $help.ResolvedCommand.Description :
+                                                (
+                                                    Get-FunctionDescription -FileName $_.FullName `
+                                                        -FunctionContent (
+                                                        [IO.File]::ReadAllText($_.FullName )
+                                                    )
+                                                )
+                                            )
 
-                    # collect all aliases for this cmdlet from different sources
-                    $aliases = @(
-                        @(
-                            Microsoft.PowerShell.Utility\Get-Alias -Definition $_.FullName -ErrorAction SilentlyContinue
-                        ) + @(
-                            Microsoft.PowerShell.Utility\Get-Alias -Definition "$($cName)" -ErrorAction SilentlyContinue
-                        )
-                    ) |
-                    Microsoft.PowerShell.Core\Where-Object {
+                                            # collect all aliases for this cmdlet from different sources
+                                            $aliases = @(
+                                                @(
+                                                    Microsoft.PowerShell.Utility\Get-Alias -Definition $_.FullName -ErrorAction SilentlyContinue
+                                                ) + @(
+                                                    Microsoft.PowerShell.Utility\Get-Alias -Definition "$($cName)" -ErrorAction SilentlyContinue
+                                                )
+                                            ) |
+                                                Microsoft.PowerShell.Core\Where-Object {
 
-                        # filter aliases to only those from the current module
-                        $_.Source -eq $Module.Name
-                    } |
-                    Microsoft.PowerShell.Core\ForEach-Object "Name";
+                                                    # filter aliases to only those from the current module
+                                                    $_.Source -eq $Module.Name
+                                                } |
+                                                Microsoft.PowerShell.Core\ForEach-Object "Name";
 
-                    # determine if cmdlet matches search criteria
-                    $found = (-not $CmdletName) -or ($CmdletName.Length -eq 0)
+                                                # determine if cmdlet matches search criteria
+                                                $found = (-not $CmdletName) -or ($CmdletName.Length -eq 0)
 
-                    # check if cmdlet name matches any provided search patterns
-                    if (-not $found) {
+                                                # check if cmdlet name matches any provided search patterns
+                                                if (-not $found) {
 
-                        foreach ($c in $CmdletName) {
+                                                    foreach ($c in $CmdletName) {
 
-                            $n = $c
+                                                        $n = $c
 
-                            # automatically add wildcards for non-exact matches
-                            if ((-not $ExactMatch) -and ($n.IndexOfAny('*?[]'.ToCharArray()) -lt 0)) {
+                                                        # automatically add wildcards for non-exact matches
+                                                        if ((-not $ExactMatch) -and ($n.IndexOfAny('*?[]'.ToCharArray()) -lt 0)) {
 
-                                $n = "*$n*"
-                            }
+                                                            $n = "*$n*"
+                                                        }
 
-                            # check for module-qualified name match
-                            if ($n.Contains('\')) {
+                                                        # check for module-qualified name match
+                                                        if ($n.Contains('\')) {
 
-                                if ("$($Module.Name)\$($cName)" -Like $n) {
-                                    $found = $true
-                                    break;
-                                }
-                            }
-                            else {
-                                # check for simple cmdlet name match
-                                if ("$($cName)" -Like $n) {
-                                    $found = $true
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                                                            if ("$($Module.Name)\$($cName)" -Like $n) {
+                                                                $found = $true
+                                                                break;
+                                                            }
+                                                        }
+                                                        else {
+                                                            # check for simple cmdlet name match
+                                                            if ("$($cName)" -Like $n) {
+                                                                $found = $true
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
 
-                    # check alias matches if cmdlet name didn't match
-                    if (-not $found) {
+                                                # check alias matches if cmdlet name didn't match
+                                                if (-not $found) {
 
-                        foreach ($a in $aliases) {
+                                                    foreach ($a in $aliases) {
 
-                            if ($a -Like $CmdletName) {
-                                $found = $true
-                                break;
-                            }
-                        }
-                    }
+                                                        if ($a -Like $CmdletName) {
+                                                            $found = $true
+                                                            break;
+                                                        }
+                                                    }
+                                                }
 
-                    # apply definition matching filter if specified
-                    if ($found -and $DefinitionMatches) {
+                                                # apply definition matching filter if specified
+                                                if ($found -and $DefinitionMatches) {
 
-                        $found = ($help ? $help.ResolvedCommand.Definition : [IO.File]::ReadAllText($_.FullName)) -match $DefinitionMatches
-                    }
+                                                    $found = ($help ? $help.ResolvedCommand.Definition : [IO.File]::ReadAllText($_.FullName)) -match $DefinitionMatches
+                                                }
 
-                    # skip this cmdlet if it doesn't match search criteria
-                    if (-not $found) { return }
+                                                # skip this cmdlet if it doesn't match search criteria
+                                                if (-not $found) { return }
 
-                    $moduleN = (
-                            $isScriptsFolder ?
-                                "GenXdev.Scripts" :
-                                [IO.Path]::GetFileName([IO.Path]::GetDirectoryName($_.FullName))
-                        )
+                                                $moduleN = (
+                                                    $isScriptsFolder ?
+                                                    "GenXdev.Scripts" :
+                                                    [IO.Path]::GetFileName([IO.Path]::GetDirectoryName($_.FullName))
+                                                )
 
-                    # create cmdlet information object and add to collection
-                    $cmdletInfo = [GenXdev.Helpers.GenXdevCmdletInfo]@{
-                        Name               = $cName
-                        ModuleName         = $moduleN
-                        BaseModule         = $($Module.Name)
-                        LineNo             = 0
-                        Description        = $description
-                        Aliases            = $aliases -join ', '
-                        ScriptFilePath     = $_.FullName
-                        ScriptTestFilePath = (
-                            $isScriptsFolder ?
-                                (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\$($cName).Tests.ps1") :
-                                (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\..\..\Tests\$moduleN\$($cName).Tests.ps1")
-                        )
-                    }
+                                                # create cmdlet information object and add to collection
+                                                $cmdletInfo = [GenXdev.Helpers.GenXdevCmdletInfo]@{
+                                                    Name               = $cName
+                                                    ModuleName         = $moduleN
+                                                    BaseModule         = $($Module.Name)
+                                                    LineNo             = 0
+                                                    Description        = $description
+                                                    Aliases            = $aliases -join ', '
+                                                    ScriptFilePath     = $_.FullName
+                                                    ScriptTestFilePath = (
+                                                        $isScriptsFolder ?
+                                                        (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\$($cName).Tests.ps1") :
+                                                        (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\..\..\Tests\$moduleN\$($cName).Tests.ps1")
+                                                    )
+                                                }
 
-                    # add to collection
-                    $null = $cmdletCollection.Add($cmdletInfo)
-                }
-                catch {
+                                                # add to collection
+                                                $null = $cmdletCollection.Add($cmdletInfo)
+                                            }
+                                            catch {
 
-                    # log warning for any file processing errors
-                    Microsoft.PowerShell.Utility\Write-Warning (
-                        "Error processing file '$($_.FullName)': $($_.Exception.Message)"
-                    )
-                }
-            }
+                                                # log warning for any file processing errors
+                                                Microsoft.PowerShell.Utility\Write-Warning (
+                                                    "Error processing file '$($_.FullName)': $($_.Exception.Message)"
+                                                )
+                                            }
+                                        }
         }
     }
 
@@ -591,13 +593,14 @@ function Get-GenXDevCmdlet {
 
             # return unique BaseModule names
             $cmdletCollection |
-            Microsoft.PowerShell.Core\ForEach-Object { $_.BaseModule } |
-            Microsoft.PowerShell.Utility\Select-Object -Unique |
-            Microsoft.PowerShell.Utility\Sort-Object {
-                "$($_.BaseModule.Length.ToString("00_"))$($_.BaseModule)"
-            } -Descending
+                Microsoft.PowerShell.Core\ForEach-Object { $_.BaseModule } |
+                Microsoft.PowerShell.Utility\Select-Object -Unique |
+                Microsoft.PowerShell.Utility\Sort-Object {
+                    "$($_.BaseModule.Length.ToString("00_"))$($_.BaseModule)"
+                } -Descending
 
-        } else {
+        }
+        else {
 
             # return full cmdlet information objects
             $cmdletCollection

@@ -88,7 +88,7 @@ function EnsureGenXdev {
         GenXdev.Coding\EnsureVSCodeInstallation
 
         # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
-        GenXdev.Helpers\Get-GenXDevCmdlet Ensure* -PassThru |
+        GenXdev.Helpers\Get-GenXDevCmdlet Ensure* |
             Microsoft.PowerShell.Core\ForEach-Object name |
             Microsoft.PowerShell.Core\Where-Object {
 
