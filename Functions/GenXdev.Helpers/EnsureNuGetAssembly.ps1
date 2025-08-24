@@ -391,6 +391,7 @@ function EnsureNuGetAssembly {
             }
 
             if (-not $installed) {
+                Microsoft.PowerShell.Utility\Write-Host "One-time only just-in-time Installation of ${PackageId}, started, one moment please..." -ForegroundColor Cyan
                 Microsoft.PowerShell.Utility\Write-Host "Installing ${PackageId} ${Version}..."
 
                 # Install using dotnet CLI
