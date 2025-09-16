@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Show-GenXDevCmdlet.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.264.2025
+Version                   : 1.268.2025
 ################################################################################
 MIT License
 
@@ -217,6 +217,7 @@ function Show-GenXdevCmdlet {
 
 
     process {
+        $wpDone = $false;
         try {
             # copy identical parameters between functions for passing to Get-GenXDevCmdlet
             $invocationParams = GenXdev.Helpers\Copy-IdenticalParamValues `
@@ -239,13 +240,34 @@ function Show-GenXdevCmdlet {
 
                 # handle online documentation
                 if ($Online) {
-                    if (@('GenXdev.Local', 'GenXdev.Scripts').IndexOf($cmdlet.BaseModule) -ge 0) {
-                        Microsoft.PowerShell.Utility\Write-Verbose "Opening documentation for $($cmdlet.ModuleName)"
-                        Microsoft.PowerShell.Management\Start-Process `
-                            "https://github.com/genXdev/$($cmdlet.ModuleName)/blob/main/README.md#$($cmdlet.Name)" `
 
-                        return
+                    if (@('GenXdev.Local', 'GenXdev.Scripts').IndexOf($cmdlet.BaseModule) -lt 0) {
+
+
+                        $url = "https://github.com/genXdev/$($cmdletData.BaseModule)#$($cmdletData.Name)";
+
+                        if ([string]::IsNullOrWhiteSpace($CmdletName)) {
+
+                            $url = "https://github.com/genXdev/$($cmdletData.ModulBaseModuleName)#Cmdlet+Index)";
+                        }
+
+                        Microsoft.PowerShell.Utility\Write-Verbose "Opening documentation for $($cmdletData.BaseModule)"
+
+                        if (Microsoft.PowerShell.Core\Get-Module GenXdev.Webbrowser -ErrorAction SilentlyContinue) {
+
+                            GenXdev.Webbrowser\Open-Webbrowser -Url $url -SideBySide:(!$wpDone) -RestoreFocus -Monitor ($wpDone ? -1 : 0)
+                            $wpDone = $true;
+                        }
+                        else {
+                            Microsoft.PowerShell.Management\Start-Process $url
+                        }
+
+                        if ([string]::IsNullOrWhiteSpace($CmdletName)) {
+
+                            return;
+                        }
                     }
+
                     continue
                 }
 
