@@ -75,6 +75,7 @@ Update-Module
 | [Remove-JSONComments](#remove-jsoncomments) | &nbsp; | Removes comments from JSON content. |
 | [Show-GenXDevCmdlet](#show-genxdevcmdlet) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
 | [Show-Verb](#show-verb) | showverbs | Shows a short alphabetical list of all PowerShell verbs. |
+| [Test-UnattendedMode](#test-unattendedmode) | &nbsp; | Detects if PowerShell is running in unattended/automated mode |
 
 ### GenXdev.Helpers.Math.Physics
 | Command | Aliases | Description |
@@ -139,27 +140,20 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
    ConvertTo-HashTable  
 ```` 
 
-### SYNOPSIS 
-    Converts a PSCustomObject to a HashTable recursively.  
-
 ### SYNTAX 
 ```PowerShell 
 ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function converts a PSCustomObject and all its nested PSCustomObject  
-    properties into HashTables. It handles arrays and other collection types by  
-    processing each element recursively.  
-
 ### PARAMETERS 
     -InputObject <Object[]>  
-        The PSCustomObject to convert into a HashTable. Accepts pipeline input.  
+        The PSCustomObject to convert into a HashTable  
         Required?                    true  
-        Position?                    1  
-        Default value                  
+        Position?                    0  
         Accept pipeline input?       true (ByValue)  
-        Aliases                        
+        Parameter set name           Default  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -176,42 +170,29 @@ ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>]
    ConvertTo-JsonEx                     --> tojsonex  
 ```` 
 
-### SYNOPSIS 
-    Converts an object to a JSON string with extended options.  
-
 ### SYNTAX 
 ```PowerShell 
 ConvertTo-JsonEx [-Object] <Object> [-Compress] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    Converts a PowerShell object to a JSON string using the GenXdev.Helpers.  
-    Serialization library. This function provides enhanced JSON serialization  
-    capabilities with optional compression to remove whitespace for reduced  
-    output size. The function is designed to handle complex PowerShell objects  
-    and provide more control over the JSON conversion process compared to the  
-    built-in ConvertTo-Json cmdlet.  
-
 ### PARAMETERS 
-    -Object <Object>  
-        The PowerShell object to convert to JSON format. This can be any type of  
-        PowerShell object including hashtables, arrays, custom objects, or primitive  
-        types.  
-        Required?                    true  
-        Position?                    1  
-        Default value                  
-        Accept pipeline input?       true (ByValue)  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -Compress [<SwitchParameter>]  
-        When specified, removes all unnecessary whitespace from the output JSON string  
-        to minimize the size. This is useful when transmitting JSON data over  
-        networks or storing in space-constrained environments.  
+    -Compress  
+        Compress the JSON output by removing whitespace  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -Object <Object>  
+        The object to convert to JSON  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -228,49 +209,38 @@ ConvertTo-JsonEx [-Object] <Object> [-Compress] [<CommonParameters>]
    EnsureGenXdev  
 ```` 
 
-### SYNOPSIS 
-    Ensures all GenXdev modules are properly loaded by invoking all Ensure*  
-    cmdlets.  
-
 ### SYNTAX 
 ```PowerShell 
 EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function retrieves all GenXdev cmdlets that start with "Ensure" and  
-    executes each one to guarantee that all required GenXdev modules and  
-    dependencies are properly loaded and available for use. Any failures during  
-    the execution are caught and displayed as informational messages.  
-    Optionally, it can also download and load all NuGet packages defined in the  
-    packages.json manifest file, and initialize LMStudio models for AI functionality.  
-
 ### PARAMETERS 
-    -Force [<SwitchParameter>]  
-        Forces the execution of ensure operations even if they appear to be already  
-        completed.  
+    -DownloadAllNugetPackages  
+        Downloads and loads all NuGet packages defined in the packages.json manifest file  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -DownloadLMStudioModels [<SwitchParameter>]  
-        Downloads and initializes LMStudio models for various AI query types.  
+    -DownloadLMStudioModels  
+        Downloads and initializes LMStudio models for various AI query types  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -DownloadAllNugetPackages [<SwitchParameter>]  
-        Downloads and loads all NuGet packages defined in the packages.json manifest  
-        file.  
+    -Force  
+        Forces the execution of ensure operations even if they appear to be already completed  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -287,73 +257,65 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [<C
    EnsureNuGetAssembly  
 ```` 
 
-### SYNOPSIS 
-    Downloads and loads .NET assemblies from NuGet packages based on package key or ID.  
-
 ### SYNTAX 
 ```PowerShell 
-EnsureNuGetAssembly [-PackageKey] <String> [-ManifestPath <String>] [-Version <String>] [-TypeName <String>] [-ForceLatest] [-Destination <String>] [<CommonParameters>] 
+EnsureNuGetAssembly [-PackageKey] <string> [-ManifestPath <string>] [-Version <string>] [-TypeName <string>] [-ForceLatest] [-Destination <string>] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function ensures that the specified NuGet package assemblies are downloaded  
-    and loaded into the current PowerShell session. It supports automatic detection  
-    and loading with fallback to a JSON manifest for configuration overrides,  
-    handling edge cases like stub dependencies (e.g., SQLite). Installation uses  
-    the dotnet CLI exclusively for reliable package management and loads assemblies  
-    directly from the global NuGet cache without copying. Lazy loading checks if  
-    the type is already available before proceeding.  
-
 ### PARAMETERS 
-    -PackageKey <String>  
-        The unique identifier for the package, either a key from the packages.json  
-        manifest or the direct NuGet PackageId.  
+    -Destination <string>  
+        Custom install destination; defaults to local persistent or global cache.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ForceLatest  
+        Fallback to latest if exact version fails.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ManifestPath <string>  
+        Path to packages.json; defaults to module root if omitted.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -PackageKey <string>  
+        Package key from packages.json or direct NuGet PackageId.  
         Required?                    true  
-        Position?                    1  
-        Default value                  
+        Position?                    0  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -ManifestPath <String>  
-        Optional path to the packages.json manifest. Defaults to module root if omitted.  
+    -TypeName <string>  
+        TypeName to verify loading.  
         Required?                    false  
-        Position?                    named  
-        Default value                  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -Version <String>  
-        Optional specific version to install and load. If omitted, uses highest from  
-        JSON or latest from NuGet.  
+    -Version <string>  
+        Specific version; if omitted, use highest from JSON or latest.  
         Required?                    false  
-        Position?                    named  
-        Default value                  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -TypeName <String>  
-        Optional .NET type name to verify after loading (e.g., 'Microsoft.Data.Sqlite.SQLiteConnection').  
-        Required?                    false  
-        Position?                    named  
-        Default value                  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -ForceLatest [<SwitchParameter>]  
-        Switch to fallback to latest version if specified version fails.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -Destination <String>  
-        Optional custom destination path for package installation. Defaults to persistent local or global cache.  
-        Required?                    false  
-        Position?                    named  
-        Default value                  
-        Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -370,17 +332,10 @@ EnsureNuGetAssembly [-PackageKey] <String> [-ManifestPath <String>] [-Version <S
    Get-DefaultWebLanguage  
 ```` 
 
-### SYNOPSIS 
-    Gets the default web language key based on the system's current language settings.  
-
 ### SYNTAX 
 ```PowerShell 
 Get-DefaultWebLanguage [<CommonParameters>] 
 ```` 
-
-### DESCRIPTION 
-    Retrieves the current system language and culture settings and maps them to the  
-    corresponding web language dictionary key used by translation services.  
 
 ### PARAMETERS 
     <CommonParameters>  
@@ -398,101 +353,92 @@ Get-DefaultWebLanguage [<CommonParameters>]
    Get-GenXDevCmdlet                    --> gcmds  
 ```` 
 
-### SYNOPSIS 
-    Retrieves and lists all GenXdev cmdlets and their details.  
-
 ### SYNTAX 
 ```PowerShell 
-Get-GenXDevCmdlet [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
+Get-GenXDevCmdlet [[-CmdletName] <string>] [[-DefinitionMatches] <string>] [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    Searches through installed GenXdev modules and script files to find cmdlets,  
-    their aliases, and descriptions. Can filter by name pattern and module name.  
-    Supports filtering by cmdlet definitions and provides flexible search options  
-    across both local and published module paths.  
-
 ### PARAMETERS 
-    -CmdletName <String>  
-        Search pattern to filter cmdlets. Supports wildcards (*) and exact matching.  
-        When ExactMatch is false, automatically wraps simple strings with wildcards.  
+    -CmdletName <string>  
+        Search pattern to filter cmdlets  
+        Required?                    false  
+        Position?                    0  
+        Accept pipeline input?       true (ByPropertyName)  
+        Parameter set name           (All)  
+        Aliases                      Filter, CmdLet, Cmd, FunctionName, Name  
+        Dynamic?                     false  
+        Accept wildcard characters?  true  
+    -DefinitionMatches <string>  
+        Regular expression to match cmdlet definitions  
         Required?                    false  
         Position?                    1  
-        Default value                  
-        Accept pipeline input?       true (ByPropertyName)  
-        Aliases                        
-        Accept wildcard characters?  true  
-    -DefinitionMatches <String>  
-        Regular expression to match cmdlet definitions. Used to filter cmdlets based  
-        on their function content or implementation details.  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ExactMatch  
+        Perform exact matching instead of wildcard matching  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -FromScripts  
+        Search in script files instead of modules  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -IncludeScripts  
+        Includes the scripts directory in addition to regular modules  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           ModuleName  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ModuleName <string[]>  
+        GenXdev module names to search  
         Required?                    false  
         Position?                    2  
-        Default value                  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -ModuleName <String[]>  
-        One or more GenXdev module names to search. Can omit GenXdev prefix. Supports  
-        wildcards and validates module name patterns for GenXdev modules.  
-        Required?                    false  
-        Position?                    3  
-        Default value                  
-        Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      Module, BaseModuleName, SubModuleName  
+        Dynamic?                     false  
         Accept wildcard characters?  true  
-    -NoLocal [<SwitchParameter>]  
-        Skip searching in local module paths. When specified, only searches in  
-        published or system module locations.  
+    -NoLocal  
+        Skip searching in local module paths  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -OnlyPublished [<SwitchParameter>]  
-        Limit search to published module paths only. Excludes local development  
-        modules and focuses on released versions.  
+    -OnlyPublished  
+        Only search in published module paths  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -FromScripts [<SwitchParameter>]  
-        Search in script files instead of module files. Changes the search target  
-        from PowerShell modules to standalone script files.  
+    -OnlyReturnModuleNames  
+        Only return unique module names  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -IncludeScripts [<SwitchParameter>]  
-        Includes the scripts directory in addition to regular modules. Expands the  
-        search scope to cover both modules and scripts simultaneously.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -OnlyReturnModuleNames [<SwitchParameter>]  
-        Only return unique module names instead of full cmdlet details. Provides a  
-        summary view of available modules rather than detailed cmdlet information.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -ExactMatch [<SwitchParameter>]  
-        Perform exact matching instead of wildcard matching. When specified, disables  
-        automatic wildcard wrapping for simple search patterns.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -509,29 +455,20 @@ Get-GenXDevCmdlet [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-Mo
    Get-ImageGeolocation  
 ```` 
 
-### SYNOPSIS 
-    Extracts geolocation data from an image file.  
-
 ### SYNTAX 
 ```PowerShell 
-Get-ImageGeolocation [-ImagePath] <String> [<CommonParameters>] 
+Get-ImageGeolocation [-ImagePath] <string> [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function reads EXIF metadata from an image file to extract its latitude and  
-    longitude coordinates. It supports images that contain GPS metadata in their EXIF  
-    data. The function uses the System.Drawing.Image class to load the image and  
-    parse the GPS coordinates from property items.  
-
 ### PARAMETERS 
-    -ImagePath <String>  
-        The full path to the image file to analyze. The file must be a valid image format  
-        that supports EXIF metadata (JPEG, TIFF, etc.).  
+    -ImagePath <string>  
+        Path to the image file to analyze  
         Required?                    true  
-        Position?                    1  
-        Default value                  
+        Position?                    0  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -548,29 +485,20 @@ Get-ImageGeolocation [-ImagePath] <String> [<CommonParameters>]
    Get-ImageMetadata  
 ```` 
 
-### SYNOPSIS 
-    Extracts comprehensive metadata from an image file.  
-
 ### SYNTAX 
 ```PowerShell 
-Get-ImageMetadata [-ImagePath] <String> [<CommonParameters>] 
+Get-ImageMetadata [-ImagePath] <string> [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function reads EXIF, IPTC and other metadata from an image file. It extracts  
-    a wide range of information including camera details, exposure settings, GPS coordinates,  
-    dates, copyright information, and more. It supports images that contain metadata  
-    in their EXIF data (JPEG, TIFF) as well as PNG metadata.  
-
 ### PARAMETERS 
-    -ImagePath <String>  
-        The full path to the image file to analyze. The file must be a valid image format  
-        that supports metadata (JPEG, TIFF, PNG, etc.).  
+    -ImagePath <string>  
+        Path to the image file to analyze  
         Required?                    true  
-        Position?                    1  
-        Default value                  
+        Position?                    0  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -614,28 +542,20 @@ Get-WebLanguageDictionary [<CommonParameters>]
    Import-GenXdevModules                --> reloadgenxdev  
 ```` 
 
-### SYNOPSIS 
-    Imports all GenXdev PowerShell modules into the global scope.  
-
 ### SYNTAX 
 ```PowerShell 
 Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    Scans the parent directory for GenXdev modules and imports each one into the  
-    global scope. Uses location stack management to preserve the working directory  
-    and provides visual feedback for successful and failed imports. Tracks function  
-    count changes during the import process.  
-
 ### PARAMETERS 
-    -DebugFailedModuleDefinitions [<SwitchParameter>]  
-        When enabled, provides detailed debug output for modules that fail to import.  
+    -DebugFailedModuleDefinitions  
+        Enable debug output for failed module definitions  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -652,28 +572,19 @@ Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>]
    Initialize-SearchPaths  
 ```` 
 
-### SYNOPSIS 
-    Initializes and configures system search paths for package management.  
-
 ### SYNTAX 
 ```PowerShell 
-Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>] 
+Initialize-SearchPaths [[-WorkspaceFolder] <string>] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function builds a comprehensive list of search paths by combining default  
-    system locations, chocolatey paths, development tool paths, and custom package  
-    paths. It then updates the system's PATH environment variable with these  
-    consolidated paths.  
-
 ### PARAMETERS 
-    -WorkspaceFolder <String>  
-        The workspace folder path to use for node modules and PowerShell paths.  
+    -WorkspaceFolder <string>  
         Required?                    false  
-        Position?                    1  
-        Default value                "$PSScriptRoot\..\..\..\..\..\"  
+        Position?                    0  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -690,79 +601,74 @@ Initialize-SearchPaths [[-WorkspaceFolder] <String>] [<CommonParameters>]
    Invoke-OnEachGenXdevModule           --> foreach-genxdev-module-do  
 ```` 
 
-### SYNOPSIS 
-    Executes a script block on each GenXdev module in the workspace.  
-
 ### SYNTAX 
 ```PowerShell 
-Invoke-OnEachGenXdevModule [-Script] <ScriptBlock> [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-IncludeGenXdevMainModule] [<CommonParameters>] 
+Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-IncludeGenXdevMainModule] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function iterates through GenXdev modules in the workspace and executes  
-    a provided script block against each module. It can filter modules by name  
-    pattern, exclude local modules, include only published modules, or process  
-    scripts instead of modules. The function automatically navigates to the  
-    correct module directory before executing the script block.  
-
 ### PARAMETERS 
-    -Script <ScriptBlock>  
-        The script block to execute for each GenXdev module. The module object is  
-        passed as an argument to the script block.  
-        Required?                    true  
+    -FromScripts  
+        Process scripts directory instead of module directories  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -IncludeGenXdevMainModule  
+        Includes the main GenXdev module in addition to sub-modules  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -IncludeScripts  
+        Includes the scripts directory in addition to regular modules  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ModuleName <string[]>  
+        Filter to apply to module names  
+        Required?                    false  
         Position?                    1  
-        Default value                  
         Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -ModuleName <String[]>  
-        Filter to apply to module names. Supports wildcards and multiple patterns.  
-        Defaults to 'GenXdev*' to include all GenXdev modules.  
-        Required?                    false  
-        Position?                    2  
-        Default value                @('GenXdev*')  
-        Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      Module, BaseModuleName, SubModuleName  
+        Dynamic?                     false  
         Accept wildcard characters?  true  
-    -NoLocal [<SwitchParameter>]  
-        Excludes local development modules from processing.  
+    -NoLocal  
+        Excludes local development modules from processing  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -OnlyPublished [<SwitchParameter>]  
-        Includes only published modules that have LICENSE and README.md files.  
+    -OnlyPublished  
+        Includes only published modules that have LICENSE and README.md files  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -FromScripts [<SwitchParameter>]  
-        Process scripts directory instead of module directories.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
+    -Script <scriptblock>  
+        The script block to execute for each GenXdev module  
+        Required?                    true  
+        Position?                    0  
         Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -IncludeScripts [<SwitchParameter>]  
-        Includes the scripts directory in addition to regular modules.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -IncludeGenXdevMainModule [<SwitchParameter>]  
-        Includes the main GenXdev module in addition to sub-modules.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      ScriptBlock  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -886,28 +792,20 @@ Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt
    Remove-JSONComments  
 ```` 
 
-### SYNOPSIS 
-    Removes comments from JSON content.  
-
 ### SYNTAX 
 ```PowerShell 
-Remove-JSONComments [-Json] <String[]> [<CommonParameters>] 
+Remove-JSONComments [-Json] <string[]> [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    Processes JSON content and removes both single-line and multi-line comments while  
-    preserving the JSON structure. This is useful for cleaning up JSON files that  
-    contain documentation comments before parsing.  
-
 ### PARAMETERS 
-    -Json <String[]>  
-        The JSON content to process as a string array. Each element represents a line of  
-        JSON content.  
+    -Json <string[]>  
+        JSON content to process as string array  
         Required?                    true  
-        Position?                    1  
-        Default value                  
+        Position?                    0  
         Accept pipeline input?       true (ByValue)  
-        Aliases                        
+        Parameter set name           Default  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -924,131 +822,127 @@ Remove-JSONComments [-Json] <String[]> [<CommonParameters>]
    Show-GenXdevCmdlet                   --> cmds  
 ```` 
 
-### SYNOPSIS 
-    Displays GenXdev PowerShell modules with their cmdlets and aliases.  
-
 ### SYNTAX 
 ```PowerShell 
-Show-GenXdevCmdlet [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-ModuleName] <String[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [<CommonParameters>] 
+Show-GenXdevCmdlet [[-CmdletName] <string>] [[-DefinitionMatches] <string>] [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    Lists all installed GenXdev PowerShell modules and their associated cmdlets and  
-    aliases. Uses Get-GenXDevCmdlet to retrieve cmdlet information and optionally  
-    their script positions. Provides filtering and various display options.  
-
 ### PARAMETERS 
-    -CmdletName <String>  
-        Search pattern to filter cmdlets. Supports wildcards (*) and exact matching.  
-        When ExactMatch is false, automatically wraps simple strings with wildcards.  
+    -CmdletName <string>  
+        Search pattern to filter cmdlets  
+        Required?                    false  
+        Position?                    0  
+        Accept pipeline input?       true (ByPropertyName)  
+        Parameter set name           (All)  
+        Aliases                      Filter, CmdLet, Cmd, FunctionName, Name  
+        Dynamic?                     false  
+        Accept wildcard characters?  true  
+    -DefinitionMatches <string>  
+        Regular expression to match cmdlet definitions  
         Required?                    false  
         Position?                    1  
-        Default value                  
-        Accept pipeline input?       true (ByPropertyName)  
-        Aliases                        
-        Accept wildcard characters?  true  
-    -DefinitionMatches <String>  
-        Regular expression to match cmdlet definitions. Used to filter cmdlets based  
-        on their function content or implementation details.  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ExactMatch  
+        Perform exact matching instead of wildcard matching  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -FromScripts  
+        Search in script files instead of modules  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -IncludeScripts  
+        Includes the scripts directory in addition to regular modules  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           ModuleName  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ModuleName <string[]>  
+        GenXdev module names to search  
         Required?                    false  
         Position?                    2  
-        Default value                  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -ModuleName <String[]>  
-        One or more GenXdev module names to search. Can omit GenXdev prefix. Supports  
-        wildcards and validates module name patterns for GenXdev modules.  
-        Required?                    false  
-        Position?                    3  
-        Default value                  
-        Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      Module, BaseModuleName, SubModuleName  
+        Dynamic?                     false  
         Accept wildcard characters?  true  
-    -NoLocal [<SwitchParameter>]  
-        Skip searching in local module paths. When specified, only searches in  
-        published or system module locations.  
+    -NoLocal  
+        Skip searching in local module paths  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -OnlyPublished [<SwitchParameter>]  
-        Limit search to published module paths only. Excludes local development  
-        modules and focuses on released versions.  
+    -Online  
+        Open GitHub documentation instead of console output  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -FromScripts [<SwitchParameter>]  
-        Search in script files instead of module files. Changes the search target  
-        from PowerShell modules to standalone script files.  
+    -OnlyAliases  
+        When specified displays only aliases of cmdlets  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      aliases, nonboring, notlame, handyonces  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -IncludeScripts [<SwitchParameter>]  
-        Includes the scripts directory in addition to regular modules. Expands the  
-        search scope to cover both modules and scripts simultaneously.  
+    -OnlyPublished  
+        Only search in published module paths  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -OnlyReturnModuleNames [<SwitchParameter>]  
-        Only return unique module names instead of full cmdlet details. Provides a  
-        summary view of available modules rather than detailed cmdlet information.  
+    -OnlyReturnModuleNames  
+        Only return unique module names  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -ExactMatch [<SwitchParameter>]  
-        Perform exact matching instead of wildcard matching. When specified, disables  
-        automatic wildcard wrapping for simple search patterns.  
+    -PassThru  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -Online [<SwitchParameter>]  
-        When specified, opens the GitHub documentation page instead of console output.  
+    -ShowTable  
+        Display results in table format  
         Required?                    false  
-        Position?                    named  
-        Default value                False  
+        Position?                    Named  
         Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -OnlyAliases [<SwitchParameter>]  
-        When specified displays only aliases of cmdlets who have them.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -ShowTable [<SwitchParameter>]  
-        When specified, displays results in a table format with Name and Description.  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
-        Accept wildcard characters?  false  
-    -PassThru [<SwitchParameter>]  
-        Required?                    false  
-        Position?                    named  
-        Default value                False  
-        Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      table, grid  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -1065,33 +959,102 @@ Show-GenXdevCmdlet [[-CmdletName] <String>] [[-DefinitionMatches] <String>] [[-M
    Show-Verb                            --> showverbs  
 ```` 
 
-### SYNOPSIS 
-    Shows a short alphabetical list of all PowerShell verbs.  
-
 ### SYNTAX 
 ```PowerShell 
-Show-Verb [[-Verb] <String[]>] [<CommonParameters>] 
+Show-Verb [[-Verb] <string[]>] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    Displays PowerShell approved verbs in a comma-separated list. If specific verbs  
-    are provided as input, only matching verbs will be shown. Supports wildcards.  
-
 ### PARAMETERS 
-    -Verb <String[]>  
-        One or more verb patterns to filter the output. Supports wildcards.  
-        If omitted, all approved verbs are shown.  
+    -Verb <string[]>  
+        One or more verb patterns to filter (supports wildcards)  
         Required?                    false  
-        Position?                    1  
-        Default value                @()  
+        Position?                    0  
         Accept pipeline input?       true (ByValue, ByPropertyName)  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  true  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
         OutBuffer, PipelineVariable, and OutVariable. For more information, see  
         about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+
+<br/><hr/><br/>
+ 
+
+##	Test-UnattendedMode 
+```PowerShell 
+
+   Test-UnattendedMode  
+```` 
+
+### SYNOPSIS 
+    Detects if PowerShell is running in unattended/automated mode  
+
+### SYNTAX 
+```PowerShell 
+Test-UnattendedMode [[-CallersInvocation] <InvocationInfo>] [-Detailed] [<CommonParameters>] 
+```` 
+
+### DESCRIPTION 
+    Analyzes various indicators to determine if PowerShell is running in an  
+    unattended or automated context, including pipeline analysis, environment  
+    variables, console redirection, and invocation context.  
+    When CallersInvocation is provided, it analyzes the pipeline position and  
+    count to determine if the function is being called as part of an automated  
+    pipeline or script execution.  
+
+### PARAMETERS 
+    -CallersInvocation <InvocationInfo>  
+        The caller's invocation information for pipeline and automation detection.  
+        Pass $MyInvocation from the calling function to analyze pipeline context.  
+        Required?                    false  
+        Position?                    1  
+        Default value                  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    -Detailed [<SwitchParameter>]  
+        Required?                    false  
+        Position?                    named  
+        Default value                False  
+        Accept pipeline input?       false  
+        Aliases                        
+        Accept wildcard characters?  false  
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+
+### NOTES 
+```PowerShell 
+
+       The function combines multiple detection methods:  
+       - Environment variables (CI/CD systems)  
+       - Console redirection  
+       - Interactive session detection  
+       - PowerShell host type  
+       - Pipeline analysis (when CallersInvocation provided)  
+       - Console availability  
+   -------------------------- EXAMPLE 1 --------------------------  
+   PS C:\> Test-UnattendedMode  
+   Returns a boolean indicating if running in unattended mode using standard detection.  
+   -------------------------- EXAMPLE 2 --------------------------  
+   PS C:\> Test-UnattendedMode -CallersInvocation $MyInvocation  
+   Analyzes the caller's invocation context and returns a boolean result.  
+   -------------------------- EXAMPLE 3 --------------------------  
+   PS C:\> Test-UnattendedMode -CallersInvocation $MyInvocation -Detailed  
+   Returns detailed analysis object with all indicators and pipeline information.  
+   -------------------------- EXAMPLE 4 --------------------------  
+   PS C:\> function My-Function {  
+       $isUnattended = Test-UnattendedMode -CallersInvocation $MyInvocation  
+       if ($isUnattended) {  
+           Write-Verbose "Running in unattended mode, skipping interactive prompts"  
+       }  
+   }  
+```` 
 
 <br/><hr/><br/>
  
@@ -1105,37 +1068,29 @@ Show-Verb [[-Verb] <String[]>] [<CommonParameters>]
    Get-FreeFallHeight  
 ```` 
 
-### SYNOPSIS 
-    Calculates the height fallen during free fall for a given time duration.  
-
 ### SYNTAX 
 ```PowerShell 
-Get-FreeFallHeight [-DurationInSeconds] <Double> [[-TerminalVelocityInMs] <Double>] [<CommonParameters>] 
+Get-FreeFallHeight [-DurationInSeconds] <double> [[-TerminalVelocityInMs] <double>] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function calculates the distance fallen during free fall using a  
-    numerical method that accounts for air resistance and terminal velocity. The  
-    calculation uses small time steps to accurately model the physics of falling  
-    objects with realistic terminal velocity constraints.  
-
 ### PARAMETERS 
-    -DurationInSeconds <Double>  
-        The time duration of the fall in seconds for which to calculate the height.  
+    -DurationInSeconds <double>  
+        The time duration of the fall in seconds  
         Required?                    true  
-        Position?                    1  
-        Default value                0  
+        Position?                    0  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -TerminalVelocityInMs <Double>  
-        The terminal velocity in meters per second. Defaults to 53 m/s which is the  
-        typical terminal velocity for a human in free fall.  
+    -TerminalVelocityInMs <double>  
+        The terminal velocity in meters per second (default: 53 m/s for human)  
         Required?                    false  
-        Position?                    2  
-        Default value                53  
+        Position?                    1  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
@@ -1152,36 +1107,29 @@ Get-FreeFallHeight [-DurationInSeconds] <Double> [[-TerminalVelocityInMs] <Doubl
    Get-FreeFallTime  
 ```` 
 
-### SYNOPSIS 
-    Calculates the time it takes for an object to fall a specified distance.  
-
 ### SYNTAX 
 ```PowerShell 
-Get-FreeFallTime [-HeightInMeters] <Double> [[-TerminalVelocityInMs] <Double>] [<CommonParameters>] 
+Get-FreeFallTime [-HeightInMeters] <double> [[-TerminalVelocityInMs] <double>] [<CommonParameters>] 
 ```` 
 
-### DESCRIPTION 
-    This function calculates the time it takes for an object to fall from a given  
-    height, taking into account terminal velocity due to air resistance. It uses a  
-    numerical method with small time steps for accurate calculation.  
-
 ### PARAMETERS 
-    -HeightInMeters <Double>  
-        The initial height of the falling object in meters.  
+    -HeightInMeters <double>  
+        The initial height of the falling object in meters  
         Required?                    true  
-        Position?                    1  
-        Default value                0  
+        Position?                    0  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
-    -TerminalVelocityInMs <Double>  
-        The terminal velocity of the falling object in meters per second. Default value  
-        is 53 m/s, which is the approximate terminal velocity of a human in free fall.  
+    -TerminalVelocityInMs <double>  
+        The terminal velocity of the falling object in m/s  
         Required?                    false  
-        Position?                    2  
-        Default value                53  
+        Position?                    1  
         Accept pipeline input?       false  
-        Aliases                        
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
         Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  

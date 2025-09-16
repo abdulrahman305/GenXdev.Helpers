@@ -30,3 +30,4 @@ if ($major -ne 10) {
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Remove-JSONComments.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Show-GenXDevCmdlet.ps1"
 . "$PSScriptRoot\Functions\GenXdev.Helpers\Show-Verb.ps1"
+. "$PSScriptRoot\Functions\GenXdev.Helpers\Test-UnattendedMode.ps1"

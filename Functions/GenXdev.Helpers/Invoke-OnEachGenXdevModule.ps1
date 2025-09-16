@@ -1,3 +1,31 @@
+<##############################################################################
+Part of PowerShell module : GenXdev.Helpers
+Original cmdlet filename  : Invoke-OnEachGenXdevModule.ps1
+Original author           : René Vaessen / GenXdev
+Version                   : 1.264.2025
+################################################################################
+MIT License
+
+Copyright 2021-2025 GenXdev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+################################################################################>
 ################################################################################
 <#
 .SYNOPSIS
@@ -65,8 +93,6 @@ function Invoke-OnEachGenXdevModule {
         [Parameter(
             Mandatory = $false,
             Position = 1,
-            ValueFromPipeline = $true,
-            ValueFromPipelineByPropertyName = $true,
             HelpMessage = 'Filter to apply to module names'
         )]
         [ValidateNotNullOrEmpty()]
@@ -130,11 +156,8 @@ function Invoke-OnEachGenXdevModule {
         # output progress information for troubleshooting
         Microsoft.PowerShell.Utility\Write-Verbose (
             "Processing modules with base names: $($ModuleName -join ', ')")
-    }
 
-    process {
-
-        $allGenXdevModules = @(GenXdev.FileSystem\Find-Item "$modulesPath\GenXdev*\1.260.2025\GenXdev*.psm1" -PassThru -NoRecurse | Microsoft.PowerShell.Core\ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.FullName) }) +
+        $allGenXdevModules = @(GenXdev.FileSystem\Find-Item "$modulesPath\GenXdev*\1.264.2025\GenXdev*.psm1" -PassThru -NoRecurse | Microsoft.PowerShell.Core\ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.FullName) }) +
             @("GenXdev.Scripts")
 
         $genXdevModules = $allGenXdevModules
@@ -157,6 +180,12 @@ function Invoke-OnEachGenXdevModule {
                 }
             })
         }
+}
+
+  process {
+  }
+
+end {
 
         # iterate through each specified module name pattern
         $uniqueModulesNames = @($ModuleName | Microsoft.PowerShell.Core\ForEach-Object {
@@ -193,11 +222,11 @@ function Invoke-OnEachGenXdevModule {
 
                 # construct expected license file path for published modules
                 $licenseFilePath = (
-                    "$($ModuleObj.FullName)\1.260.2025\LICENSE")
+                    "$($ModuleObj.FullName)\1.264.2025\LICENSE")
 
                 # construct expected readme file path for published modules
                 $readmeFilePath = (
-                    "$($ModuleObj.FullName)\1.260.2025\README.md")
+                    "$($ModuleObj.FullName)\1.264.2025\README.md")
 
                 # skip license and readme checks for scripts directory
                 if ($ModuleObj.FullName -eq $scriptsPath) {
@@ -343,9 +372,6 @@ function Invoke-OnEachGenXdevModule {
                     $_.Exception.Message
             }
         }
-    }
-
-    end {
 
         Microsoft.PowerShell.Utility\Write-Progress `
             -Activity "Processing modules" `

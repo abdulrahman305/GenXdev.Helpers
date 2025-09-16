@@ -1,4 +1,32 @@
-﻿###############################################################################
+<##############################################################################
+Part of PowerShell module : GenXdev.Helpers
+Original cmdlet filename  : EnsureNuGetAssembly.ps1
+Original author           : René Vaessen / GenXdev
+Version                   : 1.264.2025
+################################################################################
+MIT License
+
+Copyright 2021-2025 GenXdev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+################################################################################>
+###############################################################################
 <#
 .SYNOPSIS
 Downloads and loads .NET assemblies from NuGet packages based on package key or ID.
@@ -120,10 +148,10 @@ function EnsureNuGetAssembly {
         # Load JSON if exists
         $packages = $null
         $pkgConfig = $null
-        if (Microsoft.PowerShell.Management\Test-Path $ManifestPath) {
+        if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $ManifestPath) {
             Microsoft.PowerShell.Utility\Write-Verbose "Manifest file exists; loading content from ${ManifestPath}"
             try {
-                $packages = Microsoft.PowerShell.Management\Get-Content $ManifestPath |
+                $packages = Microsoft.PowerShell.Management\Get-Content -LiteralPath $ManifestPath |
                     Microsoft.PowerShell.Utility\ConvertFrom-Json -AsHashtable
                 Microsoft.PowerShell.Utility\Write-Verbose "Successfully parsed manifest JSON"
             }
@@ -316,7 +344,7 @@ function EnsureNuGetAssembly {
             Microsoft.PowerShell.Utility\Write-Verbose "Package directory (local destination): ${pkgDir}"
 
             # Check if properly installed with validation
-            if (Microsoft.PowerShell.Management\Test-Path $pkgDir) {
+            if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $pkgDir) {
                 Microsoft.PowerShell.Utility\Write-Verbose "Package directory exists at ${pkgDir}, validating completeness..."
 
                 # For stub-based packages like SQLite, check if assemblies can be found and loaded
@@ -331,18 +359,18 @@ function EnsureNuGetAssembly {
 
                     # Check main package
                     $directPath = Microsoft.PowerShell.Management\Join-Path $pkgDir $asm
-                    if (Microsoft.PowerShell.Management\Test-Path $directPath) {
+                    if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $directPath) {
                         $found = $true
                         continue
                     }
 
                     # Check in lib subdirectories of main package
                     $libDir = Microsoft.PowerShell.Management\Join-Path $pkgDir "lib"
-                    if (Microsoft.PowerShell.Management\Test-Path $libDir) {
+                    if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $libDir) {
                         $libSubDirs = Microsoft.PowerShell.Management\Get-ChildItem $libDir -Directory -ErrorAction SilentlyContinue
                         foreach ($subDir in $libSubDirs) {
                             $asmPath = Microsoft.PowerShell.Management\Join-Path $subDir.FullName $asm
-                            if (Microsoft.PowerShell.Management\Test-Path $asmPath) {
+                            if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $asmPath) {
                                 $found = $true
                                 break
                             }
@@ -399,7 +427,7 @@ function EnsureNuGetAssembly {
                 Microsoft.PowerShell.Utility\Write-Verbose "Creating temporary directory for dotnet installation: ${tempDir}"
                 Microsoft.PowerShell.Management\New-Item -Path $tempDir -ItemType Directory -Force | Microsoft.PowerShell.Core\Out-Null
                 Microsoft.PowerShell.Utility\Write-Verbose "Pushing location to ${tempDir}"
-                Microsoft.PowerShell.Management\Push-Location $tempDir
+                Microsoft.PowerShell.Management\Push-Location -LiteralPath $tempDir
                 try {
                     Microsoft.PowerShell.Utility\Write-Verbose "Invoking dotnet new classlib -n dummy --force"
                     & dotnet new classlib -n dummy --force | Microsoft.PowerShell.Core\Out-Null
@@ -419,8 +447,8 @@ function EnsureNuGetAssembly {
                     # Always discover the actual installed version from project.assets.json
                     $objDir = Microsoft.PowerShell.Management\Join-Path (Microsoft.PowerShell.Management\Get-Location) "obj"
                     $assetsFile = Microsoft.PowerShell.Management\Join-Path $objDir "project.assets.json"
-                    if (Microsoft.PowerShell.Management\Test-Path $assetsFile) {
-                        $assets = Microsoft.PowerShell.Management\Get-Content $assetsFile | Microsoft.PowerShell.Utility\ConvertFrom-Json
+                    if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $assetsFile) {
+                        $assets = Microsoft.PowerShell.Management\Get-Content -LiteralPath $assetsFile | Microsoft.PowerShell.Utility\ConvertFrom-Json
                         if ($assets.libraries) {
                             foreach ($libName in $assets.libraries.PSObject.Properties.Name) {
                                 $parts = $libName -split '/'
@@ -444,7 +472,7 @@ function EnsureNuGetAssembly {
                     $cacheDir = Microsoft.PowerShell.Management\Join-Path $globalCache "$packageLower\$actualVersion"
                     Microsoft.PowerShell.Utility\Write-Verbose "Checking main package cache directory: ${cacheDir}"
 
-                    if (-not (Microsoft.PowerShell.Management\Test-Path $cacheDir)) {
+                    if (-not (Microsoft.PowerShell.Management\Test-Path -LiteralPath $cacheDir)) {
                         throw "Package not found in global cache at: ${cacheDir}"
                     }
                     if ($cacheDir) {
@@ -476,11 +504,11 @@ function EnsureNuGetAssembly {
                                             $depCacheDir = Microsoft.PowerShell.Management\Join-Path $globalCache "$depName\$depVersion"
                                             $depDestDir = Microsoft.PowerShell.Management\Join-Path $Destination "$depName.$depVersion"
 
-                                            if ((Microsoft.PowerShell.Management\Test-Path $depCacheDir) -and (-not (Microsoft.PowerShell.Management\Test-Path $depDestDir))) {
+                                            if ((Microsoft.PowerShell.Management\Test-Path -LiteralPath $depCacheDir) -and (-not (Microsoft.PowerShell.Management\Test-Path -LiteralPath $depDestDir))) {
                                                 Microsoft.PowerShell.Utility\Write-Verbose "Copying dependency ${depName} ${depVersion} from cache"
                                                 Microsoft.PowerShell.Management\Copy-Item $depCacheDir -Destination $Destination -Recurse -Force
                                                 $copiedDepDir = Microsoft.PowerShell.Management\Join-Path $Destination (Microsoft.PowerShell.Management\Split-Path $depCacheDir -Leaf)
-                                                if (Microsoft.PowerShell.Management\Test-Path $copiedDepDir) {
+                                                if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $copiedDepDir) {
                                                     Microsoft.PowerShell.Management\Rename-Item $copiedDepDir $depDestDir -Force -ErrorAction SilentlyContinue
                                                 }
                                             }
@@ -501,7 +529,7 @@ function EnsureNuGetAssembly {
                     Microsoft.PowerShell.Management\Remove-Item $tempDir -Recurse -Force -ErrorAction SilentlyContinue
                 }
 
-                if (-not (Microsoft.PowerShell.Management\Test-Path $pkgDir)) {
+                if (-not (Microsoft.PowerShell.Management\Test-Path -LiteralPath $pkgDir)) {
                     throw "Package not found at ${pkgDir}"
                 }
                 else {
@@ -513,9 +541,9 @@ function EnsureNuGetAssembly {
             $nuspecPath = Microsoft.PowerShell.Management\Join-Path $pkgDir "$PackageId.nuspec"
             Microsoft.PowerShell.Utility\Write-Verbose "Checking for .nuspec at ${nuspecPath}"
             $nuspecFiles = @()
-            if (Microsoft.PowerShell.Management\Test-Path $nuspecPath) {
+            if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $nuspecPath) {
                 Microsoft.PowerShell.Utility\Write-Verbose "Loading .nuspec XML"
-                $nuspecXml = [xml](Microsoft.PowerShell.Management\Get-Content $nuspecPath)
+                $nuspecXml = [xml](Microsoft.PowerShell.Management\Get-Content -LiteralPath $nuspecPath)
                 $nuspecFiles = $nuspecXml.package.files.file | Microsoft.PowerShell.Utility\Select-Object -ExpandProperty target
                 Microsoft.PowerShell.Utility\Write-Verbose "Extracted $($nuspecFiles.Count) file targets from .nuspec"
             }
@@ -547,7 +575,7 @@ function EnsureNuGetAssembly {
                 # JSON relative path
                 $asmFullPath = Microsoft.PowerShell.Management\Join-Path $pkgDir $asm
                 Microsoft.PowerShell.Utility\Write-Verbose "Checking JSON relative path for ${asm}: ${asmFullPath}"
-                if (Microsoft.PowerShell.Management\Test-Path $asmFullPath) {
+                if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $asmFullPath) {
                     $asmPath = $asmFullPath
                     Microsoft.PowerShell.Utility\Write-Verbose "Found at JSON relative path"
                 }
@@ -557,7 +585,7 @@ function EnsureNuGetAssembly {
                         $libPath = Microsoft.PowerShell.Management\Join-Path $pkgDir "lib\$fw"
                         $searched += $libPath
                         Microsoft.PowerShell.Utility\Write-Verbose "Scanning TFM path: ${libPath}"
-                        if (Microsoft.PowerShell.Management\Test-Path $libPath) {
+                        if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $libPath) {
                             $foundAsm = Microsoft.PowerShell.Management\Get-ChildItem $libPath -Filter $asm.Split('/')[-1] -Recurse |
                                 Microsoft.PowerShell.Utility\Select-Object -First 1
                             if ($foundAsm) {
@@ -632,7 +660,7 @@ function EnsureNuGetAssembly {
 
             # Check main package for native files
             $nativeDir = Microsoft.PowerShell.Management\Join-Path $pkgDir "runtimes\$rid\native"
-            if (Microsoft.PowerShell.Management\Test-Path $nativeDir) {
+            if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $nativeDir) {
                 $nativeFiles = Microsoft.PowerShell.Management\Get-ChildItem $nativeDir -File
                 foreach ($nativeFile in $nativeFiles) {
                     $nativeFileSources += @{
@@ -650,7 +678,7 @@ function EnsureNuGetAssembly {
 
             foreach ($stubPkg in $stubPkgs) {
                 $stubNativeDir = Microsoft.PowerShell.Management\Join-Path $stubPkg.FullName "runtimes\$rid\native"
-                if (Microsoft.PowerShell.Management\Test-Path $stubNativeDir) {
+                if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $stubNativeDir) {
                     $nativeFiles = Microsoft.PowerShell.Management\Get-ChildItem $stubNativeDir -File
                     foreach ($nativeFile in $nativeFiles) {
                         $nativeFileSources += @{
@@ -665,7 +693,7 @@ function EnsureNuGetAssembly {
             # Check dependencies for native files
             foreach ($dep in $allPkgs) {
                 $depNativeDir = Microsoft.PowerShell.Management\Join-Path $dep.FullName "runtimes\$rid\native"
-                if (Microsoft.PowerShell.Management\Test-Path $depNativeDir) {
+                if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $depNativeDir) {
                     $nativeFiles = Microsoft.PowerShell.Management\Get-ChildItem $depNativeDir -File
                     foreach ($nativeFile in $nativeFiles) {
                         $nativeFileSources += @{
@@ -689,7 +717,7 @@ function EnsureNuGetAssembly {
 
                         # Only copy if target doesn't exist or source is newer
                         $shouldCopy = $true
-                        if (Microsoft.PowerShell.Management\Test-Path $targetPath) {
+                        if (Microsoft.PowerShell.Management\Test-Path -LiteralPath $targetPath) {
                             $sourceLastWrite = (Microsoft.PowerShell.Management\Get-Item $nativeSource.SourcePath).LastWriteTime
                             $targetLastWrite = (Microsoft.PowerShell.Management\Get-Item $targetPath).LastWriteTime
                             $shouldCopy = $sourceLastWrite -gt $targetLastWrite
