@@ -1,0 +1,84 @@
+// ################################################################################
+// Part of PowerShell module : GenXdev.Helpers
+// Original cmdlet filename  : Environment.cs
+// Original author           : René Vaessen / GenXdev
+// Version                   : 1.270.2025
+// ################################################################################
+// MIT License
+//
+// Copyright 2021-2025 GenXdev
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+// ################################################################################
+
+
+
+/*
+ * All intellectual rights of this framework, including this source file belong to Appicacy, René Vaessen.
+ * Customers of Appicacy, may copy and change it, as long as this header remains.
+ * 
+ */
+using System.Reflection;
+
+namespace GenXdev.Helpers
+{
+    public static class Environment
+    {
+        public static String GetApplicationRootDirectory()
+        {
+            var callingAssembly = System.Reflection.Assembly.GetEntryAssembly();
+
+            if (callingAssembly == null)
+                return GetAssemblyRootDirectory();
+
+            return Path.GetDirectoryName(callingAssembly.Location)!;
+        }
+
+        public static String GetAssemblyRootDirectory()
+        {
+            return Path.GetDirectoryName(System.Reflection.Assembly.GetCallingAssembly().Location)!;
+        }
+
+        public static string GetEntryAssemblyLocation()
+        {
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+
+            if (assembly == null)
+                assembly = System.Reflection.Assembly.GetCallingAssembly();
+
+            return assembly.Location;
+        }
+
+        public static string GetAssemblyCompanyName(Assembly assembly)
+        {
+            if (assembly != null)
+            {
+                // get companyname
+                var attributes = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+                if (attributes.Length > 0)
+                {
+                    var attribute = attributes[0] as AssemblyCompanyAttribute;
+                    return attribute.Company;
+                }
+            }
+
+            return "Unknown";
+        }
+    }
+}

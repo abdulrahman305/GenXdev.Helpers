@@ -1,0 +1,112 @@
+using System.Globalization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+#nullable enable
+
+namespace GenXdev.Helpers
+{
+    /// <summary>
+    /// Represents information about a GenXdev PowerShell cmdlet
+    /// </summary>
+    public partial class GenXdevCmdletInfo
+    {
+        /// <summary>
+        /// The name of the cmdlet (e.g., Get-Example)
+        /// </summary>
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        public string Name { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The module name containing the cmdlet
+        /// </summary>
+        [JsonProperty("moduleName", NullValueHandling = NullValueHandling.Ignore)]
+        public string ModuleName { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The base module name (e.g., GenXdev.Console)
+        /// </summary>
+        [JsonProperty("baseModule", NullValueHandling = NullValueHandling.Ignore)]
+        public string BaseModule { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The line number where the function is defined in the source file
+        /// </summary>
+        [JsonProperty("lineNo", NullValueHandling = NullValueHandling.Ignore)]
+        public int LineNo { get; set; }
+
+        /// <summary>
+        /// Description of what the cmdlet does
+        /// </summary>
+        [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]
+        public string Description { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Comma-separated list of aliases for the cmdlet
+        /// </summary>
+        [JsonProperty("aliases", NullValueHandling = NullValueHandling.Ignore)]
+        public string Aliases { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Full path to the script file containing the cmdlet
+        /// </summary>
+        [JsonProperty("scriptFilePath", NullValueHandling = NullValueHandling.Ignore)]
+        public string ScriptFilePath { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Full path to the test file for the cmdlet
+        /// </summary>
+        [JsonProperty("scriptTestFilePath", NullValueHandling = NullValueHandling.Ignore)]
+        public string ScriptTestFilePath { get; set; } = string.Empty;
+    }
+
+    public partial class GenXdevCmdletInfo
+    {
+        /// <summary>
+        /// Deserialize JSON string to GenXdevCmdletInfo object
+        /// </summary>
+        /// <param name="json">JSON string representation</param>
+        /// <returns>GenXdevCmdletInfo object</returns>
+        public static GenXdevCmdletInfo FromJson(string json) =>
+            JsonConvert.DeserializeObject<GenXdevCmdletInfo>(json, GenXdev.Helpers.GenXdevCmdletInfoConverter.Settings);
+    }
+
+    /// <summary>
+    /// Extension methods for serializing GenXdevCmdletInfo objects
+    /// </summary>
+    public static class GenXdevCmdletInfoSerialize
+    {
+        /// <summary>
+        /// Serialize GenXdevCmdletInfo object to JSON string
+        /// </summary>
+        /// <param name="self">The GenXdevCmdletInfo object to serialize</param>
+        /// <returns>JSON string representation</returns>
+        public static string ToJson(this GenXdevCmdletInfo self) =>
+            JsonConvert.SerializeObject(self, GenXdev.Helpers.GenXdevCmdletInfoConverter.Settings);
+
+        /// <summary>
+        /// Serialize collection of GenXdevCmdletInfo objects to JSON string
+        /// </summary>
+        /// <param name="container">Collection of GenXdevCmdletInfo objects</param>
+        /// <returns>JSON string representation</returns>
+        public static string ToJson(IEnumerable<GenXdevCmdletInfo> container) =>
+            JsonConvert.SerializeObject(container, GenXdev.Helpers.GenXdevCmdletInfoConverter.Settings);
+    }
+
+    /// <summary>
+    /// JSON converter settings for GenXdevCmdletInfo serialization
+    /// </summary>
+    internal static class GenXdevCmdletInfoConverter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters =
+            {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
+    }
+}
