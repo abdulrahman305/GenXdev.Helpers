@@ -219,7 +219,7 @@ namespace GenXdev.Helpers
                     }).Wait();
                 }
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 //Console.WriteLine($"Error in ClearQueue: {ex.Message}");
             }
@@ -427,7 +427,7 @@ namespace GenXdev.Helpers
                     };
                 }
             }
-            catch (Exception ex)
+            catch // (Exception ex)
             {
                 //Console.WriteLine($"Error in SearchAndPlay: {ex.Message}");
                 //Console.WriteLine($"Stack Trace: {ex.StackTrace}");

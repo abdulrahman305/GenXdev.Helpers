@@ -218,10 +218,10 @@ namespace GenXdev.Helpers
     public partial class ImageSearchResultDateTime
     {
         [JsonProperty("DateTimeOriginal", NullValueHandling = NullValueHandling.Ignore)]
-        public string DateTimeOriginal { get; set; }
+        public string DateTimeOriginal { get; set; } = String.Empty;
 
         [JsonProperty("DateTimeDigitized", NullValueHandling = NullValueHandling.Ignore)]
-        public string DateTimeDigitized { get; set; }
+        public string DateTimeDigitized { get; set; } = String.Empty;
     }
 
     // GPS: latitude, longitude, etc.
@@ -345,7 +345,7 @@ namespace GenXdev.Helpers
 
     public partial class ImageSearchResult
     {
-        public static ImageSearchResult FromJson(string json) => JsonConvert.DeserializeObject<ImageSearchResult>(json, GenXdev.Helpers.ImageSearchResultConverter.Settings);
+        public static ImageSearchResult FromJson(string json) => JsonConvert.DeserializeObject<ImageSearchResult>(json, GenXdev.Helpers.ImageSearchResultConverter.Settings)!;
     }
 
     public static class ImageSearchResultSerialize

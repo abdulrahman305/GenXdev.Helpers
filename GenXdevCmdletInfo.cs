@@ -68,7 +68,7 @@ namespace GenXdev.Helpers
         /// <param name="json">JSON string representation</param>
         /// <returns>GenXdevCmdletInfo object</returns>
         public static GenXdevCmdletInfo FromJson(string json) =>
-            JsonConvert.DeserializeObject<GenXdevCmdletInfo>(json, GenXdev.Helpers.GenXdevCmdletInfoConverter.Settings);
+            JsonConvert.DeserializeObject<GenXdevCmdletInfo>(json, GenXdev.Helpers.GenXdevCmdletInfoConverter.Settings)!;
     }
 
     /// <summary>

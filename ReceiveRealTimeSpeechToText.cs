@@ -929,7 +929,6 @@ namespace GenXdev.Helpers
         {
             using var processingStream = new MemoryStream();
             bool isProcessing = false;
-            int processedCount = 0;
             try
             {
                 while ((!_cts.IsCancellationRequested || _bufferQueue.Count > 0) && !_isDisposed)
@@ -1038,7 +1037,7 @@ namespace GenXdev.Helpers
                     }
                 }
             }
-            catch (Exception ex) when (!_isDisposed)
+            catch when (!_isDisposed)
             {
             }
         }

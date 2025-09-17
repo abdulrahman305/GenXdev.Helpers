@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Network.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.270.2025
+// Version                   : 1.272.2025
 // ################################################################################
 // MIT License
 //
@@ -38,7 +38,7 @@ namespace GenXdev.Helpers
         #region public ip lookup
 
         static object padLock = new object();
-        static string publicHostName = "localhost";
+        // static string publicHostName = "localhost";
 
         public static string GetPublicExternalHostname(string IPAddress = null)
         {

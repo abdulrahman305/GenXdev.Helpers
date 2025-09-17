@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : UnattendedModeHelper.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.270.2025
+// Version                   : 1.272.2025
 // ################################################################################
 // MIT License
 //
@@ -43,7 +43,7 @@ namespace GenXdev.Helpers
         /// </summary>
         /// <param name="callersInvocation">Optional: The caller's InvocationInfo for pipeline and automation detection.</param>
         /// <returns>True if running in unattended/automated mode, otherwise false.</returns>
-        public static bool IsUnattendedMode(InvocationInfo? callersInvocation = null)
+        public static bool IsUnattendedMode(InvocationInfo callersInvocation = null)
         {
             // Check 1: Environment variables indicating CI/CD or automation
             string[] automationEnvVars = new[]
