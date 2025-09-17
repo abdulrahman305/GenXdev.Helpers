@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Copy-IdenticalParamValues.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.272.2025
+// Version                   : 1.274.2025
 // ################################################################################
 // MIT License
 //
@@ -80,74 +80,72 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Management.Automation;
 
-namespace GenXdev.Helpers
+/// <summary>
+/// Copies parameter values from bound parameters to a new hashtable based on
+/// another function's possible parameters.
+/// </summary>
+[Cmdlet(VerbsCommon.Copy, "IdenticalParamValues")]
+[OutputType(typeof(Hashtable))]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
+public class CopyIdenticalParamValuesCommand : PSCmdlet
 {
+    #region Parameters
+
     /// <summary>
-    /// Copies parameter values from bound parameters to a new hashtable based on
-    /// another function's possible parameters.
+    /// The bound parameters from which to copy values, typically $PSBoundParameters.
     /// </summary>
-    [Cmdlet(VerbsCommon.Copy, "IdenticalParamValues")]
-    [OutputType(typeof(Hashtable))]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly")]
-    public class CopyIdenticalParamValuesCommand : PSCmdlet
+    [Parameter(
+        Mandatory = true,
+        Position = 0,
+        HelpMessage = "Source bound parameters to copy from")]
+    [ValidateNotNull()]
+    public object[] BoundParameters { get; set; }
+
+    /// <summary>
+    /// The name of the function whose parameter set will be used as a filter.
+    /// </summary>
+    [Parameter(
+        Mandatory = true,
+        Position = 1,
+        HelpMessage = "Target function name to filter parameters")]
+    [ValidateNotNullOrEmpty()]
+    public string FunctionName { get; set; }
+
+    /// <summary>
+    /// Default values for non-switch parameters that are not present in BoundParameters.
+    /// </summary>
+    [Parameter(
+        Mandatory = false,
+        Position = 2,
+        HelpMessage = "Default values for parameters")]
+    public PSVariable[] DefaultValues { get; set; } = new PSVariable[0];
+
+    #endregion
+
+    #region Static Fields
+
+    /// <summary>
+    /// Common PowerShell parameters to filter out when copying parameters
+    /// </summary>
+    private static readonly string[] CommonParameterFilter;
+
+    /// <summary>
+    /// Cache for command info to avoid repeated PowerShell invocations
+    /// Key: Function name, Value: CommandInfo object or null if not found
+    /// </summary>
+    private static readonly ConcurrentDictionary<string, CommandInfo> CommandInfoCache;
+
+    #endregion
+
+    #region Static Constructor
+
+    /// <summary>
+    /// Static constructor to initialize static fields
+    /// </summary>
+    static CopyIdenticalParamValuesCommand()
     {
-        #region Parameters
-
-        /// <summary>
-        /// The bound parameters from which to copy values, typically $PSBoundParameters.
-        /// </summary>
-        [Parameter(
-            Mandatory = true,
-            Position = 0,
-            HelpMessage = "Source bound parameters to copy from")]
-        [ValidateNotNull()]
-        public object[] BoundParameters { get; set; }
-
-        /// <summary>
-        /// The name of the function whose parameter set will be used as a filter.
-        /// </summary>
-        [Parameter(
-            Mandatory = true,
-            Position = 1,
-            HelpMessage = "Target function name to filter parameters")]
-        [ValidateNotNullOrEmpty()]
-        public string FunctionName { get; set; }
-
-        /// <summary>
-        /// Default values for non-switch parameters that are not present in BoundParameters.
-        /// </summary>
-        [Parameter(
-            Mandatory = false,
-            Position = 2,
-            HelpMessage = "Default values for parameters")]
-        public PSVariable[] DefaultValues { get; set; } = new PSVariable[0];
-
-        #endregion
-
-        #region Static Fields
-
-        /// <summary>
-        /// Common PowerShell parameters to filter out when copying parameters
-        /// </summary>
-        private static readonly string[] CommonParameterFilter;
-
-        /// <summary>
-        /// Cache for command info to avoid repeated PowerShell invocations
-        /// Key: Function name, Value: CommandInfo object or null if not found
-        /// </summary>
-        private static readonly ConcurrentDictionary<string, CommandInfo> CommandInfoCache;
-
-        #endregion
-
-        #region Static Constructor
-
-        /// <summary>
-        /// Static constructor to initialize static fields
-        /// </summary>
-        static CopyIdenticalParamValuesCommand()
+        CommonParameterFilter = new string[]
         {
-            CommonParameterFilter = new string[]
-            {
                 "input",
                 "MyInvocation",
                 "null",
@@ -173,276 +171,275 @@ namespace GenXdev.Helpers
                 "ErrorVariable",
                 "Passthru",
                 "PassThru"
-            };
+        };
 
-            // Initialize command info cache
-            CommandInfoCache = new ConcurrentDictionary<string, CommandInfo>(StringComparer.OrdinalIgnoreCase);
+        // Initialize command info cache
+        CommandInfoCache = new ConcurrentDictionary<string, CommandInfo>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    #endregion
+
+    #region Private Fields
+
+    private Hashtable _results;
+    private Hashtable _defaults;
+    private CommandInfo _functionInfo;
+
+    #endregion
+
+    #region Cmdlet Lifecycle
+
+    /// <summary>
+    /// BeginProcessing - Initialize hashtables and get function information
+    /// </summary>
+    protected override void BeginProcessing()
+    {
+        // Initialize results hashtable
+        _results = new Hashtable();
+
+        // Create hashtable of default parameter values
+        _defaults = CreateDefaultsHashtable();
+
+        // Get function info for parameter validation (with caching)
+        _functionInfo = GetCachedCommandInfo(FunctionName);
+
+        if (_functionInfo?.Parameters == null)
+        {
+            var errorRecord = new ErrorRecord(
+                new ArgumentException($"Function '{FunctionName}' not found"),
+                "FunctionNotFound",
+                ErrorCategory.ObjectNotFound,
+                FunctionName);
+            WriteError(errorRecord);
+            return;
         }
 
-        #endregion
+        WriteVerbose($"Found function with {_functionInfo.Parameters.Count} parameters");
+    }
 
-        #region Private Fields
+    /// <summary>
+    /// ProcessRecord - Main processing logic
+    /// </summary>
+    protected override void ProcessRecord()
+    {
+        if (_functionInfo?.Parameters == null)
+            return;
 
-        private Hashtable _results;
-        private Hashtable _defaults;
-        private CommandInfo _functionInfo;
-
-        #endregion
-
-        #region Cmdlet Lifecycle
-
-        /// <summary>
-        /// BeginProcessing - Initialize hashtables and get function information
-        /// </summary>
-        protected override void BeginProcessing()
+        // Get the first bound parameters object (PowerShell passes as object[])
+        var boundParamsObject = BoundParameters?.FirstOrDefault();
+        if (boundParamsObject == null)
         {
-            // Initialize results hashtable
-            _results = new Hashtable();
-
-            // Create hashtable of default parameter values
-            _defaults = CreateDefaultsHashtable();
-
-            // Get function info for parameter validation (with caching)
-            _functionInfo = GetCachedCommandInfo(FunctionName);
-
-            if (_functionInfo?.Parameters == null)
-            {
-                var errorRecord = new ErrorRecord(
-                    new ArgumentException($"Function '{FunctionName}' not found"),
-                    "FunctionNotFound",
-                    ErrorCategory.ObjectNotFound,
-                    FunctionName);
-                WriteError(errorRecord);
-                return;
-            }
-
-            WriteVerbose($"Found function with {_functionInfo.Parameters.Count} parameters");
+            WriteObject(_results);
+            return;
         }
 
-        /// <summary>
-        /// ProcessRecord - Main processing logic
-        /// </summary>
-        protected override void ProcessRecord()
+        // Convert to hashtable-like access
+        var boundParamsDict = ConvertToParameterDictionary(boundParamsObject);
+
+        // Iterate through all parameters of the target function
+        foreach (var parameterKvp in _functionInfo.Parameters)
         {
-            if (_functionInfo?.Parameters == null)
-                return;
+            var paramName = parameterKvp.Key;
+            var paramInfo = parameterKvp.Value;
 
-            // Get the first bound parameters object (PowerShell passes as object[])
-            var boundParamsObject = BoundParameters?.FirstOrDefault();
-            if (boundParamsObject == null)
+            // Check if parameter exists in bound parameters
+            if (boundParamsDict.ContainsKey(paramName))
             {
-                WriteObject(_results);
-                return;
-            }
+                WriteVerbose($"Copying value for parameter '{paramName}'");
+                var paramValue = boundParamsDict[paramName];
 
-            // Convert to hashtable-like access
-            var boundParamsDict = ConvertToParameterDictionary(boundParamsObject);
-
-            // Iterate through all parameters of the target function
-            foreach (var parameterKvp in _functionInfo.Parameters)
-            {
-                var paramName = parameterKvp.Key;
-                var paramInfo = parameterKvp.Value;
-
-                // Check if parameter exists in bound parameters
-                if (boundParamsDict.ContainsKey(paramName))
+                // For switch parameters, only include if explicitly set to $true
+                if (paramInfo.ParameterType == typeof(SwitchParameter))
                 {
-                    WriteVerbose($"Copying value for parameter '{paramName}'");
-                    var paramValue = boundParamsDict[paramName];
-
-                    // For switch parameters, only include if explicitly set to $true
-                    if (paramInfo.ParameterType == typeof(SwitchParameter))
+                    if (IsTrue(paramValue))
                     {
-                        if (IsTrue(paramValue))
-                        {
-                            _results[paramName] = paramValue;
-                            WriteVerbose($"Including switch parameter '{paramName}' (explicitly set to true)");
-                        }
-                        else
-                        {
-                            WriteVerbose($"Excluding switch parameter '{paramName}' (not set or false)");
-                        }
+                        _results[paramName] = paramValue;
+                        WriteVerbose($"Including switch parameter '{paramName}' (explicitly set to true)");
                     }
                     else
                     {
-                        _results[paramName] = paramValue;
+                        WriteVerbose($"Excluding switch parameter '{paramName}' (not set or false)");
                     }
                 }
                 else
                 {
-                    // Only add default values for non-switch parameters
-                    if (paramInfo.ParameterType != typeof(SwitchParameter))
+                    _results[paramName] = paramValue;
+                }
+            }
+            else
+            {
+                // Only add default values for non-switch parameters
+                if (paramInfo.ParameterType != typeof(SwitchParameter))
+                {
+                    var defaultValue = _defaults[paramName];
+                    if (defaultValue != null)
                     {
-                        var defaultValue = _defaults[paramName];
-                        if (defaultValue != null)
-                        {
-                            _results[paramName] = defaultValue;
+                        _results[paramName] = defaultValue;
 
-                            // Convert to JSON for verbose output, matching PowerShell behavior
-                            var jsonValue = ConvertToJsonString(defaultValue);
-                            WriteVerbose($"Using default value for '{paramName}': {jsonValue}");
-                        }
+                        // Convert to JSON for verbose output, matching PowerShell behavior
+                        var jsonValue = ConvertToJsonString(defaultValue);
+                        WriteVerbose($"Using default value for '{paramName}': {jsonValue}");
                     }
-                    else
+                }
+                else
+                {
+                    var defaultValue = _defaults[paramName];
+                    if (IsTrue(defaultValue))
                     {
-                        var defaultValue = _defaults[paramName];
-                        if (IsTrue(defaultValue))
-                        {
-                            _results[paramName] = true;
-                            WriteVerbose($"Using default value for '{paramName}': $True");
-                        }
+                        _results[paramName] = true;
+                        WriteVerbose($"Using default value for '{paramName}': $True");
                     }
                 }
             }
         }
+    }
 
-        /// <summary>
-        /// EndProcessing - Output final results
-        /// </summary>
-        protected override void EndProcessing()
+    /// <summary>
+    /// EndProcessing - Output final results
+    /// </summary>
+    protected override void EndProcessing()
+    {
+        WriteVerbose($"Returning hashtable with {_results.Count} parameters");
+        WriteObject(_results);
+    }
+
+    #endregion
+
+    #region Private Helper Methods
+
+    /// <summary>
+    /// Gets command info with caching to improve performance
+    /// </summary>
+    /// <param name="functionName">Name of the function to get command info for</param>
+    /// <returns>CommandInfo object or null if not found</returns>
+    private CommandInfo GetCachedCommandInfo(string functionName)
+    {
+        // Try to get from cache first
+        if (CommandInfoCache.TryGetValue(functionName, out var cachedInfo))
         {
-            WriteVerbose($"Returning hashtable with {_results.Count} parameters");
-            WriteObject(_results);
+            WriteVerbose($"Using cached command info for function '{functionName}'");
+            return cachedInfo;
         }
 
-        #endregion
+        // Not in cache, retrieve from PowerShell
+        WriteVerbose($"Getting command info for function '{functionName}'");
 
-        #region Private Helper Methods
+        var getCommandScript = $"Microsoft.PowerShell.Core\\Get-Command -Name '{functionName}' -ErrorAction SilentlyContinue";
+        var commandResults = InvokeCommand.InvokeScript(getCommandScript);
 
-        /// <summary>
-        /// Gets command info with caching to improve performance
-        /// </summary>
-        /// <param name="functionName">Name of the function to get command info for</param>
-        /// <returns>CommandInfo object or null if not found</returns>
-        private CommandInfo GetCachedCommandInfo(string functionName)
+        CommandInfo commandInfo = null;
+        if (commandResults?.Any() == true)
         {
-            // Try to get from cache first
-            if (CommandInfoCache.TryGetValue(functionName, out var cachedInfo))
-            {
-                WriteVerbose($"Using cached command info for function '{functionName}'");
-                return cachedInfo;
-            }
-
-            // Not in cache, retrieve from PowerShell
-            WriteVerbose($"Getting command info for function '{functionName}'");
-
-            var getCommandScript = $"Microsoft.PowerShell.Core\\Get-Command -Name '{functionName}' -ErrorAction SilentlyContinue";
-            var commandResults = InvokeCommand.InvokeScript(getCommandScript);
-
-            CommandInfo commandInfo = null;
-            if (commandResults?.Any() == true)
-            {
-                commandInfo = commandResults.FirstOrDefault()?.BaseObject as CommandInfo;
-            }
-
-            // Cache the result (even if null) to avoid repeated lookups for non-existent functions
-            CommandInfoCache.TryAdd(functionName, commandInfo);
-
-            return commandInfo;
+            commandInfo = commandResults.FirstOrDefault()?.BaseObject as CommandInfo;
         }
 
-        /// <summary>
-        /// Creates the defaults hashtable from DefaultValues parameter
-        /// </summary>
-        private Hashtable CreateDefaultsHashtable()
-        {
-            var defaultsHash = new Hashtable();
+        // Cache the result (even if null) to avoid repeated lookups for non-existent functions
+        CommandInfoCache.TryAdd(functionName, commandInfo);
 
-            if (DefaultValues != null)
+        return commandInfo;
+    }
+
+    /// <summary>
+    /// Creates the defaults hashtable from DefaultValues parameter
+    /// </summary>
+    private Hashtable CreateDefaultsHashtable()
+    {
+        var defaultsHash = new Hashtable();
+
+        if (DefaultValues != null)
+        {
+            foreach (var variable in DefaultValues)
             {
-                foreach (var variable in DefaultValues)
+                // Filter out variables with Options != None (matching PowerShell behavior)
+                if (variable.Options == ScopedItemOptions.None)
                 {
-                    // Filter out variables with Options != None (matching PowerShell behavior)
-                    if (variable.Options == ScopedItemOptions.None)
+                    // Check if variable name is in filter list
+                    if (Array.IndexOf(CommonParameterFilter, variable.Name) < 0)
                     {
-                        // Check if variable name is in filter list
-                        if (Array.IndexOf(CommonParameterFilter, variable.Name) < 0)
+                        // Skip null or whitespace string values
+                        if (!(variable.Value is string strValue && string.IsNullOrWhiteSpace(strValue)))
                         {
-                            // Skip null or whitespace string values
-                            if (!(variable.Value is string strValue && string.IsNullOrWhiteSpace(strValue)))
+                            if (variable.Value != null)
                             {
-                                if (variable.Value != null)
-                                {
-                                    defaultsHash[variable.Name] = variable.Value;
-                                }
+                                defaultsHash[variable.Name] = variable.Value;
                             }
                         }
                     }
                 }
             }
-
-            return defaultsHash;
         }
 
-        /// <summary>
-        /// Converts bound parameters object to dictionary for easy access
-        /// </summary>
-        private Dictionary<string, object> ConvertToParameterDictionary(object boundParamsObject)
-        {
-            var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-
-            if (boundParamsObject is IDictionary dict)
-            {
-                foreach (DictionaryEntry entry in dict)
-                {
-                    if (entry.Key is string key)
-                    {
-                        result[key] = entry.Value;
-                    }
-                }
-            }
-            else if (boundParamsObject is PSObject psObj)
-            {
-                foreach (var property in psObj.Properties)
-                {
-                    result[property.Name] = property.Value;
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Checks if a value represents boolean true (matching PowerShell semantics)
-        /// </summary>
-        private bool IsTrue(object value)
-        {
-            if (value == null)
-                return false;
-
-            if (value is bool boolValue)
-                return boolValue;
-
-            if (value is SwitchParameter switchParam)
-                return switchParam.IsPresent;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Converts object to JSON string for verbose output (mimicking PowerShell ConvertTo-Json behavior)
-        /// </summary>
-        private string ConvertToJsonString(object value)
-        {
-            try
-            {
-                // Use PowerShell's ConvertTo-Json for consistency
-                var jsonScript = $"$input | Microsoft.PowerShell.Utility\\ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue";
-                var jsonResults = InvokeCommand.InvokeScript(jsonScript, new object[] { value });
-
-                if (jsonResults?.Any() == true)
-                {
-                    return jsonResults.FirstOrDefault()?.ToString() ?? value?.ToString() ?? "null";
-                }
-            }
-            catch
-            {
-                // Fall back to simple string representation
-            }
-
-            return value?.ToString() ?? "null";
-        }
-
-        #endregion
+        return defaultsHash;
     }
+
+    /// <summary>
+    /// Converts bound parameters object to dictionary for easy access
+    /// </summary>
+    private Dictionary<string, object> ConvertToParameterDictionary(object boundParamsObject)
+    {
+        var result = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+        if (boundParamsObject is IDictionary dict)
+        {
+            foreach (DictionaryEntry entry in dict)
+            {
+                if (entry.Key is string key)
+                {
+                    result[key] = entry.Value;
+                }
+            }
+        }
+        else if (boundParamsObject is PSObject psObj)
+        {
+            foreach (var property in psObj.Properties)
+            {
+                result[property.Name] = property.Value;
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Checks if a value represents boolean true (matching PowerShell semantics)
+    /// </summary>
+    private bool IsTrue(object value)
+    {
+        if (value == null)
+            return false;
+
+        if (value is bool boolValue)
+            return boolValue;
+
+        if (value is SwitchParameter switchParam)
+            return switchParam.IsPresent;
+
+        return false;
+    }
+
+    /// <summary>
+    /// Converts object to JSON string for verbose output (mimicking PowerShell ConvertTo-Json behavior)
+    /// </summary>
+    private string ConvertToJsonString(object value)
+    {
+        try
+        {
+            // Use PowerShell's ConvertTo-Json for consistency
+            var jsonScript = $"$input | Microsoft.PowerShell.Utility\\ConvertTo-Json -Depth 1 -WarningAction SilentlyContinue -ErrorAction SilentlyContinue";
+            var jsonResults = InvokeCommand.InvokeScript(jsonScript, new object[] { value });
+
+            if (jsonResults?.Any() == true)
+            {
+                return jsonResults.FirstOrDefault()?.ToString() ?? value?.ToString() ?? "null";
+            }
+        }
+        catch
+        {
+            // Fall back to simple string representation
+        }
+
+        return value?.ToString() ?? "null";
+    }
+
+    #endregion
 }
