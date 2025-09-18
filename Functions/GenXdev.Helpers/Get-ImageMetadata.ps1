@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Get-ImageMetadata.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.274.2025
+Version                   : 1.276.2025
 ################################################################################
 MIT License
 
@@ -53,10 +53,10 @@ Returns a hashtable containing all available metadata categories including:
 - Additional (software, comments, etc.)
 
 .EXAMPLE
-Get-ImageMetadata -ImagePath "C:\Photos\vacation.jpg"
+Get-ImageMetadata -ImagePath "C:\Pictures\vacation.jpg"
 
 .EXAMPLE
-"C:\Photos\vacation.jpg" | Get-ImageMetadata
+"C:\Pictures\vacation.jpg" | Get-ImageMetadata
 #>
 function Get-ImageMetadata {
 

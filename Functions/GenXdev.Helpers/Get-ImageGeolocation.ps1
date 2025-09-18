@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Get-ImageGeolocation.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.274.2025
+Version                   : 1.276.2025
 ################################################################################
 MIT License
 
@@ -47,10 +47,10 @@ Returns a hashtable containing Latitude and Longitude if GPS data is found,
 otherwise returns $null.
 
 .EXAMPLE
-Get-ImageGeolocation -ImagePath "C:\Photos\vacation.jpg"
+Get-ImageGeolocation -ImagePath "C:\Pictures\vacation.jpg"
 
 .EXAMPLE
-"C:\Photos\vacation.jpg" | Get-ImageGeolocation
+"C:\Pictures\vacation.jpg" | Get-ImageGeolocation
 #>
 function Get-ImageGeolocation {
 
