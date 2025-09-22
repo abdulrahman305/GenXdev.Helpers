@@ -1,6 +1,6 @@
-using System.Management.Automation;
-using NAudio.Wave;
 using NAudio.CoreAudioApi;
+using NAudio.Wave;
+using System.Management.Automation;
 
 /// <summary>
 /// Gets available audio device names that can be used with AudioDevice parameter

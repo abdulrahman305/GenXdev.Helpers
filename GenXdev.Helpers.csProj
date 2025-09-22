@@ -10,8 +10,8 @@
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.276.2025</AssemblyVersion>
-    <FileVersion>1.276.2025</FileVersion>
+    <AssemblyVersion>1.278.2025</AssemblyVersion>
+    <FileVersion>1.278.2025</FileVersion>
     <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
     <Copyright>Copyright (c) 2024 GenXdev</Copyright>
     <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>

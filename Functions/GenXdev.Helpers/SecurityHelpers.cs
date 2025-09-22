@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : SecurityHelpers.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.276.2025
+// Version                   : 1.278.2025
 // ################################################################################
 // MIT License
 //
@@ -36,19 +36,29 @@ namespace GenXdev.Helpers
 {
     public static class SecurityHelper
     {
+        /// <summary>
+        /// Sanitizes a filename by replacing invalid characters with underscores and optionally adding a unique suffix.
+        /// </summary>
+        /// <param name="name">The filename to sanitize.</param>
+        /// <param name="giveUniqueSuffix">Whether to append a unique hash-based suffix to prevent collisions.</param>
+        /// <returns>Sanitized filename safe for filesystem operations.</returns>
         public static string SanitizeFileName(string name, bool giveUniqueSuffix = false)
         {
+            // get system-defined invalid path characters
             var invalidChars = Path.GetInvalidPathChars();
 
+            // build sanitized string character by character
             var sb = new StringBuilder(name.Length);
 
             foreach (var c in name.ToCharArray())
             {
+                // replace invalid characters with underscore
                 if (Array.IndexOf(invalidChars, c) >= 0)
                 {
                     sb.Append('_');
                 }
                 else
+                    // allow only safe characters for filenames
                     switch (Char.ToLower(c))
                     {
                         case 'a':
@@ -107,96 +117,139 @@ namespace GenXdev.Helpers
                             sb.Append(c);
                             break;
                         default:
+                            // replace unsafe characters with underscore
                             sb.Append('_');
                             break;
                     }
             }
 
+            // append unique suffix based on hash if requested
             if (giveUniqueSuffix)
             {
                 sb.Append("_" + ((UInt32)name.Trim().ToLowerInvariant().GetHashCode()).ToString().PadLeft(10, '0'));
             }
 
+            // clean up double underscores
             return sb.ToString().Replace("__", "_");
         }
 
+        /// <summary>
+        /// Determines if a URL string points to a safe public host by checking if all resolved IP addresses are public.
+        /// </summary>
+        /// <param name="URL">The URL string to validate.</param>
+        /// <returns>True if the URL resolves to public IP addresses only.</returns>
         public static bool IsSafePublicURL(string URL)
         {
             try
             {
+                // parse URL and check host
                 Uri url = new Uri(URL);
                 return HostOrIPPublic(url.Host);
             }
             catch
             {
+                // invalid URL format is not safe
                 return false;
             }
         }
+
+        /// <summary>
+        /// Determines if a Uri object points to a safe public host by checking if all resolved IP addresses are public.
+        /// </summary>
+        /// <param name="URL">The Uri object to validate.</param>
+        /// <returns>True if the Uri resolves to public IP addresses only.</returns>
         public static bool IsSafePublicURL(Uri URL)
         {
+            // delegate to host checking logic
             return HostOrIPPublic(URL.Host);
         }
 
+        /// <summary>
+        /// Checks if a hostname resolves to public IP addresses only (not private or local).
+        /// </summary>
+        /// <param name="HostName">The hostname to check.</param>
+        /// <returns>True if all resolved addresses are public.</returns>
         public static bool HostOrIPPublic(string HostName)
         {
+            // assume public until proven otherwise
             bool result = true;
             try
             {
+                // resolve hostname to IP addresses
                 IPAddress[] addresslist = Dns.GetHostAddresses(HostName.Trim());
 
+                // check each resolved address
                 foreach (IPAddress address in addresslist)
                 {
                     if (!IsPublicIpAddress(address))
                     {
+                        // any private address makes the host not safe
                         return false;
                     }
                 }
             }
             catch
             {
+                // DNS resolution failure means not safe
                 result = false;
             }
 
             return result;
         }
 
+        /// <summary>
+        /// Asynchronously checks if a hostname resolves to public IP addresses only (not private or local).
+        /// </summary>
+        /// <param name="HostName">The hostname to check.</param>
+        /// <returns>True if all resolved addresses are public.</returns>
         public static async Task<bool> HostOrIPPublicAsync(string HostName)
         {
+            // assume public until proven otherwise
             bool result = true;
             try
             {
+                // asynchronously resolve hostname to IP addresses
                 var addresslist = await Task.Factory.FromAsync<IPAddress[]>(
                     Dns.BeginGetHostAddresses(HostName.Trim(), null, null),
                     Dns.EndGetHostAddresses);
 
+                // check each resolved address
                 foreach (IPAddress address in addresslist)
                 {
                     if (!IsPublicIpAddress(address))
                     {
+                        // any private address makes the host not safe
                         return false;
                     }
                 }
             }
             catch
             {
+                // DNS resolution failure means not safe
                 result = false;
             }
 
             return result;
         }
 
+        /// <summary>
+        /// Determines if an IP address is public (not private, local, or reserved).
+        /// </summary>
+        /// <param name="address">The IP address to check.</param>
+        /// <returns>True if the address is public and safe for external connections.</returns>
         public static bool IsPublicIpAddress(IPAddress address)
         {
             try
             {
-                // (address.AddressFamily == AddressFamily.InterNetwork);
-
+                // parse IPv4 address into octets
                 String[] straryIPAddress = address.ToString().Split(new String[] { "." }, StringSplitOptions.RemoveEmptyEntries);
                 int[] iaryIPAddress = new int[] { int.Parse(straryIPAddress[0]), int.Parse(straryIPAddress[1]), int.Parse(straryIPAddress[2]), int.Parse(straryIPAddress[3]) };
-                if (iaryIPAddress[0] == 10 ||
-                    (iaryIPAddress[0] == 127 && (iaryIPAddress[1] == 0) && (iaryIPAddress[2] == 0) && (iaryIPAddress[3] == 1)) ||
-                    (iaryIPAddress[0] == 192 && iaryIPAddress[1] == 168) ||
-                    (iaryIPAddress[0] == 172 && (iaryIPAddress[1] >= 16 && iaryIPAddress[1] <= 31))
+
+                // check for private IPv4 ranges
+                if (iaryIPAddress[0] == 10 ||  // 10.0.0.0/8
+                    (iaryIPAddress[0] == 127 && (iaryIPAddress[1] == 0) && (iaryIPAddress[2] == 0) && (iaryIPAddress[3] == 1)) ||  // localhost
+                    (iaryIPAddress[0] == 192 && iaryIPAddress[1] == 168) ||  // 192.168.0.0/16
+                    (iaryIPAddress[0] == 172 && (iaryIPAddress[1] >= 16 && iaryIPAddress[1] <= 31))  // 172.16.0.0/12
                    )
                 {
                     return false;
@@ -204,6 +257,7 @@ namespace GenXdev.Helpers
             }
             catch
             {
+                // parsing error means not safe
             }
 
             return true;

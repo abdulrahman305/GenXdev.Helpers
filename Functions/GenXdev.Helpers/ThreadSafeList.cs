@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : ThreadSafeList.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.276.2025
+// Version                   : 1.278.2025
 // ################################################################################
 // MIT License
 //
@@ -48,18 +48,42 @@ namespace GenXdev.Containers
     [DebuggerDisplay("Count = {Count}")]
     public class ThreadSafeList<T> : IList<T>, ICollection<T>, IEnumerable<T>, IList, ICollection, IEnumerable
     {
+        /// <summary>
+        /// Creates a thread-safe snapshot of the current list contents as an array.
+        /// </summary>
+        /// <returns>Array copy of all current elements.</returns>
         public T[] ToThreadSafeEnumerable()
         {
+            // thread-safe snapshot by copying under lock
             lock (padLock)
             {
                 return internalList.ToArray<T>();
             }
         }
 
+        /// <summary>
+        /// Delegate for matching items during update operations.
+        /// </summary>
+        /// <param name="item1">First item to compare.</param>
+        /// <param name="item2">Second item to compare.</param>
+        /// <returns>True if items match for update purposes.</returns>
         public delegate bool UpdateCallbackMatch(T item1, T item2);
+
+        /// <summary>
+        /// Delegate for updating existing items with new values.
+        /// </summary>
+        /// <param name="itemToUpdate">The existing item to modify.</param>
+        /// <param name="newValues">The new values to apply.</param>
         public delegate void UpdateCallbackUpdate(T itemToUpdate, T newValues);
 
+        /// <summary>
+        /// Synchronization object for thread-safe operations.
+        /// </summary>
         object padLock = new object();
+
+        /// <summary>
+        /// Internal list that stores the actual data.
+        /// </summary>
         List<T> internalList;
 
         // Summary:

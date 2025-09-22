@@ -1,9 +1,9 @@
-using System.Management.Automation;
 using NAudio.Wave;
+using System.Collections.Concurrent;
+using System.Management;
+using System.Management.Automation;
 using Whisper.net;
 using Whisper.net.Ggml;
-using System.Management;
-using System.Collections.Concurrent;
 [Cmdlet(VerbsCommunications.Receive, "RealTimeSpeechToText")]
 public class ReceiveRealTimeSpeechToText : PSCmdlet
 {

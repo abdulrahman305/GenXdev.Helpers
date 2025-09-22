@@ -1,7 +1,7 @@
 ﻿using SpotifyAPI.Web;
 using SpotifyAPI.Web.Auth;
-using System.Reflection;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace GenXdev.Helpers
 {
@@ -221,7 +221,6 @@ namespace GenXdev.Helpers
             }
             catch // (Exception ex)
             {
-                //Console.WriteLine($"Error in ClearQueue: {ex.Message}");
             }
         }
 
@@ -319,8 +318,6 @@ namespace GenXdev.Helpers
                     }
 
                     // Log URIs for debugging
-                    //Console.WriteLine("Artist URIs: " + string.Join(", ", uris));
-
                     client.Player.ResumePlayback(new PlayerResumePlaybackRequest()
                     {
                         Uris = uris.ToArray(),
@@ -427,10 +424,8 @@ namespace GenXdev.Helpers
                     };
                 }
             }
-            catch // (Exception ex)
+            catch
             {
-                //Console.WriteLine($"Error in SearchAndPlay: {ex.Message}");
-                //Console.WriteLine($"Stack Trace: {ex.StackTrace}");
             }
 
             return null;

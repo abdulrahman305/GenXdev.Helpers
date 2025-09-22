@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Serialization.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.276.2025
+// Version                   : 1.278.2025
 // ################################################################################
 // MIT License
 //
@@ -29,9 +29,9 @@
 
 
 
-using System.Text;
-using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
+using System.Runtime.Serialization.Json;
+using System.Text;
 
 namespace GenXdev.Helpers
 {

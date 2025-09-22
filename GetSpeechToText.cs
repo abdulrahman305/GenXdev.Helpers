@@ -1,8 +1,8 @@
-﻿using System.Management.Automation;
+﻿using System.Collections.Concurrent;
+using System.Management;
+using System.Management.Automation;
 using Whisper.net;
 using Whisper.net.Ggml;
-using System.Management;
-using System.Collections.Concurrent;
 [Cmdlet(VerbsCommon.Get, "SpeechToText")]
 public class GetSpeechToText : PSCmdlet
 {

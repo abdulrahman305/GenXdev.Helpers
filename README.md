@@ -142,7 +142,8 @@ alignScript [[-script] <String>] [[-spaces] <Int32>] [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>] 
+ConvertTo-HashTable [-InputObject] <Object[]>
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -172,7 +173,8 @@ ConvertTo-HashTable [-InputObject] <Object[]> [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-ConvertTo-JsonEx [-Object] <Object> [-Compress] [<CommonParameters>] 
+ConvertTo-JsonEx [-Object] <Object> [-Compress]
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -355,7 +357,11 @@ Get-DefaultWebLanguage [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-Get-GenXDevCmdlet [[-CmdletName] <string>] [[-DefinitionMatches] <string>] [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [<CommonParameters>] 
+Get-GenXDevCmdlet [[-CmdletName] <string>]
+    [[-DefinitionMatches] <string>] [[-ModuleName]
+    <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts]
+    [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch]
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -457,7 +463,8 @@ Get-GenXDevCmdlet [[-CmdletName] <string>] [[-DefinitionMatches] <string>] [[-Mo
 
 ### SYNTAX 
 ```PowerShell 
-Get-ImageGeolocation [-ImagePath] <string> [<CommonParameters>] 
+Get-ImageGeolocation [-ImagePath] <string>
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -544,7 +551,8 @@ Get-WebLanguageDictionary [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>] 
+Import-GenXdevModules [-DebugFailedModuleDefinitions]
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -574,7 +582,8 @@ Import-GenXdevModules [-DebugFailedModuleDefinitions] [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-Initialize-SearchPaths [[-WorkspaceFolder] <string>] [<CommonParameters>] 
+Initialize-SearchPaths [[-WorkspaceFolder] <string>]
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -603,7 +612,10 @@ Initialize-SearchPaths [[-WorkspaceFolder] <string>] [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-IncludeGenXdevMainModule] [<CommonParameters>] 
+Invoke-OnEachGenXdevModule [-Script] <scriptblock>
+    [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished]
+    [-FromScripts] [-IncludeScripts]
+    [-IncludeGenXdevMainModule] [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -690,7 +702,11 @@ Invoke-OnEachGenXdevModule [-Script] <scriptblock> [[-ModuleName] <string[]>] [-
 
 ### SYNTAX 
 ```PowerShell 
-Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>] [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>] [[-WriteTimeout] <UInt32>] [[-Parity] <String>] [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text] <Object> [-AddCRLinefeeds] [<CommonParameters>] 
+Out-Serial [[-Portname] <String>] [[-BaudRate] <Int32>]
+    [[-MaxBytesToRead] <UInt32>] [[-ReadTimeout] <UInt32>]
+    [[-WriteTimeout] <UInt32>] [[-Parity] <String>]
+    [[-DataBits] <Int32>] [[-StopBits] <String>] [-Text]
+    <Object> [-AddCRLinefeeds] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
@@ -824,7 +840,12 @@ Remove-JSONComments [-Json] <string[]> [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-Show-GenXdevCmdlet [[-CmdletName] <string>] [[-DefinitionMatches] <string>] [[-ModuleName] <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts] [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch] [-Online] [-OnlyAliases] [-ShowTable] [-PassThru] [<CommonParameters>] 
+Show-GenXdevCmdlet [[-CmdletName] <string>]
+    [[-DefinitionMatches] <string>] [[-ModuleName]
+    <string[]>] [-NoLocal] [-OnlyPublished] [-FromScripts]
+    [-IncludeScripts] [-OnlyReturnModuleNames] [-ExactMatch]
+    [-Online] [-OnlyAliases] [-ShowTable] [-PassThru]
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -994,7 +1015,8 @@ Show-Verb [[-Verb] <string[]>] [<CommonParameters>]
 
 ### SYNTAX 
 ```PowerShell 
-Test-UnattendedMode [[-CallersInvocation] <InvocationInfo>] [-Detailed] [<CommonParameters>] 
+Test-UnattendedMode [[-CallersInvocation] <InvocationInfo>]
+    [-Detailed] [<CommonParameters>] 
 ```` 
 
 ### DESCRIPTION 
@@ -1070,7 +1092,8 @@ Test-UnattendedMode [[-CallersInvocation] <InvocationInfo>] [-Detailed] [<Common
 
 ### SYNTAX 
 ```PowerShell 
-Get-FreeFallHeight [-DurationInSeconds] <double> [[-TerminalVelocityInMs] <double>] [<CommonParameters>] 
+Get-FreeFallHeight [-DurationInSeconds] <double>
+    [[-TerminalVelocityInMs] <double>] [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
@@ -1109,7 +1132,8 @@ Get-FreeFallHeight [-DurationInSeconds] <double> [[-TerminalVelocityInMs] <doubl
 
 ### SYNTAX 
 ```PowerShell 
-Get-FreeFallTime [-HeightInMeters] <double> [[-TerminalVelocityInMs] <double>] [<CommonParameters>] 
+Get-FreeFallTime [-HeightInMeters] <double>
+    [[-TerminalVelocityInMs] <double>] [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
