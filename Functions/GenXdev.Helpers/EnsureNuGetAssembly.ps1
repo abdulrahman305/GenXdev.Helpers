@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureNuGetAssembly.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.284.2025
+Version                   : 1.286.2025
 ################################################################################
 MIT License
 
