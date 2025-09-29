@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Get-ImageMetadata.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.286.2025
+Version                   : 1.288.2025
 ################################################################################
 MIT License
 
@@ -265,6 +265,10 @@ function Get-ImageMetadata {
             }
             try {
                 $image = [System.Drawing.Image]::FromFile($actualPath)
+            }
+            catch {
+                
+                return;
             }
             finally {
                 if ($actualPath -ne $ImagePath) {
