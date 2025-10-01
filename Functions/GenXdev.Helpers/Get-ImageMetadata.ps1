@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Get-ImageMetadata.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.288.2025
+Version                   : 1.290.2025
 ################################################################################
 MIT License
 
@@ -41,6 +41,14 @@ in their EXIF data (JPEG, TIFF) as well as PNG metadata.
 The full path to the image file to analyze. The file must be a valid image format
 that supports metadata (JPEG, TIFF, PNG, etc.).
 
+.PARAMETER ForceConsent
+Force a consent prompt even if a preference is already set for ImageSharp package
+installation, overriding any saved consent preferences.
+
+.PARAMETER ConsentToThirdPartySoftwareInstallation
+Automatically consent to third-party software installation and set a persistent
+preference flag for ImageSharp packages, bypassing interactive consent prompts.
+
 .OUTPUTS
 System.Collections.Hashtable
 Returns a hashtable containing all available metadata categories including:
@@ -57,6 +65,9 @@ Get-ImageMetadata -ImagePath "C:\Pictures\vacation.jpg"
 
 .EXAMPLE
 "C:\Pictures\vacation.jpg" | Get-ImageMetadata
+
+.EXAMPLE
+Get-ImageMetadata -ImagePath "C:\Pictures\photo.webp" -ConsentToThirdPartySoftwareInstallation
 #>
 function Get-ImageMetadata {
 
@@ -74,7 +85,21 @@ function Get-ImageMetadata {
             HelpMessage = 'Path to the image file to analyze'
         )]
         [ValidateNotNullOrEmpty()]
-        [string]$ImagePath
+        [string]$ImagePath,
+
+        ########################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Force a consent prompt even if preference is set for ImageSharp package installation.'
+        )]
+        [switch] $ForceConsent,
+
+        ########################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Automatically consent to third-party software installation and set persistent flag for ImageSharp packages.'
+        )]
+        [switch] $ConsentToThirdPartySoftwareInstallation
         ########################################################################
     )
 
@@ -236,9 +261,28 @@ function Get-ImageMetadata {
                 # If the path is a script, execute it to get the actual image path
                 $actualPath = [IO.Path]::GetTempFileName() + ".png";
 
-                GenXdev.Helpers\EnsureNuGetAssembly -PackageKey "SixLabors.ImageSharp"
-                GenXdev.Helpers\EnsureNuGetAssembly -PackageKey "Shorthand.ImageSharp.WebP"
-                GenXdev.Helpers\EnsureNuGetAssembly -PackageKey "SixLabors.ImageSharp.Drawing"
+                # Load ImageSharp packages with embedded consent using Copy-IdenticalParamValues
+                $ensureParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                    -BoundParameters $PSBoundParameters `
+                    -FunctionName 'GenXdev.Helpers\EnsureNuGetAssembly' `
+                    -DefaultValues (
+                    Microsoft.PowerShell.Utility\Get-Variable -Scope Local `
+                        -ErrorAction SilentlyContinue
+                )
+
+                # Set specific parameters for ImageSharp packages
+                $ensureParams['Description'] = 'Required for WebP image format processing and conversion'
+                $ensureParams['Publisher'] = 'SixLabors'
+
+                # Load required ImageSharp packages
+                $ensureParams['PackageKey'] = 'SixLabors.ImageSharp'
+                GenXdev.Helpers\EnsureNuGetAssembly @ensureParams
+
+                $ensureParams['PackageKey'] = 'Shorthand.ImageSharp.WebP'
+                GenXdev.Helpers\EnsureNuGetAssembly @ensureParams
+
+                $ensureParams['PackageKey'] = 'SixLabors.ImageSharp.Drawing'
+                GenXdev.Helpers\EnsureNuGetAssembly @ensureParams
 
                 try {
                     $webpImage = [SixLabors.ImageSharp.Image]::Load($ImagePath)
@@ -267,7 +311,7 @@ function Get-ImageMetadata {
                 $image = [System.Drawing.Image]::FromFile($actualPath)
             }
             catch {
-                
+
                 return;
             }
             finally {

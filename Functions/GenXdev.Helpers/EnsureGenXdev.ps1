@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureGenXdev.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.288.2025
+Version                   : 1.290.2025
 ################################################################################
 MIT License
 
@@ -52,6 +52,14 @@ Downloads and initializes LMStudio models for various AI query types.
 Downloads and loads all NuGet packages defined in the packages.json manifest
 file.
 
+.PARAMETER ForceConsent
+Force a consent prompt even if a preference is already set for third-party
+software installation, overriding any saved consent preferences.
+
+.PARAMETER ConsentToThirdPartySoftwareInstallation
+Automatically consent to third-party software installation and set a persistent
+preference flag for all packages, bypassing interactive consent prompts.
+
 .EXAMPLE
 EnsureGenXdev
 
@@ -63,6 +71,9 @@ EnsureGenXdev -DownloadAllNugetPackages
 
 This command runs all Ensure* cmdlets and also downloads and loads all NuGet
 packages defined in the packages.json manifest file.
+
+.EXAMPLE
+EnsureGenXdev -DownloadAllNugetPackages -ConsentToThirdPartySoftwareInstallation
 
 .EXAMPLE
 EnsureGenXdev -DownloadLMStudioModels -DownloadAllNugetPackages
@@ -94,7 +105,21 @@ function EnsureGenXdev {
             Mandatory = $false,
             HelpMessage = "Downloads and loads all NuGet packages defined in the packages.json manifest file"
         )]
-        [Switch] $DownloadAllNugetPackages
+        [Switch] $DownloadAllNugetPackages,
+
+        ###########################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Force a consent prompt even if preference is set for third-party software installation.'
+        )]
+        [switch] $ForceConsent,
+
+        ###########################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Automatically consent to third-party software installation and set persistent flag for all packages.'
+        )]
+        [switch] $ConsentToThirdPartySoftwareInstallation
         ###########################################################################
     )
 
@@ -113,7 +138,34 @@ function EnsureGenXdev {
     process {
 
         # ensure vs code installation is available
-        GenXdev.Coding\EnsureVSCodeInstallation
+        try {
+            # request consent for VSCode installation using embedded consent
+            $vscodeParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                -BoundParameters $PSBoundParameters `
+                -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
+                -DefaultValues (
+                Microsoft.PowerShell.Utility\Get-Variable -Scope Local `
+                    -ErrorAction SilentlyContinue
+            )
+
+            # Set specific parameters for VSCode
+            $vscodeParams['ApplicationName'] = 'Visual Studio Code'
+            $vscodeParams['Source'] = 'Winget'
+            $vscodeParams['Description'] = 'Code editor required for GenXdev development environment'
+            $vscodeParams['Publisher'] = 'Microsoft'
+
+            $consent = GenXdev.FileSystem\Confirm-InstallationConsent @vscodeParams
+
+            if (-not $consent) {
+                Microsoft.PowerShell.Utility\Write-Warning "VSCode installation consent denied. Some GenXdev features may not be available."
+            }
+            else {
+                GenXdev.Coding\EnsureVSCodeInstallation
+            }
+        }
+        catch {
+            Microsoft.PowerShell.Utility\Write-Warning "Failed to check VSCode installation consent: $($_.Exception.Message)"
+        }
 
         # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
         GenXdev.Helpers\Get-GenXDevCmdlet Ensure* |
@@ -159,6 +211,28 @@ function EnsureGenXdev {
         # download all NuGet packages if requested
         if ($DownloadAllNugetPackages) {
             try {
+                # request consent for NuGet packages installation using embedded consent
+                $nugetParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                    -BoundParameters $PSBoundParameters `
+                    -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
+                    -DefaultValues (
+                    Microsoft.PowerShell.Utility\Get-Variable -Scope Local `
+                        -ErrorAction SilentlyContinue
+                )
+
+                # Set specific parameters for NuGet packages
+                $nugetParams['ApplicationName'] = 'NuGet Packages'
+                $nugetParams['Source'] = 'PowerShell Gallery'
+                $nugetParams['Description'] = 'Third-party .NET assemblies and libraries for GenXdev functionality'
+                $nugetParams['Publisher'] = 'Various'
+
+                $nugetConsent = GenXdev.FileSystem\Confirm-InstallationConsent @nugetParams
+
+                if (-not $nugetConsent) {
+                    Microsoft.PowerShell.Utility\Write-Warning "NuGet packages installation consent denied. Some GenXdev features may not be available."
+                    return
+                }
+
                 Microsoft.PowerShell.Utility\Write-Verbose (
                     'Processing all NuGet packages from packages.json'
                 )
@@ -185,8 +259,17 @@ function EnsureGenXdev {
                                 "Ensuring NuGet package: $packageKey"
                             )
 
-                            # ensure the specific nuget assembly is loaded
-                            GenXdev.Helpers\EnsureNuGetAssembly -PackageKey $packageKey
+                            # ensure the specific nuget assembly is loaded using embedded consent
+                            $ensureParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                                -BoundParameters $PSBoundParameters `
+                                -FunctionName 'GenXdev.Helpers\EnsureNuGetAssembly' `
+                                -DefaultValues (
+                                Microsoft.PowerShell.Utility\Get-Variable -Scope Local `
+                                    -ErrorAction SilentlyContinue
+                            )
+
+                            $ensureParams['PackageKey'] = $packageKey
+                            GenXdev.Helpers\EnsureNuGetAssembly @ensureParams
                         }
                         catch {
                             # capture and display package loading failures
@@ -223,6 +306,35 @@ function EnsureGenXdev {
 
         # exit early if lmstudio models are not requested
         if (-not $DownloadLMStudioModels) { return }
+
+        # request consent for LMStudio models installation
+        try {
+            # request consent for LMStudio using embedded consent
+            $lmStudioParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                -BoundParameters $PSBoundParameters `
+                -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
+                -DefaultValues (
+                Microsoft.PowerShell.Utility\Get-Variable -Scope Local `
+                    -ErrorAction SilentlyContinue
+            )
+
+            # Set specific parameters for LMStudio
+            $lmStudioParams['ApplicationName'] = 'LMStudio AI Models'
+            $lmStudioParams['Source'] = 'LMStudio'
+            $lmStudioParams['Description'] = 'Large language models for AI functionality in GenXdev'
+            $lmStudioParams['Publisher'] = 'LMStudio'
+
+            $lmStudioConsent = GenXdev.FileSystem\Confirm-InstallationConsent @lmStudioParams
+
+            if (-not $lmStudioConsent) {
+                Microsoft.PowerShell.Utility\Write-Warning "LMStudio models installation consent denied. AI features will not be available."
+                return
+            }
+        }
+        catch {
+            Microsoft.PowerShell.Utility\Write-Warning "Failed to check LMStudio models installation consent: $($_.Exception.Message)"
+            return
+        }
 
         # initialize lmstudio models for each query type
         foreach ($llmQueryType in $queryTypes) {

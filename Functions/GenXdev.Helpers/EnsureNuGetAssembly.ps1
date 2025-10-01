@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureNuGetAssembly.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.288.2025
+Version                   : 1.290.2025
 ################################################################################
 MIT License
 
@@ -60,11 +60,26 @@ Switch to fallback to latest version if specified version fails.
 .PARAMETER Destination
 Optional custom destination path for package installation. Defaults to persistent local or global cache.
 
+.PARAMETER Description
+Optional description of the software and its purpose for consent prompts. If not provided, a default description is used.
+
+.PARAMETER Publisher
+Optional publisher or vendor of the software for consent prompts. If not provided, attempts to read from packages.json or uses default.
+
+.PARAMETER ForceConsent
+Force a consent prompt even if a preference is already set for the package.
+
+.PARAMETER ConsentToThirdPartySoftwareInstallation
+Automatically consent to third-party software installation and set a persistent preference flag, bypassing interactive prompts.
+
 .EXAMPLE
 EnsureNuGetAssembly -PackageKey "Microsoft.Data.Sqlite.Core"
 
 .EXAMPLE
 EnsureNuGetAssembly -PackageKey "Microsoft.Playwright" -Version "1.54.0" -TypeName "Microsoft.Playwright.Playwright"
+
+.EXAMPLE
+EnsureNuGetAssembly -PackageKey "Microsoft.Data.Sqlite.Core" -ConsentToThirdPartySoftwareInstallation
 #>
 function EnsureNuGetAssembly {
 
@@ -93,7 +108,27 @@ function EnsureNuGetAssembly {
 
         [Parameter(Mandatory = $false,
             HelpMessage = "Custom install destination; defaults to local persistent or global cache.")]
-        [string] $Destination
+        [string] $Destination,
+
+        ###############################################################################
+        [Parameter(Mandatory = $false,
+            HelpMessage = "Optional description of the software and its purpose for consent.")]
+        [string] $Description,
+
+        ###############################################################################
+        [Parameter(Mandatory = $false,
+            HelpMessage = "Optional publisher or vendor of the software for consent.")]
+        [string] $Publisher,
+
+        ###############################################################################
+        [Parameter(Mandatory = $false,
+            HelpMessage = "Force a prompt even if preference is set for consent.")]
+        [switch] $ForceConsent,
+
+        ###############################################################################
+        [Parameter(Mandatory = $false,
+            HelpMessage = "Automatically consent to third-party software installation and set persistent flag.")]
+        [switch] $ConsentToThirdPartySoftwareInstallation
     )
     begin {
         # Lazy check if type already loaded
@@ -273,6 +308,27 @@ function EnsureNuGetAssembly {
         if (-not (Microsoft.PowerShell.Core\Get-Command dotnet -ErrorAction SilentlyContinue)) {
             Microsoft.PowerShell.Utility\Write-Host "dotnet CLI not found; attempting install via winget if available..."
             if (Microsoft.PowerShell.Core\Get-Command winget -ErrorAction SilentlyContinue) {
+                # Request consent for .NET SDK installation using embedded consent logic
+                $sdkDescription = if ($Description) { $Description } else { "Required for NuGet package management and compilation" }
+
+                # Use Copy-IdenticalParamValues to pass parameters to Confirm-InstallationConsent
+                $sdkConsentParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                    -BoundParameters $PSBoundParameters `
+                    -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
+                    -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
+
+                # Set fixed values for .NET SDK consent
+                $sdkConsentParams['ApplicationName'] = "Microsoft .NET SDK 9"
+                $sdkConsentParams['Source'] = 'Winget'
+                $sdkConsentParams['Description'] = $sdkDescription
+                $sdkConsentParams['Publisher'] = "Microsoft"
+
+                $consentResult = GenXdev.FileSystem\Confirm-InstallationConsent @sdkConsentParams
+
+                if (-not $consentResult) {
+                    throw "Installation consent denied for Microsoft .NET SDK 9. Cannot proceed without dotnet CLI. Please install .NET SDK 9+ manually from https://dotnet.microsoft.com/download/dotnet/9.0"
+                }
+
                 Microsoft.PowerShell.Utility\Write-Verbose "Invoking winget install Microsoft.DotNet.SDK.9 --accept-package-agreements --accept-source-agreements"
                 winget install Microsoft.DotNet.SDK.9 --accept-package-agreements --accept-source-agreements
                 # Reload PATH after install
@@ -419,6 +475,28 @@ function EnsureNuGetAssembly {
             }
 
             if (-not $installed) {
+                # Request consent for NuGet package installation using embedded consent logic
+                $packageDescription = if ($Description) { $Description } else { "Required .NET assembly for PowerShell module functionality" }
+                $packagePublisher = if ($Publisher) { $Publisher } elseif ($pkgConfig -and $pkgConfig.Publisher) { $pkgConfig.Publisher } else { "NuGet Package Author" }
+
+                # Use Copy-IdenticalParamValues to pass parameters to Confirm-InstallationConsent
+                $consentParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                    -BoundParameters $PSBoundParameters `
+                    -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
+                    -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
+
+                # Map PackageKey to ApplicationName and set fixed Source
+                $consentParams['ApplicationName'] = $PackageId
+                $consentParams['Source'] = 'NuGet'
+                $consentParams['Description'] = $packageDescription
+                $consentParams['Publisher'] = $packagePublisher
+
+                $consentResult = GenXdev.FileSystem\Confirm-InstallationConsent @consentParams
+
+                if (-not $consentResult) {
+                    throw "Installation consent denied for package ${PackageId}. Cannot load required assemblies without this package."
+                }
+
                 Microsoft.PowerShell.Utility\Write-Host "One-time only just-in-time Installation of ${PackageId}, started, one moment please..." -ForegroundColor Cyan
                 Microsoft.PowerShell.Utility\Write-Host "Installing ${PackageId} ${Version}..."
 

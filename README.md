@@ -213,10 +213,19 @@ ConvertTo-JsonEx [-Object] <Object> [-Compress]
 
 ### SYNTAX 
 ```PowerShell 
-EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [<CommonParameters>] 
+EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [-ForceConsent] [-ConsentToThirdPartySoftwareInstallation] [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
+    -ConsentToThirdPartySoftwareInstallation  
+        Automatically consent to third-party software installation and set persistent flag for all packages.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
     -DownloadAllNugetPackages  
         Downloads and loads all NuGet packages defined in the packages.json manifest file  
         Required?                    false  
@@ -244,6 +253,15 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [<C
         Aliases                      None  
         Dynamic?                     false  
         Accept wildcard characters?  false  
+    -ForceConsent  
+        Force a consent prompt even if preference is set for third-party software installation.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
     <CommonParameters>  
         This cmdlet supports the common parameters: Verbose, Debug,  
         ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
@@ -261,12 +279,39 @@ EnsureGenXdev [-Force] [-DownloadLMStudioModels] [-DownloadAllNugetPackages] [<C
 
 ### SYNTAX 
 ```PowerShell 
-EnsureNuGetAssembly [-PackageKey] <string> [-ManifestPath <string>] [-Version <string>] [-TypeName <string>] [-ForceLatest] [-Destination <string>] [<CommonParameters>] 
+EnsureNuGetAssembly [-PackageKey] <string> [-ManifestPath <string>] [-Version <string>] [-TypeName <string>] [-ForceLatest] [-Destination <string>] [-Description <string>] [-Publisher <string>] [-ForceConsent] [-ConsentToThirdPartySoftwareInstallation] [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
+    -ConsentToThirdPartySoftwareInstallation  
+        Automatically consent to third-party software installation and set persistent flag.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -Description <string>  
+        Optional description of the software and its purpose for consent.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
     -Destination <string>  
         Custom install destination; defaults to local persistent or global cache.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ForceConsent  
+        Force a prompt even if preference is set for consent.  
         Required?                    false  
         Position?                    Named  
         Accept pipeline input?       false  
@@ -296,6 +341,15 @@ EnsureNuGetAssembly [-PackageKey] <string> [-ManifestPath <string>] [-Version <s
         Package key from packages.json or direct NuGet PackageId.  
         Required?                    true  
         Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -Publisher <string>  
+        Optional publisher or vendor of the software for consent.  
+        Required?                    false  
+        Position?                    Named  
         Accept pipeline input?       false  
         Parameter set name           (All)  
         Aliases                      None  
@@ -494,10 +548,30 @@ Get-ImageGeolocation [-ImagePath] <string>
 
 ### SYNTAX 
 ```PowerShell 
-Get-ImageMetadata [-ImagePath] <string> [<CommonParameters>] 
+Get-ImageMetadata [-ImagePath] <string> [-ForceConsent]
+    [-ConsentToThirdPartySoftwareInstallation]
+    [<CommonParameters>] 
 ```` 
 
 ### PARAMETERS 
+    -ConsentToThirdPartySoftwareInstallation  
+        Automatically consent to third-party software installation and set persistent flag for ImageSharp packages.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+    -ForceConsent  
+        Force a consent prompt even if preference is set for ImageSharp package installation.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
     -ImagePath <string>  
         Path to the image file to analyze  
         Required?                    true  
