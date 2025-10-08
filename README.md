@@ -915,19 +915,10 @@ Remove-JSONComments [-Json] <string[]> [<CommonParameters>]
    resetdefaultmonitor  
 ```` 
 
-### SYNOPSIS 
-    Restores default secondary monitor configuration.  
-
 ### SYNTAX 
 ```PowerShell 
 resetdefaultmonitor [<CommonParameters>] 
 ```` 
-
-### DESCRIPTION 
-    This script restores the default secondary monitor configuration for the system,  
-    setting the secondary monitor to the original default value.  
-    This is useful for users who want to revert to their previous multi-monitor setup after using side-by-side configurations.  
-    See also: 'sidebyside' function to switch to side-by-side mode for new windows.  
 
 ### PARAMETERS 
     <CommonParameters>  
@@ -945,18 +936,10 @@ resetdefaultmonitor [<CommonParameters>]
    secondscreen  
 ```` 
 
-### SYNOPSIS 
-    Sets default second-monitor configuration.  
-
 ### SYNTAX 
 ```PowerShell 
 secondscreen [<CommonParameters>] 
 ```` 
-
-### DESCRIPTION 
-    Sets the default behavior for GenXdev window openings to be on the secondary monitor.  
-    This is useful for users with a single monitor or those who prefer side-by-side window layouts.  
-    See also cmdlet 'sidebyside' and 'restoredefaultmonitor'  
 
 ### PARAMETERS 
     <CommonParameters>  
@@ -1146,18 +1129,10 @@ Show-Verb [[-Verb] <string[]>] [<CommonParameters>]
    sidebyside  
 ```` 
 
-### SYNOPSIS 
-    Sets default side-by-side configuration.  
-
 ### SYNTAX 
 ```PowerShell 
 sidebyside [<CommonParameters>] 
 ```` 
-
-### DESCRIPTION 
-    Sets the default behavior for GenXdev window openings to be side-by-side with PowerShell.  
-    This is useful for users with a single monitor or those who prefer side-by-side window layouts.  
-    See also cmdlet 'secondscreen' and 'restoredefaultmonitor'  
 
 ### PARAMETERS 
     <CommonParameters>  

@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureNuGetAssembly.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.296.2025
+Version                   : 1.298.2025
 ################################################################################
 MIT License
 
@@ -312,7 +312,7 @@ function EnsureNuGetAssembly {
                 $sdkDescription = if ($Description) { $Description } else { "Required for NuGet package management and compilation" }
 
                 # Use Copy-IdenticalParamValues to pass parameters to Confirm-InstallationConsent
-                $sdkConsentParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                $sdkConsentParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                     -BoundParameters $PSBoundParameters `
                     -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
                     -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
@@ -480,7 +480,7 @@ function EnsureNuGetAssembly {
                 $packagePublisher = if ($Publisher) { $Publisher } elseif ($pkgConfig -and $pkgConfig.Publisher) { $pkgConfig.Publisher } else { "NuGet Package Author" }
 
                 # Use Copy-IdenticalParamValues to pass parameters to Confirm-InstallationConsent
-                $consentParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                $consentParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                     -BoundParameters $PSBoundParameters `
                     -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
                     -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)

@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Get-ImageMetadata.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.296.2025
+Version                   : 1.298.2025
 ################################################################################
 MIT License
 
@@ -262,7 +262,7 @@ function Get-ImageMetadata {
                 $actualPath = [IO.Path]::GetTempFileName() + ".png";
 
                 # Load ImageSharp packages with embedded consent using Copy-IdenticalParamValues
-                $ensureParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                $ensureParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                     -BoundParameters $PSBoundParameters `
                     -FunctionName 'GenXdev.Helpers\EnsureNuGetAssembly' `
                     -DefaultValues (

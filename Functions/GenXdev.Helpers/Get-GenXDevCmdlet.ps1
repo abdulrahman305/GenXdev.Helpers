@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Get-GenXDevCmdlet.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.296.2025
+Version                   : 1.298.2025
 ################################################################################
 MIT License
 
@@ -184,7 +184,7 @@ function Get-GenXDevCmdlet {
     process {
 
         # copy identical parameter values to pass to the module iteration function
-        $params = GenXdev.Helpers\Copy-IdenticalParamValues `
+        $params = GenXdev.FileSystem\Copy-IdenticalParamValues `
             -BoundParameters $PSBoundParameters `
             -FunctionName 'GenXdev.Helpers\Invoke-OnEachGenXdevModule' `
             -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable `
@@ -222,8 +222,8 @@ function Get-GenXDevCmdlet {
         `"LineNo`": 0,
         `"Description`": `"Fast multi-threaded file and directory search with optional textcontent pattern matching`",
         `"Aliases`": `"l`",
-        `"ScriptFilePath`": `"$($psRootPath.Replace("\","\\"))\\Modules\\GenXdev.FileSystem\\1.296.2025\\Functions\\GenXdev.FileSystem\\Find-Item.Cmdlet.cs`",
-        `"ScriptTestFilePath`": `"$($psRootPath.Replace("\","\\"))\\Modules\\GenXdev.FileSystem\\1.296.2025\\Tests\\GenXdev.FileSystem\\Find-Item.Tests.ps1`"
+        `"ScriptFilePath`": `"$($psRootPath.Replace("\","\\"))\\Modules\\GenXdev.FileSystem\\1.298.2025\\Functions\\GenXdev.FileSystem\\Find-Item.Cmdlet.cs`",
+        `"ScriptTestFilePath`": `"$($psRootPath.Replace("\","\\"))\\Modules\\GenXdev.FileSystem\\1.298.2025\\Tests\\GenXdev.FileSystem\\Find-Item.Tests.ps1`"
 }
 "@ | Microsoft.PowerShell.Utility\ConvertFrom-Json | GenXdev.Helpers\ConvertTo-HashTable
             }

@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Show-GenXDevCmdlet.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.296.2025
+Version                   : 1.298.2025
 ################################################################################
 MIT License
 
@@ -220,7 +220,7 @@ function Show-GenXdevCmdlet {
         $wpDone = $false;
         try {
             # copy identical parameters between functions for passing to Get-GenXDevCmdlet
-            $invocationParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+            $invocationParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                 -FunctionName 'GenXdev.Helpers\Get-GenXDevCmdlet' `
                 -BoundParameters $PSBoundParameters `
                 -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable `

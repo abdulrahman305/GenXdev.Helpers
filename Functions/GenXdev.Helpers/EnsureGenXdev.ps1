@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureGenXdev.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.296.2025
+Version                   : 1.298.2025
 ################################################################################
 MIT License
 
@@ -140,7 +140,7 @@ function EnsureGenXdev {
         # ensure vs code installation is available
         try {
             # request consent for VSCode installation using embedded consent
-            $vscodeParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+            $vscodeParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                 -BoundParameters $PSBoundParameters `
                 -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
                 -DefaultValues (
@@ -190,7 +190,7 @@ function EnsureGenXdev {
                     )
 
                     # copy identical parameter values for the target function
-                    $params = GenXdev.Helpers\Copy-IdenticalParamValues `
+                    $params = GenXdev.FileSystem\Copy-IdenticalParamValues `
                         -BoundParameters $PSBoundParameters `
                         -FunctionName $_ `
                         -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
@@ -212,7 +212,7 @@ function EnsureGenXdev {
         if ($DownloadAllNugetPackages) {
             try {
                 # request consent for NuGet packages installation using embedded consent
-                $nugetParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                $nugetParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                     -BoundParameters $PSBoundParameters `
                     -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
                     -DefaultValues (
@@ -260,7 +260,7 @@ function EnsureGenXdev {
                             )
 
                             # ensure the specific nuget assembly is loaded using embedded consent
-                            $ensureParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+                            $ensureParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                                 -BoundParameters $PSBoundParameters `
                                 -FunctionName 'GenXdev.Helpers\EnsureNuGetAssembly' `
                                 -DefaultValues (
@@ -310,7 +310,7 @@ function EnsureGenXdev {
         # request consent for LMStudio models installation
         try {
             # request consent for LMStudio using embedded consent
-            $lmStudioParams = GenXdev.Helpers\Copy-IdenticalParamValues `
+            $lmStudioParams = GenXdev.FileSystem\Copy-IdenticalParamValues `
                 -BoundParameters $PSBoundParameters `
                 -FunctionName 'GenXdev.FileSystem\Confirm-InstallationConsent' `
                 -DefaultValues (
@@ -346,7 +346,7 @@ function EnsureGenXdev {
                 )
 
                 # copy identical parameter values for the ai initialization function
-                $params = GenXdev.Helpers\Copy-IdenticalParamValues `
+                $params = GenXdev.FileSystem\Copy-IdenticalParamValues `
                     -BoundParameters $PSBoundParameters `
                     -FunctionName 'GenXdev.AI\Initialize-LMStudioModel' `
                     -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable -Scope Local -ErrorAction SilentlyContinue)
