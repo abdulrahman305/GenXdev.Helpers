@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : HiPerfTimer.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.300.2025
+// Version                   : 1.302.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -21,7 +21,7 @@
 
 
 
-namespace GenXdev.Additional.HiPerfTimer
+namespace GenXdev.Helpers
 {
     public class NativeMethods
     {
@@ -63,7 +63,7 @@ namespace GenXdev.Additional.HiPerfTimer
         }
 
         /// <summary>
-        /// Stop timer 
+        /// Stop timer
         /// </summary>
         /// <returns>long - tick count</returns>
         public long Stop()

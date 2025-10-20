@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : MD5.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.300.2025
+// Version                   : 1.302.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -23,7 +23,7 @@
 
 using System.Text;
 
-namespace GenXdev.Security
+namespace GenXdev.Helpers
 {
     public static class MD5
     {

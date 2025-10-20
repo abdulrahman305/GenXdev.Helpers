@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : MultiEntranceMutex.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.300.2025
+// Version                   : 1.302.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -44,7 +44,7 @@ namespace GenXdev.Helpers
 
                     if (Interlocked.Increment(ref State) == 1)
                     {
-                        HasHandle = Mutex.WaitOne(Convert.ToInt32(Math.Round(timeout.Value.TotalMilliseconds, 0)), false);
+                        HasHandle = Mutex.WaitOne(Convert.ToInt32(System.Math.Round(timeout.Value.TotalMilliseconds, 0)), false);
                         if (HasHandle == false)
                         {
                             Interlocked.Decrement(ref State);

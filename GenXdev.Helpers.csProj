@@ -12,8 +12,8 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <NeutralLanguage>en</NeutralLanguage>
-    <AssemblyVersion>1.300.2025</AssemblyVersion>
-    <FileVersion>1.300.2025</FileVersion>
+    <AssemblyVersion>1.302.2025</AssemblyVersion>
+    <FileVersion>1.302.2025</FileVersion>
     <Description>A Windows PowerShell module with helpers mostly used by other GenXdev modules</Description>
     <Copyright>Copyright (c) 2024 GenXdev</Copyright>
     <PackageProjectUrl>https://github.com/genXdev/GenXdev.Helpers</PackageProjectUrl>
@@ -79,7 +79,7 @@
     </PackageReference>
     <PackageReference Include="Whisper.net" Version="1.7.4" />
     <PackageReference Include="Whisper.net.Runtime" Version="1.7.4" />
-    <PackageReference Include="WpfScreenHelper" Version="2.1.1" />
+    <PackageReference Include="WpfScreenHelper" Version="2.1.1"  />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -92,6 +92,12 @@
     <EmbeddedResource Include="default_site\index.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\GenXdev.FileSystem\1.302.2025\GenXdev.FileSystem.csproj">
+    <PrivateAssets>all</PrivateAssets>
+    <IncludeAssets>compile;analyzers;none</IncludeAssets>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <None Update="bin\net9.0-windows10.0.26100.0\win-x64\Microsoft.Extensions.Configuration.UserSecrets.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -101,7 +107,7 @@
     <None Update="LICENSE">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
 </Project>

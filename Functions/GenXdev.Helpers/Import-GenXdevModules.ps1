@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Import-GenXdevModules.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.300.2025
+Version                   : 1.302.2025
 ################################################################################
 Copyright (c)  René Vaessen / GenXdev
 
@@ -18,6 +18,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ################################################################################>
+# don't remove this line [dontrefactor]
+
 ###############################################################################
 <#
 .SYNOPSIS
@@ -66,7 +68,7 @@ function Import-GenXdevModules {
         # prepare console output variables
         $esc = [char]0x1b
         Microsoft.PowerShell.Utility\Write-Output (
-            "$esc[36m$('## Reloading genXdev..'.PadRight([Console]::WindowWidth - 1, ' '))" +
+            "$esc[36m$('Reloading genXdev..'.PadRight([Console]::WindowWidth - 1, ' '))" +
             "$esc[0m"
         )
 
@@ -104,7 +106,7 @@ function Import-GenXdevModules {
 
                         # show success message
                         Microsoft.PowerShell.Utility\Write-Output (
-                            "$esc[32m$("- [✅] $name".PadRight([Console]::WindowWidth - 1, ' '))" +
+                            "$esc[32m$("- 🗹 $name".PadRight([Console]::WindowWidth - 1, ' '))" +
                             "$esc[0m"
                         )
                     }
@@ -121,7 +123,7 @@ function Import-GenXdevModules {
 
                             if (($null -ne $importError) -and ($importError.Length -gt 0)) {
                                 Microsoft.PowerShell.Utility\Write-Output (
-                                    "$esc[91m$("- [❌] $importError".PadRight(
+                                    "$esc[91m$("- ☒ $importError".PadRight(
                                 [Console]::WindowWidth - 1, ' '
                             ))$esc[0m"
                                 )
@@ -131,7 +133,7 @@ function Import-GenXdevModules {
                             # show failure message
                             Microsoft.PowerShell.Utility\Write-Verbose "Failed to import module: $name"
                             Microsoft.PowerShell.Utility\Write-Output (
-                                "$esc[91m$("- [❌] $name".PadRight(
+                                "$esc[91m$("- ☒ $name".PadRight(
                             [Console]::WindowWidth - 1, ' '
                         ))$esc[0m"
                             )
@@ -159,7 +161,7 @@ function Import-GenXdevModules {
         )
 
         Microsoft.PowerShell.Utility\Write-Output (
-            "$esc[36m$("## Reloaded genXdev$text".PadRight(
+            "$esc[36m$("Reloaded genXdev$text".PadRight(
                 [Console]::WindowWidth - 1, ' '
             ))$esc[0m"
         )

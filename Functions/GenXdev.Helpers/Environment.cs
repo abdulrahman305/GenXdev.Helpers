@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Environment.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.300.2025
+// Version                   : 1.302.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -21,11 +21,6 @@
 
 
 
-/*
- * All intellectual rights of this framework, including this source file belong to Appicacy, René Vaessen.
- * Customers of Appicacy, may copy and change it, as long as this header remains.
- * 
- */
 using System.Reflection;
 
 namespace GenXdev.Helpers

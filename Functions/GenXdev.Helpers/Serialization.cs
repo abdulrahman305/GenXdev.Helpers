@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Serialization.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.300.2025
+// Version                   : 1.302.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -98,6 +98,11 @@ namespace GenXdev.Helpers
             }
         }
 
+        public static string RemoveJSONComments(string[] jsonLines)
+        {
+            return RemoveJSONComments(string.Join("\r\n", jsonLines));
+        }
+
         public static T FromJson<T>(String JSON)
         {
             return JsonConvert.DeserializeObject<T>(JSON);
@@ -118,26 +123,102 @@ namespace GenXdev.Helpers
 
         public static string RemoveJSONComments(String JSON)
         {
-            // init
-            StringBuilder sb = new StringBuilder();
+            if (string.IsNullOrEmpty(JSON))
+                return JSON;
 
-            // split up into lines
-            var lines = JSON.Replace("\n", "").Split('\r');
+            var result = new StringBuilder();
+            bool inString = false;
+            bool inSingleLineComment = false;
+            bool inMultiLineComment = false;
+            char stringChar = '"';
 
-            foreach (var line in lines)
+            for (int i = 0; i < JSON.Length; i++)
             {
-                // remove whitespaces
-                var trimmedLine = line.Trim();
+                char current = JSON[i];
+                char next = (i + 1 < JSON.Length) ? JSON[i + 1] : '\0';
 
-                // not a comment?
-                if (!trimmedLine.StartsWith("\\\\"))
+                // Handle string literals - don't process comments inside strings
+                if (!inSingleLineComment && !inMultiLineComment)
                 {
-                    // then keep it
-                    sb.Append(line + " ");
+                    if (!inString && (current == '"' || current == '\''))
+                    {
+                        inString = true;
+                        stringChar = current;
+                        result.Append(current);
+                        continue;
+                    }
+                    else if (inString && current == stringChar)
+                    {
+                        // Check for escaped quotes
+                        bool escaped = false;
+                        int backslashCount = 0;
+                        for (int j = i - 1; j >= 0 && JSON[j] == '\\'; j--)
+                        {
+                            backslashCount++;
+                        }
+                        escaped = backslashCount % 2 == 1;
+
+                        if (!escaped)
+                        {
+                            inString = false;
+                        }
+                        result.Append(current);
+                        continue;
+                    }
+                    else if (inString)
+                    {
+                        result.Append(current);
+                        continue;
+                    }
                 }
+
+                // Handle comments
+                if (!inString)
+                {
+                    // Start of single-line comment
+                    if (!inMultiLineComment && current == '/' && next == '/')
+                    {
+                        inSingleLineComment = true;
+                        i++; // Skip the second '/'
+                        continue;
+                    }
+
+                    // Start of multi-line comment
+                    if (!inSingleLineComment && current == '/' && next == '*')
+                    {
+                        inMultiLineComment = true;
+                        i++; // Skip the '*'
+                        continue;
+                    }
+
+                    // End of multi-line comment
+                    if (inMultiLineComment && current == '*' && next == '/')
+                    {
+                        inMultiLineComment = false;
+                        i++; // Skip the '/'
+                        continue;
+                    }
+
+                    // End of single-line comment (newline)
+                    if (inSingleLineComment && (current == '\r' || current == '\n'))
+                    {
+                        inSingleLineComment = false;
+                        result.Append(current);
+                        continue;
+                    }
+
+                    // Skip characters inside comments
+                    if (inSingleLineComment || inMultiLineComment)
+                    {
+                        continue;
+                    }
+                }
+
+                // Add non-comment characters
+                result.Append(current);
             }
 
-            return sb.ToString();
+            return result.ToString();
         }
     }
 }

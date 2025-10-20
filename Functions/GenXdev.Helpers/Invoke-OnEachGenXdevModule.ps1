@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : Invoke-OnEachGenXdevModule.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.300.2025
+Version                   : 1.302.2025
 ################################################################################
 Copyright (c)  René Vaessen / GenXdev
 
@@ -18,7 +18,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ################################################################################>
-################################################################################
 <#
 .SYNOPSIS
 Executes a script block on each GenXdev module in the workspace.
@@ -149,7 +148,7 @@ function Invoke-OnEachGenXdevModule {
         Microsoft.PowerShell.Utility\Write-Verbose (
             "Processing modules with base names: $($ModuleName -join ', ')")
 
-        $allGenXdevModules = @(GenXdev.FileSystem\Find-Item "$modulesPath\GenXdev*\1.300.2025\GenXdev*.psm1" -PassThru -NoRecurse | Microsoft.PowerShell.Core\ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.FullName) }) +
+        $allGenXdevModules = @(GenXdev.FileSystem\Find-Item "$modulesPath\GenXdev*\1.302.2025\GenXdev*.psm1" -PassThru -NoRecurse | Microsoft.PowerShell.Core\ForEach-Object { [IO.Path]::GetFileNameWithoutExtension($_.FullName) }) +
             @("GenXdev.Scripts")
 
         $genXdevModules = $allGenXdevModules
@@ -214,11 +213,11 @@ end {
 
                 # construct expected license file path for published modules
                 $licenseFilePath = (
-                    "$($ModuleObj.FullName)\1.300.2025\LICENSE")
+                    "$($ModuleObj.FullName)\1.302.2025\LICENSE")
 
                 # construct expected readme file path for published modules
                 $readmeFilePath = (
-                    "$($ModuleObj.FullName)\1.300.2025\README.md")
+                    "$($ModuleObj.FullName)\1.302.2025\README.md")
 
                 # skip license and readme checks for scripts directory
                 if ($ModuleObj.FullName -eq $scriptsPath) {

@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureGenXdev.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.300.2025
+Version                   : 1.302.2025
 ################################################################################
 Copyright (c)  René Vaessen / GenXdev
 
@@ -25,7 +25,8 @@ Ensures all GenXdev modules are properly loaded by invoking all Ensure*
 cmdlets.
 
 .DESCRIPTION
-This function retrieves all GenXdev cmdlets that start with "Ensure" and
+This function retrieves all GenXdev cmdlets that start with "Ensure" or
+"Optimize-Ensure" (for c# cmdlets) and
 executes each one to guarantee that all required GenXdev modules and
 dependencies are properly loaded and available for use. Any failures during
 the execution are caught and displayed as informational messages.
@@ -160,13 +161,14 @@ function EnsureGenXdev {
         }
 
         # get all ensure cmdlets and execute each one (excluding self to prevent infinite recursion)
-        GenXdev.Helpers\Get-GenXDevCmdlet Ensure* |
+        (@(GenXdev.Helpers\Get-GenXDevCmdlet Ensure*) + @(GenXdev.Helpers\Get-GenXDevCmdlet Optimize-Ensure*)) |
             Microsoft.PowerShell.Core\ForEach-Object name |
             Microsoft.PowerShell.Core\Where-Object {
 
                 # exclude self and other specific cmdlets to prevent recursion
-                (@('EnsureGenXdev', 'EnsureComfyUIModel').IndexOf($_) -lt 0) -and
-                ($_ -ne "EnsureNuGetAssembly")
+                (@('EnsureGenXdev', 'EnsureComfyUIModel', 'Optimize-EnsureGenXdev', 'Optimize-EnsureComfyUIModel').IndexOf($_) -lt 0) -and
+                ($_ -ne "EnsureNuGetAssembly") -and
+                ($_ -ne "Optimize-EnsureNuGetAssembly")
 
             } |
             Microsoft.PowerShell.Core\ForEach-Object {
