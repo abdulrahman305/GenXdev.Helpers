@@ -1,0 +1,599 @@
+<##############################################################################
+Part of PowerShell module : GenXdev.Helpers
+Original cmdlet filename  : Get-GenXDevCmdlet.ps1
+Original author           : René Vaessen / GenXdev
+Version                   : 1.304.2025
+################################################################################
+Copyright (c)  René Vaessen / GenXdev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+################################################################################>
+###############################################################################
+<#
+.SYNOPSIS
+Retrieves and lists all GenXdev cmdlets and their details.
+
+.DESCRIPTION
+Searches through installed GenXdev modules and script files to find cmdlets,
+their aliases, and descriptions. Can filter by name pattern and module name.
+Supports filtering by cmdlet definitions and provides flexible search options
+across both local and published module paths.
+
+.PARAMETER CmdletName
+Search pattern to filter cmdlets. Supports wildcards (*) and exact matching.
+When ExactMatch is false, automatically wraps simple strings with wildcards.
+
+.PARAMETER DefinitionMatches
+Regular expression to match cmdlet definitions. Used to filter cmdlets based
+on their function content or implementation details.
+
+.PARAMETER ModuleName
+One or more GenXdev module names to search. Can omit GenXdev prefix. Supports
+wildcards and validates module name patterns for GenXdev modules.
+
+.PARAMETER NoLocal
+Skip searching in local module paths. When specified, only searches in
+published or system module locations.
+
+.PARAMETER OnlyPublished
+Limit search to published module paths only. Excludes local development
+modules and focuses on released versions.
+
+.PARAMETER FromScripts
+Search in script files instead of module files. Changes the search target
+from PowerShell modules to standalone script files.
+
+.PARAMETER IncludeScripts
+Includes the scripts directory in addition to regular modules. Expands the
+search scope to cover both modules and scripts simultaneously.
+
+.PARAMETER OnlyReturnModuleNames
+Only return unique module names instead of full cmdlet details. Provides a
+summary view of available modules rather than detailed cmdlet information.
+
+.PARAMETER ExactMatch
+Perform exact matching instead of wildcard matching. When specified, disables
+automatic wildcard wrapping for simple search patterns.
+
+.EXAMPLE
+Get-GenXDevCmdlet -CmdletName "Get-*" -ModuleName "Console" -NoLocal
+
+.EXAMPLE
+gcmds Get-*
+
+.EXAMPLE
+Get-GenXDevCmdlet -OnlyReturnModuleNames
+#>
+function Get-GenXDevCmdlet {
+
+    [CmdletBinding()]
+    [OutputType([GenXdev.Helpers.GenXdevCmdletInfo], [string])]
+    [Alias('gcmds')]
+
+    param(
+        ###############################################################################
+        [Parameter(
+            Position = 0,
+            Mandatory = $false,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = 'Search pattern to filter cmdlets'
+        )]
+        [ValidateNotNullOrEmpty()]
+        [Alias('Filter', 'CmdLet', 'Cmd', 'FunctionName', 'Name')]
+        [SupportsWildcards()]
+        [string] $CmdletName,
+        ###############################################################################
+        [Parameter(
+            Position = 1,
+            Mandatory = $false,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = 'Regular expression to match cmdlet definitions'
+        )]
+        [ValidateNotNullOrEmpty()]
+        [string] $DefinitionMatches,
+        ###############################################################################
+        [Parameter(
+            Position = 2,
+            Mandatory = $false,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true,
+            HelpMessage = 'GenXdev module names to search'
+        )]
+        [ValidateNotNullOrEmpty()]
+        [Alias('Module', 'BaseModuleName', 'SubModuleName')]
+        [ValidatePattern('^(GenXdev|GenXde[v]\*|GenXdev(\.[\w\*\[\]\?]*)+)+$')]
+        [SupportsWildcards()]
+        [string[]] $ModuleName,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Skip searching in local module paths'
+        )]
+        [switch] $NoLocal,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Only search in published module paths'
+        )]
+        [switch] $OnlyPublished,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Search in script files instead of modules'
+        )]
+        [switch] $FromScripts,
+        ###############################################################################
+        [Parameter(
+            ParameterSetName = "ModuleName",
+            Mandatory = $false,
+            HelpMessage = ('Includes the scripts directory in addition to ' +
+                'regular modules')
+        )]
+        [switch] $IncludeScripts,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Only return unique module names'
+        )]
+        [switch] $OnlyReturnModuleNames,
+        ###############################################################################
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Perform exact matching instead of wildcard matching'
+        )]
+        [switch] $ExactMatch
+    )
+
+    begin {
+
+        # # get ps root path
+        # $psRootPath = GenXdev.FileSystem\Expand-Path "$PSScriptRoot\..\..\..\..\..\"
+
+        # store current location to restore later and prevent side effects
+        $originalLocation = Microsoft.PowerShell.Management\Get-Location
+
+        # initialize collection to store found cmdlets
+        $cmdletCollection = [System.Collections.Generic.List[GenXdev.Helpers.GenXdevCmdletInfo]]::new()
+
+        # output verbose information about search parameters
+        Microsoft.PowerShell.Utility\Write-Verbose (
+            "Starting cmdlet search with CmdletName: ${CmdletName}, " +
+            "ModuleName: ${ModuleName}, ExactMatch: ${ExactMatch}"
+        )
+    }
+
+    process {
+
+        # copy identical parameter values to pass to the module iteration function
+        $params = GenXdev.FileSystem\Copy-IdenticalParamValues `
+            -BoundParameters $PSBoundParameters `
+            -FunctionName 'GenXdev.Helpers\Invoke-OnEachGenXdevModule' `
+            -DefaultValues (Microsoft.PowerShell.Utility\Get-Variable `
+                -Scope Local `
+                -ErrorAction SilentlyContinue
+        )
+
+        # output verbose information about parameter copying
+        Microsoft.PowerShell.Utility\Write-Verbose (
+            "Copied parameters for module iteration: " +
+            "$($params.Keys -join ', ')"
+        )
+
+        # iterate through each genxdev module to find cmdlets
+        GenXdev.Helpers\Invoke-OnEachGenXdevModule @params {
+
+            param(
+                $Module,
+                $isScriptsFolder,
+                $isSubModule,
+                $subModuleName
+            )
+
+            # determine which files to search based on folder type
+            @(
+                if ($isScriptsFolder) {
+
+                    # search all powershell scripts recursively in scripts folder
+                    Microsoft.PowerShell.Management\Get-ChildItem .\*.ps1 -Recurse
+
+                }
+                elseif ($isSubModule) {
+
+                    # get all subdirectories under Functions to process each submodule
+                    Microsoft.PowerShell.Management\Get-ChildItem .\Functions\* -Directory -ErrorAction SilentlyContinue |
+                        Microsoft.PowerShell.Core\ForEach-Object {
+                            $subModuleDir = $_
+
+                            # temporarily change to submodule directory
+                            Microsoft.PowerShell.Management\Push-Location -LiteralPath $subModuleDir.FullName
+
+                            # get all powershell files in this submodule directory
+                            Microsoft.PowerShell.Management\Get-ChildItem .\*.ps1, .\*.cs -ErrorAction SilentlyContinue |
+                                Microsoft.PowerShell.Core\ForEach-Object {
+
+                                    if ($_.Name -like "_*") {
+                                        return
+                                    }
+
+                                    if ($_.Name -like "*.cs") {
+
+                                        if ([IO.File]::ReadAllText($_.FullName) -notmatch '\[Cmdlet') {
+                                            Microsoft.PowerShell.Utility\Write-Verbose "Skipping C# file without Cmdlet attribute: $($_.FullName)"
+                                            return
+                                        }
+                                    }
+
+                                    # add a property to track the actual submodule name
+                                    $_ | Microsoft.PowerShell.Utility\Add-Member -NotePropertyName 'ActualSubModuleName' -NotePropertyValue $subModuleDir.Name -Force
+                                    $_
+                                }
+
+                                # restore previous location
+                                Microsoft.PowerShell.Management\Pop-Location
+                            }
+                        }
+                        else {
+
+                            # search all function files recursively, excluding private ones
+                            Microsoft.PowerShell.Management\Get-ChildItem .\Functions\*.ps1, .\Functions\*.cs -Recurse -ErrorAction SilentlyContinue |
+                                Microsoft.PowerShell.Core\Where-Object {
+
+                                    # exclude files starting with underscore (private functions)
+                                    $_.Name -notlike "_*"
+                                } |
+                                Microsoft.PowerShell.Core\ForEach-Object {
+
+                                    if ($_.Name -like "*.cs") {
+
+                                        if ([IO.File]::ReadAllText($_.FullName) -notmatch '\[Cmdlet') {
+                                            Microsoft.PowerShell.Utility\Write-Verbose "Skipping C# file without Cmdlet attribute: $($_.FullName)"
+                                            return
+                                        }
+                                    }
+
+                                    $_
+                                }
+                            }
+                        ) | Microsoft.PowerShell.Core\ForEach-Object {
+
+                            try {
+                                ###############################################################################
+                                <#
+                        .SYNOPSIS
+                        Helper function to extract function help content from sourcecode.
+
+                        .DESCRIPTION
+                        Parses PowerShell script content to extract the SYNOPSIS, DESCRIPTION,
+                        and EXAMPLES sections from comment-based help. Handles both module
+                        functions and script files with different regex patterns based on file location.
+
+                        .PARAMETER FileName
+                        The path to the script file to analyze for function descriptions.
+
+                        .PARAMETER FunctionContent
+                        The content of the function to parse for extracting the help sections.
+                        #>
+                                function Get-FunctionHelpContent {
+
+                                    [CmdletBinding()]
+                                    [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseOutputTypeCorrectly', 'Get-FunctionHelpContent')]
+                                    [OutputType([hashtable])]
+
+                                    param(
+                                        [Parameter(
+                                            Position = 0,
+                                            Mandatory = $true
+                                        )]
+                                        [string]$FileName,
+
+                                        [Parameter(
+                                            Position = 1,
+                                            Mandatory = $true
+                                        )]
+                                        [AllowEmptyString()]
+                                        [AllowNull()]
+                                        [string]$FunctionContent
+                                    )
+
+                                    # ensure function content is never null for string operations
+                                    $FunctionContent = ($null -eq $FunctionContent) ? '' : $FunctionContent
+
+                                    # check if file is in scripts folder to determine parsing strategy
+                                    $fromScripts = $FileName.StartsWith((GenXdev.FileSystem\Expand-Path `
+                                                -FilePath "$PSScriptRoot\..\..\..\..\..\Scripts\"))
+
+                                    $result = @{
+                                        Synopsis    = ''
+                                        Description = ''
+                                        Examples    = @()
+                                    }
+
+                                    try {
+
+                                        # build regex pattern based on file location and structure
+                                        $pattern = if ($FileName.EndsWith('.cs')) {
+                                            # For C# files, extract from XML documentation comments
+                                            # This is a simplified pattern - may need enhancement for full XML parsing
+                                            @{
+                                                Synopsis    = '<para type="synopsis">(.*?)</para>'
+                                                Description = '<para type="description">(.*?)</para>'
+                                                Examples    = '<code>(.*?)</code>'
+                                            }
+                                        }
+                                        elseif ($fromScripts) {
+                                            @{
+                                                Synopsis    = '\.SYNOPSIS\s*\r\n([^\r\n]*[\r\n]*?)(?=\r\n\r\n|\.DESCRIPTION|\.EXAMPLE|#>|\z)'
+                                                Description = '\.DESCRIPTION\s*\r\n(.*?)(?=\r\n\r\n\.EXAMPLE|\r\n\r\n#>|\.EXAMPLE|#>|\z)'
+                                                Examples    = '\.EXAMPLE\s*\r\n(.*?)(?=\r\n\r\n\.EXAMPLE|\r\n\r\n\.SYNOPSIS|\r\n\r\n\.DESCRIPTION|\r\n\r\n#>|\.SYNOPSIS|\.DESCRIPTION|#>|\z)'
+                                            }
+                                        }
+                                        else {
+                                            @{
+                                                Synopsis    = ('\.SYNOPSIS\s*\r\n([^\r\n]*[\r\n]*?)(?=\r\n\r\n|\.DESCRIPTION|\.EXAMPLE|#>|\z)')
+                                                Description = ('\.DESCRIPTION\s*\r\n(.*?)(?=\r\n\s*\.[A-Z]|\z)')
+                                                Examples    = ('\.EXAMPLE\s*\r\n(.*?)(?=\r\n\r\n\.EXAMPLE|\r\n\r\n\.SYNOPSIS|\r\n\r\n\.DESCRIPTION|\r\n\r\n#>|\.SYNOPSIS|\.DESCRIPTION|#>|\z)')
+                                            }
+                                        }
+
+                                        if ($FileName.EndsWith('.cs')) {
+                                            # For C# files, extract each section
+                                            foreach ($section in 'Synopsis', 'Description') {
+                                                if ($section -eq 'Description') {
+                                                    # For Description, collect all description paras except the first one (PARAMETERS)
+                                                    $descMatches = [regex]::Matches(
+                                                        $FunctionContent,
+                                                        $pattern[$section],
+                                                        ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
+                                                        [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                                    )
+                                                    if ($descMatches.Count -gt 1) {
+                                                        # Skip the first match (PARAMETERS) and combine the rest
+                                                        $contents = @()
+                                                        for ($i = 1; $i -lt $descMatches.Count; $i++) {
+                                                            $content = $descMatches[$i].Groups[1].Value.Trim() -replace '^///\s*', '' -replace '\s*///\s*$', '' -replace '\s*///\s*', ' '
+                                                            $contents += $content
+                                                        }
+                                                        $result[$section] = $contents -join ' '
+                                                    }
+                                                }
+                                                else {
+                                                    $match = [regex]::Match(
+                                                        $FunctionContent,
+                                                        $pattern[$section],
+                                                        ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
+                                                        [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                                    )
+                                                    if ($match.Success) {
+                                                        $content = $match.Groups[1].Value.Trim()
+                                                        # Clean up /// prefixes from C# XML comments
+                                                        $content = $content -replace '^///\s*', '' -replace '\s*///\s*$', '' -replace '\s*///\s*', ' '
+                                                        $result[$section] = $content
+                                                    }
+                                                }
+                                            }
+                                            # For C# Examples, extract all code blocks
+                                            $exampleMatches = [regex]::Matches(
+                                                $FunctionContent,
+                                                $pattern['Examples'],
+                                                ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
+                                                [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                            )
+                                            if ($exampleMatches.Count -gt 0) {
+                                                $result['Examples'] = $exampleMatches | Microsoft.PowerShell.Core\ForEach-Object {
+                                                    $_.Groups[1].Value.Trim() -replace '^///\s*', '' -replace '\s*///\s*$', '' -replace '\s*///\s*', ' '
+                                                }
+                                            }
+                                        }
+                                        else {
+                                            # For PowerShell files, extract each section
+                                            foreach ($section in 'Synopsis', 'Description') {
+                                                $match = [regex]::Match(
+                                                    $FunctionContent,
+                                                    $pattern[$section],
+                                                    ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
+                                                    [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                                )
+                                                if ($match.Success) {
+                                                    $result[$section] = $match.Groups[1].Value.Trim()
+                                                }
+                                            }
+                                            # Extract all examples
+                                            $exampleMatches = [regex]::Matches(
+                                                $FunctionContent,
+                                                $pattern['Examples'],
+                                                ([System.Text.RegularExpressions.RegexOptions]::IgnoreCase -bor
+                                                [System.Text.RegularExpressions.RegexOptions]::Singleline)
+                                            )
+                                            if ($exampleMatches.Count -gt 0) {
+                                                $result['Examples'] = $exampleMatches | Microsoft.PowerShell.Core\ForEach-Object { $_.Groups[1].Value.Trim() }
+                                            }
+                                        }
+                                    }
+                                    catch {
+
+                                        # log verbose message on parsing failure
+                                        Microsoft.PowerShell.Utility\Write-Verbose (
+                                            "Failed to get help content: $($_.Exception.Message)"
+                                        )
+                                    }
+
+                                    # return the extracted help content
+                                    return $result
+                                }
+
+                                # extract the cmdlet name from the current file being processed
+                                $cName = [IO.Path]::GetFileNameWithoutExtension($_.Name).Replace(".Cmdlet", "").Replace(".cmdlet", "")
+
+                                # get command help information for the cmdlet
+                                $help = @(@($isScriptsFolder ?
+                                        (Microsoft.PowerShell.Core\Get-Command -Name $_.FullName -ErrorAction SilentlyContinue) :
+                                        (Microsoft.PowerShell.Core\Get-Command -Name "$($Module.Name)\$($cName)" -ErrorAction SilentlyContinue)) |
+                                        Microsoft.PowerShell.Utility\Select-Object -first 1 -ErrorAction SilentlyContinue)
+
+                                    # read the source file content
+                                    $fileContent = [IO.File]::ReadAllText($_.FullName)
+
+                                    # extract help content from source code
+                                    $helpContent = Get-FunctionHelpContent -FileName $_.FullName -FunctionContent $fileContent
+
+                                    # determine description from help or extracted content
+                                    $description = (
+                                        $help -and (-not [String]::IsNullOrWhiteSpace($help.ResolvedCommand.Description)) ?
+                                        $help.ResolvedCommand.Description :
+                                        $helpContent.Description
+                                    )
+
+                                    # use synopsis from extracted content, fallback to description
+                                    $synopsis = $helpContent.Synopsis
+                                    if ([string]::IsNullOrWhiteSpace($synopsis)) {
+                                        $synopsis = $description
+                                    }
+
+                                    # collect all aliases for this cmdlet from different sources
+                                    $aliases = @(
+                                        @(
+                                            Microsoft.PowerShell.Utility\Get-Alias -Definition $_.FullName -ErrorAction SilentlyContinue
+                                        ) + @(
+                                            Microsoft.PowerShell.Utility\Get-Alias -Definition "$($cName)" -ErrorAction SilentlyContinue
+                                        )
+                                    ) | Microsoft.PowerShell.Core\Where-Object {
+
+                                        # filter aliases to only those from the current module
+                                        $_.Source -eq $Module.Name
+
+                                    } | Microsoft.PowerShell.Core\ForEach-Object "Name";
+
+                                    # determine if cmdlet matches search criteria
+                                    $found = (-not $CmdletName) -or ($CmdletName.Length -eq 0)
+
+                                    # check if cmdlet name matches any provided search patterns
+                                    if (-not $found) {
+
+                                        foreach ($c in $CmdletName) {
+
+                                            $n = $c
+
+                                            # automatically add wildcards for non-exact matches
+                                            if ((-not $ExactMatch) -and ($n.IndexOfAny('*?[]'.ToCharArray()) -lt 0)) {
+
+                                                $n = "*$n*"
+                                            }
+
+                                            # check for module-qualified name match
+                                            if ($n.Contains('\')) {
+
+                                                if ("$($Module.Name)\$($cName)" -Like $n) {
+                                                    $found = $true
+                                                    break;
+                                                }
+                                            }
+                                            else {
+                                                # check for simple cmdlet name match
+                                                if ("$($cName)" -Like $n) {
+                                                    $found = $true
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    # check alias matches if cmdlet name didn't match
+                                    if (-not $found) {
+
+                                        foreach ($a in $aliases) {
+
+                                            if ($a -Like $CmdletName) {
+                                                $found = $true
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                    # apply definition matching filter if specified
+                                    if ($found -and -not [string]::IsNullOrWhiteSpace($DefinitionMatches)) {
+
+                                        $found = ($help ? $help.ResolvedCommand.Definition : [IO.File]::ReadAllText($_.FullName)) -match $DefinitionMatches
+                                    }
+
+                                    # skip this cmdlet if it doesn't match search criteria
+                                    if (-not $found) { return }
+
+                                    $moduleN = (
+                                        $isScriptsFolder ?
+                                        "GenXdev.Scripts" :
+                                        [IO.Path]::GetFileName([IO.Path]::GetDirectoryName($_.FullName))
+                                    )
+
+                                    # create cmdlet information object and add to collection
+                                    $cmdletInfo = [GenXdev.Helpers.GenXdevCmdletInfo]@{
+                                        Name               = $cName
+                                        ModuleName         = $moduleN
+                                        BaseModule         = $($Module.Name)
+                                        LineNo             = 0
+                                        Description        = $description
+                                        Synopsis           = $synopsis
+                                        Examples           = $helpContent.Examples
+                                        Aliases            = $aliases -join ', '
+                                        ScriptFilePath     = $_.FullName
+                                        ScriptTestFilePath = (
+                                            $isScriptsFolder ?
+                                            (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\$($cName).Tests.ps1") :
+                                            (GenXdev.FileSystem\Expand-Path "$([IO.Path]::GetDirectoryName($_.FullName))\..\..\Tests\$moduleN\$($cName).Tests.ps1")
+                                        )
+                                    }
+
+                                    # add to collection
+                                    $null = $cmdletCollection.Add($cmdletInfo)
+                                }
+                                catch {
+
+                                    # log warning for any file processing errors
+                                    Microsoft.PowerShell.Utility\Write-Warning (
+                                        "Error processing file '$($_.FullName)': $($_.Exception.Message)"
+                                    )
+                                }
+                            }
+        }
+    }
+
+    end {
+
+        # restore the original location to prevent side effects
+        Microsoft.PowerShell.Management\Set-Location -LiteralPath $originalLocation
+
+        # output verbose completion message
+        Microsoft.PowerShell.Utility\Write-Verbose (
+            "Completed cmdlet search and restored original location"
+        )
+
+        # return results based on OnlyReturnModuleNames parameter
+        if ($OnlyReturnModuleNames) {
+
+            # return unique BaseModule names
+            $cmdletCollection |
+                Microsoft.PowerShell.Core\ForEach-Object { $_.BaseModule } |
+                Microsoft.PowerShell.Utility\Select-Object -Unique |
+                Microsoft.PowerShell.Utility\Sort-Object {
+                    "$($_.BaseModule.Length.ToString("00_"))$($_.BaseModule)"
+                } -Descending
+
+        }
+        else {
+
+            # return full cmdlet information objects
+            $cmdletCollection
+        }
+    }
+}
+###############################################################################

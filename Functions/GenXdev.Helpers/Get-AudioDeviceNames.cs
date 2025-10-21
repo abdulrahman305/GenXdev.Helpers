@@ -1,8 +1,8 @@
 // ################################################################################
 // Part of PowerShell module : GenXdev.Helpers
-// Original cmdlet filename  : GetAudioDeviceNames.cs
+// Original cmdlet filename  : Get-AudioDeviceNames.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.302.2025
+// Version                   : 1.304.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //

@@ -59,13 +59,13 @@ Update-Module
 | [Get-GenXDevCmdlet](#get-genxdevcmdlet) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#get-imagegeolocation) | &nbsp; | Extracts geolocation data from an image file. |
 | [Get-ImageMetadata](#get-imagemetadata) | &nbsp; | &nbsp; |
+| [Get-SpeechToText](#get-speechtotext) | &nbsp; | Converts audio files to text using OpenAI's Whisper speech recognition model. |
 | [Get-WebLanguageDictionary](#get-weblanguagedictionary) | &nbsp; | Returns a reversed dictionary for all languages supported by Google Search |
-| [GetSpeechToText](#getspeechtotext) | &nbsp; | Converts audio files to text using OpenAI's Whisper speech recognition model. |
 | [Import-GenXdevModules](#import-genxdevmodules) | reloadgenxdev | Imports all GenXdev PowerShell modules into the global scope. |
 | [Initialize-SearchPaths](#initialize-searchpaths) | &nbsp; | Initializes and configures system search paths for package management. |
 | [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do | Executes a script block on each GenXdev module in the workspace. |
 | [Out-Serial](#out-serial) | &nbsp; | Sends a string to a serial port |
-| [ReceiveRealTimeSpeechToText](#receiverealtimespeechtotext) | &nbsp; | &nbsp; |
+| [Receive-RealTimeSpeechToText](#receive-realtimespeechtotext) | &nbsp; | &nbsp; |
 | [resetdefaultmonitor](#resetdefaultmonitor) | &nbsp; | &nbsp; |
 | [SecondScreen](#secondscreen) | &nbsp; | Sets default second-monitor configuration. |
 | [Show-GenXDevCmdlet](#show-genxdevcmdlet) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
@@ -1216,18 +1216,33 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    ConvertTo-HashTable  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+ConvertTo-HashTable [-InputObject] <Object[]>
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -InputObject <Object[]>  
+        The PSCustomObject to convert into a HashTable  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1239,18 +1254,21 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-DefaultWebLanguage  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-DefaultWebLanguage [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1262,18 +1280,416 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ImageGeolocation  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ImageGeolocation [-ImagePath] <string>
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -ImagePath <string>  
+        Path to the image file to analyze  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
+##	Get-SpeechToText 
+```PowerShell 
+
+   Get-SpeechToText  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Get-SpeechToText [-Input] <Object> [-ModelFileDirectoryPath
+    <string>] [-LanguageIn <string>] [-CpuThreads <int>]
+    [-Temperature <float>] [-TemperatureInc <float>]
+    [-NoSpeechThreshold <float>] [-Prompt <string>]
+    [-SuppressRegex <string>] [-TokenTimestampsSumThreshold
+    <float>] [-MaxTokensPerSegment <int>] [-AudioContextSize
+    <int>] [-MaxDuration <timespan>] [-Offset <timespan>]
+    [-MaxLastTextTokens <int>] [-MaxSegmentLength <int>]
+    [-MaxInitialTimestamp <timespan>] [-LengthPenalty
+    <float>] [-EntropyThreshold <float>] [-LogProbThreshold
+    <float>] [-ModelType {Tiny | TinyEn | Base | BaseEn |
+    Small | SmallEn | Medium | MediumEn | LargeV1 | LargeV2
+    | LargeV3 | LargeV3Turbo}] [-Passthru]
+    [-WithTokenTimestamps] [-SplitOnWord] [-WithTranslate]
+    [-WithProgress] [-DontSuppressBlank]
+    [-SingleSegmentOnly] [-PrintSpecialTokens] [-NoContext]
+    [-WithBeamSearchSamplingStrategy] [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -AudioContextSize <int>  
+        Size of the audio context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -CpuThreads <int>  
+        Sets the output language  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DontSuppressBlank  
+        Whether to NOT suppress blank lines  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -EntropyThreshold <float>  
+        Entropy threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Input <Object>  
+        Audio file path, FileInfo object, or any audio format supported by Whisper.  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      WaveFile  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LanguageIn <string>  
+        Sets the input language to detect, defaults to 'en'  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LengthPenalty <float>  
+        Length penalty  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LogProbThreshold <float>  
+        Log probability threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxDuration <timespan>  
+        Maximum duration of the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxInitialTimestamp <timespan>  
+        Start timestamps at this moment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxLastTextTokens <int>  
+        Maximum number of last text tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxSegmentLength <int>  
+        Maximum segment length  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxTokensPerSegment <int>  
+        Maximum number of tokens per segment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelFileDirectoryPath <string>  
+        Path to the model file directory  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelType <GgmlType>  
+        Whisper model type to use, defaults to LargeV3Turbo  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoContext  
+        Do not use context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoSpeechThreshold <float>  
+        No speech threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Offset <timespan>  
+        Offset for the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Passthru  
+        Returns objects instead of strings  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -PrintSpecialTokens  
+        Whether to print special tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Prompt <string>  
+        Prompt to use for the model  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SingleSegmentOnly  
+        Whether to use single segment only  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SplitOnWord  
+        Whether to split on word boundaries  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SuppressRegex <string>  
+        Regex to suppress tokens from the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Temperature <float>  
+        Temperature for speech detection  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TemperatureInc <float>  
+        Temperature increment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TokenTimestampsSumThreshold <float>  
+        Sum threshold for token timestamps, defaults to 0.5  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithBeamSearchSamplingStrategy  
+        Use beam search sampling strategy  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithProgress  
+        Whether to show progress  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTokenTimestamps  
+        Whether to include token timestamps  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTranslate  
+        Whether to translate the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1285,22 +1701,22 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-WebLanguageDictionary  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-WebLanguageDictionary [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
 ``` 
-
-<br/><hr/><br/>
- 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
 
 <br/><hr/><br/>
  
@@ -1311,22 +1727,476 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Initialize-SearchPaths  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Initialize-SearchPaths [[-WorkspaceFolder] <string>]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
 ``` 
+```yaml 
+    -WorkspaceFolder <string>  
+        The workspace folder path to use for node modules and PowerShell paths.  
+        Required?                    false  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
 
 <br/><hr/><br/>
  
+
+##	Receive-RealTimeSpeechToText 
+```PowerShell 
+
+   Receive-RealTimeSpeechToText  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Receive-RealTimeSpeechToText [-ModelFileDirectoryPath
+    <string>] [-UseDesktopAudioCapture]
+    [-UseDesktopAndRecordingDevice] [-AudioDevice <string>]
+    [-Passthru] [-WithTokenTimestamps]
+    [-TokenTimestampsSumThreshold <float>] [-SplitOnWord]
+    [-MaxTokensPerSegment <int>] [-IgnoreSilence]
+    [-MaxDurationOfSilence <timespan>] [-SilenceThreshold
+    <int>] [-LanguageIn <string>] [-CpuThreads <int>]
+    [-Temperature <float>] [-TemperatureInc <float>]
+    [-WithTranslate] [-Prompt <string>] [-SuppressRegex
+    <string>] [-WithProgress] [-AudioContextSize <int>]
+    [-DontSuppressBlank] [-MaxDuration <timespan>] [-Offset
+    <timespan>] [-MaxLastTextTokens <int>]
+    [-SingleSegmentOnly] [-PrintSpecialTokens]
+    [-MaxSegmentLength <int>] [-MaxInitialTimestamp
+    <timespan>] [-LengthPenalty <float>] [-EntropyThreshold
+    <float>] [-LogProbThreshold <float>] [-NoSpeechThreshold
+    <float>] [-NoContext] [-WithBeamSearchSamplingStrategy]
+    [-ModelType {Tiny | TinyEn | Base | BaseEn | Small |
+    SmallEn | Medium | MediumEn | LargeV1 | LargeV2 |
+    LargeV3 | LargeV3Turbo}] [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -AudioContextSize <int>  
+        Size of the audio context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -AudioDevice <string>  
+        Use both desktop and recording device  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -CpuThreads <int>  
+        Sets the output language  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DontSuppressBlank  
+        Whether to NOT suppress blank lines  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -EntropyThreshold <float>  
+        Entropy threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IgnoreSilence  
+        Whether to ignore silence (will mess up timestamps)  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LanguageIn <string>  
+        Sets the input language to detect, defaults to 'en'  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LengthPenalty <float>  
+        Length penalty  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LogProbThreshold <float>  
+        Log probability threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxDuration <timespan>  
+        Maximum duration of the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxDurationOfSilence <timespan>  
+        Maximum duration of silence before automatically stopping recording  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxInitialTimestamp <timespan>  
+        Start timestamps at this moment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxLastTextTokens <int>  
+        Maximum number of last text tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxSegmentLength <int>  
+        Maximum segment length  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxTokensPerSegment <int>  
+        Maximum number of tokens per segment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelFileDirectoryPath <string>  
+        Path to the model file  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelType <GgmlType>  
+        Whisper model type to use, defaults to Small  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoContext  
+        Do not use context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoSpeechThreshold <float>  
+        No speech threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Offset <timespan>  
+        Offset for the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Passthru  
+        Returns objects instead of strings  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -PrintSpecialTokens  
+        Whether to print special tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Prompt <string>  
+        Prompt to use for the model  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SilenceThreshold <int>  
+        Silence detect threshold (0..32767 defaults to 30)  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SingleSegmentOnly  
+        Whether to use single segment only  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SplitOnWord  
+        Whether to split on word boundaries  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SuppressRegex <string>  
+        Regex to suppress tokens from the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Temperature <float>  
+        Temperature for speech detection  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TemperatureInc <float>  
+        Temperature increment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TokenTimestampsSumThreshold <float>  
+        Sum threshold for token timestamps, defaults to 0.5  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -UseDesktopAndRecordingDevice  
+        Whether to use both desktop audio capture and recording device simultaneously  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -UseDesktopAudioCapture  
+        Whether to use desktop audio capture instead of microphone  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithBeamSearchSamplingStrategy  
+        Use beam search sampling strategy  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithProgress  
+        Whether to show progress  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTokenTimestamps  
+        Whether to include token timestamps  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTranslate  
+        Whether to translate the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
 
 <br/><hr/><br/>
  
@@ -1340,18 +2210,68 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ApparentSizeAtArmLength  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ApparentSizeAtArmLength [-DistanceInMeters] <double>
+    [-SizeInMeters] <double> [[-ArmLengthInMeters] <double>]
+    [[-As] {millimeters | centimeters | meters | inches |
+    feet}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -ArmLengthInMeters <double>  
+        The arm length in meters (default: 0.7)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output size  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DistanceInMeters <double>  
+        The distance to the object in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SizeInMeters <double>  
+        The actual size of the object in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1363,18 +2283,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-AtEyeLengthSizeInMM  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-AtEyeLengthSizeInMM [-DistanceInMeters] <double>
+    [-SizeInMeters] <double> [-EyeToArmLengthInMeters
+    <double>] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -DistanceInMeters <double>  
+        The distance to the object in meters.  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -EyeToArmLengthInMeters <double>  
+        The arm's length distance in meters. Default value is 0.7.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SizeInMeters <double>  
+        The actual size of the object in meters.  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1386,18 +2344,69 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-BuoyantForceByDisplacedVolumeAndDensity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-BuoyantForceByDisplacedVolumeAndDensity
+    [-DisplacedVolumeInCubicMeters] <double>
+    [-FluidDensityInKilogramsPerCubicMeter] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {newtons | poundforce}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for force  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DisplacedVolumeInCubicMeters <double>  
+        Displaced volume in m³  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -FluidDensityInKilogramsPerCubicMeter <double>  
+        Fluid density in kg/m³  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1409,18 +2418,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-CentripetalAccelerationByVelocityAndRadius  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-CentripetalAccelerationByVelocityAndRadius
+    [-VelocityInMetersPerSecond] <double> [-RadiusInMeters]
+    <double> [[-As] {m/s² | g}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for acceleration  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -RadiusInMeters <double>  
+        Radius in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1432,18 +2479,100 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-DopplerFrequencyShiftBySourceSpeedAndObserverSpeed  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-DopplerFrequencyShiftBySourceSpeedAndObserverSpeed
+    [-OriginalFrequencyInHertz] <double>
+    [-SourceSpeedInMetersPerSecond] <double>
+    [-ObserverSpeedInMetersPerSecond] <double>
+    [[-SpeedOfSoundInMetersPerSecond] <double>] [[-As]
+    {hertz | kilohertz | megahertz}] [<CommonParameters>]
+Get-DopplerFrequencyShiftBySourceSpeedAndObserverSpeed
+    [-OriginalFrequencyInHertz] <double>
+    [-SourceSpeedInMetersPerSecond] <double>
+    [-ObserverSpeedInMetersPerSecond] <double> [-Medium]
+    {air | water | seawater | steel | glass | lead | gold |
+    copper | rubber | vacuum | helium | co2 | methane}
+    [[-As] {hertz | kilohertz | megahertz}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for frequency  
+        Required?                    false  
+        Position?                    4  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium  
+        Required?                    true  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ObserverSpeedInMetersPerSecond <double>  
+        Observer speed in m/s (positive towards source)  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -OriginalFrequencyInHertz <double>  
+        Original frequency in Hz  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SourceSpeedInMetersPerSecond <double>  
+        Source speed in m/s (positive towards observer)  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedOfSoundInMetersPerSecond <double>  
+        Speed of sound in m/s (default: 343)  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1455,18 +2584,80 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-DragForceByVelocityDensityAreaAndCoefficient  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-DragForceByVelocityDensityAreaAndCoefficient
+    [-VelocityInMetersPerSecond] <double>
+    [-DensityInKilogramsPerCubicMeter] <double>
+    [-AreaInSquareMeters] <double> [-Coefficient] <double>
+    [[-As] {newtons | poundforce}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AreaInSquareMeters <double>  
+        Cross-sectional area in m²  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for force  
+        Required?                    false  
+        Position?                    4  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Coefficient <double>  
+        Drag coefficient  
+        Required?                    true  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DensityInKilogramsPerCubicMeter <double>  
+        Fluid density in kg/m³  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1478,18 +2669,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-EscapeVelocityByMassAndRadius  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-EscapeVelocityByMassAndRadius [-MassInKilograms]
+    <double> [-RadiusInMeters] <double> [[-As] {m/s | km/h |
+    mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass of body in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -RadiusInMeters <double>  
+        Radius in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1501,18 +2730,69 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-FreeFallDistance  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-FreeFallDistance [-DurationInSeconds] <double>
+    [[-TerminalVelocityInMetersPerSecond] <double>]
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {meters | kilometers | centimeters | millimeters | feet
+    | inches | miles | yards}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output distance  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DurationInSeconds <double>  
+        The time duration of the fall in seconds  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        The acceleration due to gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TerminalVelocityInMetersPerSecond <double>  
+        The terminal velocity in meters per second (default: 53)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1524,18 +2804,57 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-FreeFallHeight  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-FreeFallHeight [-DurationInSeconds] <double>
+    [[-TerminalVelocityInMs] <double>] [[-As] {meters |
+    kilometers | centimeters | millimeters | feet | inches |
+    miles | yards}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output height  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DurationInSeconds <double>  
+        The time duration of the fall in seconds  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TerminalVelocityInMs <double>  
+        The terminal velocity in meters per second (default: 53 m/s for human)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1547,18 +2866,57 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-FreeFallTime  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-FreeFallTime [-HeightInMeters] <double>
+    [[-TerminalVelocityInMs] <double>] [[-As] {seconds |
+    minutes | hours | milliseconds | days}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output time  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -HeightInMeters <double>  
+        The height to fall in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TerminalVelocityInMs <double>  
+        The terminal velocity in meters per second (default: 53 m/s for human)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1570,18 +2928,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ImpactVelocityByHeightAndGravity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ImpactVelocityByHeightAndGravity [-HeightInMeters]
+    <double> [[-GravityInMetersPerSecondSquared] <double>]
+    [[-As] {m/s | km/h | mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity. Default 'm/s'.  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s². Default 9.81.  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -HeightInMeters <double>  
+        Height in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1593,18 +2989,57 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-KineticEnergyByMassAndVelocity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-KineticEnergyByMassAndVelocity [-MassInKilograms]
+    <double> [-VelocityInMetersPerSecond] <double> [[-As]
+    {joules | calories | kilowatthours}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for energy  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1616,18 +3051,72 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-LightTravelTimeByDistance  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-LightTravelTimeByDistance [-DistanceInMeters] <double>
+    [[-SpeedOfLightInMetersPerSecond] <double>] [[-As]
+    {seconds | minutes | hours | milliseconds | days}]
+    [<CommonParameters>]
+Get-LightTravelTimeByDistance [-DistanceInMeters] <double>
+    [-Medium] {vacuum | air | water | glass | diamond}
+    [[-As] {seconds | minutes | hours | milliseconds |
+    days}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for time  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DistanceInMeters <double>  
+        Distance in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium through which light travels  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedOfLightInMetersPerSecond <double>  
+        Speed of light in m/s (default: 299792458)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1639,18 +3128,45 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-MagnificationByObjectDistanceAndImageDistance  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-MagnificationByObjectDistanceAndImageDistance
+    [-ObjectDistanceInMeters] <double>
+    [-ImageDistanceInMeters] <double> [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -ImageDistanceInMeters <double>  
+        Image distance in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ObjectDistanceInMeters <double>  
+        Object distance in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1662,18 +3178,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-MomentumByMassAndVelocity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-MomentumByMassAndVelocity [-MassInKilograms] <double>
+    [-VelocityInMetersPerSecond] <double> [[-As] {kgm/s}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for momentum  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1685,18 +3239,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-OrbitalVelocityByRadiusAndMass  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-OrbitalVelocityByRadiusAndMass [-RadiusInMeters]
+    <double> [-CentralMassInKilograms] <double> [[-As] {m/s
+    | km/h | mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -CentralMassInKilograms <double>  
+        Central mass in kg  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -RadiusInMeters <double>  
+        Orbital radius in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1708,18 +3300,69 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-PotentialEnergyByMassHeightAndGravity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-PotentialEnergyByMassHeightAndGravity [-MassInKilograms]
+    <double> [-HeightInMeters] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {joules | calories | kilowatthours}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for energy  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -HeightInMeters <double>  
+        Height in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1731,18 +3374,70 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ProjectileRangeByInitialSpeedAndAngle  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ProjectileRangeByInitialSpeedAndAngle
+    [-InitialSpeedInMetersPerSecond] <double>
+    [-AngleInDegrees] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {meters | kilometers | centimeters | millimeters | feet
+    | inches | miles | yards}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AngleInDegrees <double>  
+        Launch angle in degrees  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for range  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -InitialSpeedInMetersPerSecond <double>  
+        Initial speed in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1754,18 +3449,68 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-RefractionAngleByIncidentAngleAndIndices  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-RefractionAngleByIncidentAngleAndIndices
+    [-IncidentAngleInDegrees] <double> [-IndexOfRefraction1]
+    <double> [-IndexOfRefraction2] <double> [[-As] {degrees
+    | radians}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for angle  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IncidentAngleInDegrees <double>  
+        Incident angle in degrees  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IndexOfRefraction1 <double>  
+        Refractive index of first medium  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IndexOfRefraction2 <double>  
+        Refractive index of second medium  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1777,18 +3522,72 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ResonantFrequencyByLengthAndSpeed  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ResonantFrequencyByLengthAndSpeed [-LengthInMeters]
+    <double> [-SpeedInMetersPerSecond] <double> [[-As]
+    {hertz | kilohertz | megahertz}] [<CommonParameters>]
+Get-ResonantFrequencyByLengthAndSpeed [-LengthInMeters]
+    <double> [-Medium] {air | water | seawater | steel |
+    glass | lead | gold | copper | rubber | vacuum | helium
+    | co2 | methane} [[-As] {hertz | kilohertz | megahertz}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for frequency  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LengthInMeters <double>  
+        Length in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedInMetersPerSecond <double>  
+        Wave speed in m/s  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1800,18 +3599,74 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-SoundTravelDistanceByTime  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-SoundTravelDistanceByTime [-TimeInSeconds] <double>
+    [[-SpeedOfSoundInMetersPerSecond] <double>] [[-As]
+    {meters | kilometers | centimeters | millimeters | feet
+    | inches | miles | yards}] [<CommonParameters>]
+Get-SoundTravelDistanceByTime [-TimeInSeconds] <double>
+    [-Medium] {air | water | seawater | steel | glass | lead
+    | gold | copper | rubber | vacuum | helium | co2 |
+    methane} [[-As] {meters | kilometers | centimeters |
+    millimeters | feet | inches | miles | yards}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output distance  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium through which sound travels  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedOfSoundInMetersPerSecond <double>  
+        Speed of sound in m/s (default: 343)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TimeInSeconds <double>  
+        The time in seconds  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1823,18 +3678,93 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-TerminalVelocityByMassGravityDensityAndArea  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-TerminalVelocityByMassGravityDensityAndArea
+    [-MassInKilograms] <double>
+    [[-GravityInMetersPerSecondSquared] <double>]
+    [-DensityInKilogramsPerCubicMeter] <double>
+    [-AreaInSquareMeters] <double> [[-DragCoefficient]
+    <double>] [[-As] {m/s | km/h | mph | ft/s}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AreaInSquareMeters <double>  
+        Cross-sectional area in m²  
+        Required?                    true  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity  
+        Required?                    false  
+        Position?                    5  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DensityInKilogramsPerCubicMeter <double>  
+        Fluid density in kg/m³  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DragCoefficient <double>  
+        Drag coefficient (default: 0.5)  
+        Required?                    false  
+        Position?                    4  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1846,18 +3776,70 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-TimeOfFlightByInitialVelocityAndAngle  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-TimeOfFlightByInitialVelocityAndAngle
+    [-InitialVelocityInMetersPerSecond] <double>
+    [-AngleInDegrees] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {seconds | minutes | hours | milliseconds | days}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AngleInDegrees <double>  
+        Launch angle in degrees  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for time  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -InitialVelocityInMetersPerSecond <double>  
+        Initial velocity in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -1869,18 +3851,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-WaveSpeedByFrequencyAndWavelength  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-WaveSpeedByFrequencyAndWavelength [-FrequencyInHertz]
+    <double> [-WavelengthInMeters] <double> [[-As] {m/s |
+    km/h | mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for speed  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -FrequencyInHertz <double>  
+        Frequency in Hz  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WavelengthInMeters <double>  
+        Wavelength in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -2930,18 +4950,33 @@ sidebyside [<CommonParameters>]
    ConvertTo-HashTable  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+ConvertTo-HashTable [-InputObject] <Object[]>
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -InputObject <Object[]>  
+        The PSCustomObject to convert into a HashTable  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -2953,18 +4988,21 @@ sidebyside [<CommonParameters>]
    Get-DefaultWebLanguage  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-DefaultWebLanguage [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -2976,18 +5014,416 @@ sidebyside [<CommonParameters>]
    Get-ImageGeolocation  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ImageGeolocation [-ImagePath] <string>
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -ImagePath <string>  
+        Path to the image file to analyze  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue, ByPropertyName)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
+##	Get-SpeechToText 
+```PowerShell 
+
+   Get-SpeechToText  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Get-SpeechToText [-Input] <Object> [-ModelFileDirectoryPath
+    <string>] [-LanguageIn <string>] [-CpuThreads <int>]
+    [-Temperature <float>] [-TemperatureInc <float>]
+    [-NoSpeechThreshold <float>] [-Prompt <string>]
+    [-SuppressRegex <string>] [-TokenTimestampsSumThreshold
+    <float>] [-MaxTokensPerSegment <int>] [-AudioContextSize
+    <int>] [-MaxDuration <timespan>] [-Offset <timespan>]
+    [-MaxLastTextTokens <int>] [-MaxSegmentLength <int>]
+    [-MaxInitialTimestamp <timespan>] [-LengthPenalty
+    <float>] [-EntropyThreshold <float>] [-LogProbThreshold
+    <float>] [-ModelType {Tiny | TinyEn | Base | BaseEn |
+    Small | SmallEn | Medium | MediumEn | LargeV1 | LargeV2
+    | LargeV3 | LargeV3Turbo}] [-Passthru]
+    [-WithTokenTimestamps] [-SplitOnWord] [-WithTranslate]
+    [-WithProgress] [-DontSuppressBlank]
+    [-SingleSegmentOnly] [-PrintSpecialTokens] [-NoContext]
+    [-WithBeamSearchSamplingStrategy] [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -AudioContextSize <int>  
+        Size of the audio context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -CpuThreads <int>  
+        Sets the output language  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DontSuppressBlank  
+        Whether to NOT suppress blank lines  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -EntropyThreshold <float>  
+        Entropy threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Input <Object>  
+        Audio file path, FileInfo object, or any audio format supported by Whisper.  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      WaveFile  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LanguageIn <string>  
+        Sets the input language to detect, defaults to 'en'  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LengthPenalty <float>  
+        Length penalty  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LogProbThreshold <float>  
+        Log probability threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxDuration <timespan>  
+        Maximum duration of the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxInitialTimestamp <timespan>  
+        Start timestamps at this moment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxLastTextTokens <int>  
+        Maximum number of last text tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxSegmentLength <int>  
+        Maximum segment length  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxTokensPerSegment <int>  
+        Maximum number of tokens per segment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelFileDirectoryPath <string>  
+        Path to the model file directory  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelType <GgmlType>  
+        Whisper model type to use, defaults to LargeV3Turbo  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoContext  
+        Do not use context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoSpeechThreshold <float>  
+        No speech threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Offset <timespan>  
+        Offset for the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Passthru  
+        Returns objects instead of strings  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -PrintSpecialTokens  
+        Whether to print special tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Prompt <string>  
+        Prompt to use for the model  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SingleSegmentOnly  
+        Whether to use single segment only  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SplitOnWord  
+        Whether to split on word boundaries  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SuppressRegex <string>  
+        Regex to suppress tokens from the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Temperature <float>  
+        Temperature for speech detection  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TemperatureInc <float>  
+        Temperature increment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TokenTimestampsSumThreshold <float>  
+        Sum threshold for token timestamps, defaults to 0.5  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithBeamSearchSamplingStrategy  
+        Use beam search sampling strategy  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithProgress  
+        Whether to show progress  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTokenTimestamps  
+        Whether to include token timestamps  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTranslate  
+        Whether to translate the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -2999,22 +5435,22 @@ sidebyside [<CommonParameters>]
    Get-WebLanguageDictionary  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-WebLanguageDictionary [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
 ``` 
-
-<br/><hr/><br/>
- 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
 
 <br/><hr/><br/>
  
@@ -3025,22 +5461,476 @@ sidebyside [<CommonParameters>]
    Initialize-SearchPaths  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Initialize-SearchPaths [[-WorkspaceFolder] <string>]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
 ``` 
+```yaml 
+    -WorkspaceFolder <string>  
+        The workspace folder path to use for node modules and PowerShell paths.  
+        Required?                    false  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
 
 <br/><hr/><br/>
  
+
+##	Receive-RealTimeSpeechToText 
+```PowerShell 
+
+   Receive-RealTimeSpeechToText  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Receive-RealTimeSpeechToText [-ModelFileDirectoryPath
+    <string>] [-UseDesktopAudioCapture]
+    [-UseDesktopAndRecordingDevice] [-AudioDevice <string>]
+    [-Passthru] [-WithTokenTimestamps]
+    [-TokenTimestampsSumThreshold <float>] [-SplitOnWord]
+    [-MaxTokensPerSegment <int>] [-IgnoreSilence]
+    [-MaxDurationOfSilence <timespan>] [-SilenceThreshold
+    <int>] [-LanguageIn <string>] [-CpuThreads <int>]
+    [-Temperature <float>] [-TemperatureInc <float>]
+    [-WithTranslate] [-Prompt <string>] [-SuppressRegex
+    <string>] [-WithProgress] [-AudioContextSize <int>]
+    [-DontSuppressBlank] [-MaxDuration <timespan>] [-Offset
+    <timespan>] [-MaxLastTextTokens <int>]
+    [-SingleSegmentOnly] [-PrintSpecialTokens]
+    [-MaxSegmentLength <int>] [-MaxInitialTimestamp
+    <timespan>] [-LengthPenalty <float>] [-EntropyThreshold
+    <float>] [-LogProbThreshold <float>] [-NoSpeechThreshold
+    <float>] [-NoContext] [-WithBeamSearchSamplingStrategy]
+    [-ModelType {Tiny | TinyEn | Base | BaseEn | Small |
+    SmallEn | Medium | MediumEn | LargeV1 | LargeV2 |
+    LargeV3 | LargeV3Turbo}] [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -AudioContextSize <int>  
+        Size of the audio context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -AudioDevice <string>  
+        Use both desktop and recording device  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -CpuThreads <int>  
+        Sets the output language  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DontSuppressBlank  
+        Whether to NOT suppress blank lines  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -EntropyThreshold <float>  
+        Entropy threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IgnoreSilence  
+        Whether to ignore silence (will mess up timestamps)  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LanguageIn <string>  
+        Sets the input language to detect, defaults to 'en'  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LengthPenalty <float>  
+        Length penalty  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LogProbThreshold <float>  
+        Log probability threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxDuration <timespan>  
+        Maximum duration of the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxDurationOfSilence <timespan>  
+        Maximum duration of silence before automatically stopping recording  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxInitialTimestamp <timespan>  
+        Start timestamps at this moment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxLastTextTokens <int>  
+        Maximum number of last text tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxSegmentLength <int>  
+        Maximum segment length  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MaxTokensPerSegment <int>  
+        Maximum number of tokens per segment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelFileDirectoryPath <string>  
+        Path to the model file  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ModelType <GgmlType>  
+        Whisper model type to use, defaults to Small  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoContext  
+        Do not use context  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -NoSpeechThreshold <float>  
+        No speech threshold  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Offset <timespan>  
+        Offset for the audio  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Passthru  
+        Returns objects instead of strings  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -PrintSpecialTokens  
+        Whether to print special tokens  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Prompt <string>  
+        Prompt to use for the model  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SilenceThreshold <int>  
+        Silence detect threshold (0..32767 defaults to 30)  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SingleSegmentOnly  
+        Whether to use single segment only  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SplitOnWord  
+        Whether to split on word boundaries  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SuppressRegex <string>  
+        Regex to suppress tokens from the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Temperature <float>  
+        Temperature for speech detection  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TemperatureInc <float>  
+        Temperature increment  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TokenTimestampsSumThreshold <float>  
+        Sum threshold for token timestamps, defaults to 0.5  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -UseDesktopAndRecordingDevice  
+        Whether to use both desktop audio capture and recording device simultaneously  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -UseDesktopAudioCapture  
+        Whether to use desktop audio capture instead of microphone  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithBeamSearchSamplingStrategy  
+        Use beam search sampling strategy  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithProgress  
+        Whether to show progress  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTokenTimestamps  
+        Whether to include token timestamps  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WithTranslate  
+        Whether to translate the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
 
 <br/><hr/><br/>
  
@@ -3114,18 +6004,68 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ApparentSizeAtArmLength  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ApparentSizeAtArmLength [-DistanceInMeters] <double>
+    [-SizeInMeters] <double> [[-ArmLengthInMeters] <double>]
+    [[-As] {millimeters | centimeters | meters | inches |
+    feet}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -ArmLengthInMeters <double>  
+        The arm length in meters (default: 0.7)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output size  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DistanceInMeters <double>  
+        The distance to the object in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SizeInMeters <double>  
+        The actual size of the object in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3137,18 +6077,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-AtEyeLengthSizeInMM  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-AtEyeLengthSizeInMM [-DistanceInMeters] <double>
+    [-SizeInMeters] <double> [-EyeToArmLengthInMeters
+    <double>] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -DistanceInMeters <double>  
+        The distance to the object in meters.  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -EyeToArmLengthInMeters <double>  
+        The arm's length distance in meters. Default value is 0.7.  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SizeInMeters <double>  
+        The actual size of the object in meters.  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3160,18 +6138,69 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-BuoyantForceByDisplacedVolumeAndDensity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-BuoyantForceByDisplacedVolumeAndDensity
+    [-DisplacedVolumeInCubicMeters] <double>
+    [-FluidDensityInKilogramsPerCubicMeter] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {newtons | poundforce}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for force  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DisplacedVolumeInCubicMeters <double>  
+        Displaced volume in m³  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -FluidDensityInKilogramsPerCubicMeter <double>  
+        Fluid density in kg/m³  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3183,18 +6212,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-CentripetalAccelerationByVelocityAndRadius  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-CentripetalAccelerationByVelocityAndRadius
+    [-VelocityInMetersPerSecond] <double> [-RadiusInMeters]
+    <double> [[-As] {m/s² | g}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for acceleration  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -RadiusInMeters <double>  
+        Radius in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3206,18 +6273,100 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-DopplerFrequencyShiftBySourceSpeedAndObserverSpeed  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-DopplerFrequencyShiftBySourceSpeedAndObserverSpeed
+    [-OriginalFrequencyInHertz] <double>
+    [-SourceSpeedInMetersPerSecond] <double>
+    [-ObserverSpeedInMetersPerSecond] <double>
+    [[-SpeedOfSoundInMetersPerSecond] <double>] [[-As]
+    {hertz | kilohertz | megahertz}] [<CommonParameters>]
+Get-DopplerFrequencyShiftBySourceSpeedAndObserverSpeed
+    [-OriginalFrequencyInHertz] <double>
+    [-SourceSpeedInMetersPerSecond] <double>
+    [-ObserverSpeedInMetersPerSecond] <double> [-Medium]
+    {air | water | seawater | steel | glass | lead | gold |
+    copper | rubber | vacuum | helium | co2 | methane}
+    [[-As] {hertz | kilohertz | megahertz}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for frequency  
+        Required?                    false  
+        Position?                    4  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium  
+        Required?                    true  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ObserverSpeedInMetersPerSecond <double>  
+        Observer speed in m/s (positive towards source)  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -OriginalFrequencyInHertz <double>  
+        Original frequency in Hz  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SourceSpeedInMetersPerSecond <double>  
+        Source speed in m/s (positive towards observer)  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedOfSoundInMetersPerSecond <double>  
+        Speed of sound in m/s (default: 343)  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3229,18 +6378,80 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-DragForceByVelocityDensityAreaAndCoefficient  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-DragForceByVelocityDensityAreaAndCoefficient
+    [-VelocityInMetersPerSecond] <double>
+    [-DensityInKilogramsPerCubicMeter] <double>
+    [-AreaInSquareMeters] <double> [-Coefficient] <double>
+    [[-As] {newtons | poundforce}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AreaInSquareMeters <double>  
+        Cross-sectional area in m²  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for force  
+        Required?                    false  
+        Position?                    4  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Coefficient <double>  
+        Drag coefficient  
+        Required?                    true  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DensityInKilogramsPerCubicMeter <double>  
+        Fluid density in kg/m³  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3252,18 +6463,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-EscapeVelocityByMassAndRadius  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-EscapeVelocityByMassAndRadius [-MassInKilograms]
+    <double> [-RadiusInMeters] <double> [[-As] {m/s | km/h |
+    mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass of body in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -RadiusInMeters <double>  
+        Radius in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3275,18 +6524,69 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-FreeFallDistance  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-FreeFallDistance [-DurationInSeconds] <double>
+    [[-TerminalVelocityInMetersPerSecond] <double>]
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {meters | kilometers | centimeters | millimeters | feet
+    | inches | miles | yards}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output distance  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DurationInSeconds <double>  
+        The time duration of the fall in seconds  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        The acceleration due to gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TerminalVelocityInMetersPerSecond <double>  
+        The terminal velocity in meters per second (default: 53)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3298,18 +6598,57 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-FreeFallHeight  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-FreeFallHeight [-DurationInSeconds] <double>
+    [[-TerminalVelocityInMs] <double>] [[-As] {meters |
+    kilometers | centimeters | millimeters | feet | inches |
+    miles | yards}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output height  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DurationInSeconds <double>  
+        The time duration of the fall in seconds  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TerminalVelocityInMs <double>  
+        The terminal velocity in meters per second (default: 53 m/s for human)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3321,18 +6660,57 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-FreeFallTime  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-FreeFallTime [-HeightInMeters] <double>
+    [[-TerminalVelocityInMs] <double>] [[-As] {seconds |
+    minutes | hours | milliseconds | days}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output time  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -HeightInMeters <double>  
+        The height to fall in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TerminalVelocityInMs <double>  
+        The terminal velocity in meters per second (default: 53 m/s for human)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3344,18 +6722,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ImpactVelocityByHeightAndGravity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ImpactVelocityByHeightAndGravity [-HeightInMeters]
+    <double> [[-GravityInMetersPerSecondSquared] <double>]
+    [[-As] {m/s | km/h | mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity. Default 'm/s'.  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s². Default 9.81.  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -HeightInMeters <double>  
+        Height in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3367,18 +6783,57 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-KineticEnergyByMassAndVelocity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-KineticEnergyByMassAndVelocity [-MassInKilograms]
+    <double> [-VelocityInMetersPerSecond] <double> [[-As]
+    {joules | calories | kilowatthours}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for energy  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3390,18 +6845,72 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-LightTravelTimeByDistance  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-LightTravelTimeByDistance [-DistanceInMeters] <double>
+    [[-SpeedOfLightInMetersPerSecond] <double>] [[-As]
+    {seconds | minutes | hours | milliseconds | days}]
+    [<CommonParameters>]
+Get-LightTravelTimeByDistance [-DistanceInMeters] <double>
+    [-Medium] {vacuum | air | water | glass | diamond}
+    [[-As] {seconds | minutes | hours | milliseconds |
+    days}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for time  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DistanceInMeters <double>  
+        Distance in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium through which light travels  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedOfLightInMetersPerSecond <double>  
+        Speed of light in m/s (default: 299792458)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3413,18 +6922,45 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-MagnificationByObjectDistanceAndImageDistance  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-MagnificationByObjectDistanceAndImageDistance
+    [-ObjectDistanceInMeters] <double>
+    [-ImageDistanceInMeters] <double> [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -ImageDistanceInMeters <double>  
+        Image distance in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -ObjectDistanceInMeters <double>  
+        Object distance in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3436,18 +6972,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-MomentumByMassAndVelocity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-MomentumByMassAndVelocity [-MassInKilograms] <double>
+    [-VelocityInMetersPerSecond] <double> [[-As] {kgm/s}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for momentum  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -VelocityInMetersPerSecond <double>  
+        Velocity in m/s  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3459,18 +7033,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-OrbitalVelocityByRadiusAndMass  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-OrbitalVelocityByRadiusAndMass [-RadiusInMeters]
+    <double> [-CentralMassInKilograms] <double> [[-As] {m/s
+    | km/h | mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -CentralMassInKilograms <double>  
+        Central mass in kg  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -RadiusInMeters <double>  
+        Orbital radius in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3482,18 +7094,69 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-PotentialEnergyByMassHeightAndGravity  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-PotentialEnergyByMassHeightAndGravity [-MassInKilograms]
+    <double> [-HeightInMeters] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {joules | calories | kilowatthours}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for energy  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -HeightInMeters <double>  
+        Height in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3505,18 +7168,70 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ProjectileRangeByInitialSpeedAndAngle  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ProjectileRangeByInitialSpeedAndAngle
+    [-InitialSpeedInMetersPerSecond] <double>
+    [-AngleInDegrees] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {meters | kilometers | centimeters | millimeters | feet
+    | inches | miles | yards}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AngleInDegrees <double>  
+        Launch angle in degrees  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for range  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -InitialSpeedInMetersPerSecond <double>  
+        Initial speed in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3528,18 +7243,68 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-RefractionAngleByIncidentAngleAndIndices  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-RefractionAngleByIncidentAngleAndIndices
+    [-IncidentAngleInDegrees] <double> [-IndexOfRefraction1]
+    <double> [-IndexOfRefraction2] <double> [[-As] {degrees
+    | radians}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for angle  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IncidentAngleInDegrees <double>  
+        Incident angle in degrees  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IndexOfRefraction1 <double>  
+        Refractive index of first medium  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -IndexOfRefraction2 <double>  
+        Refractive index of second medium  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3551,18 +7316,72 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-ResonantFrequencyByLengthAndSpeed  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-ResonantFrequencyByLengthAndSpeed [-LengthInMeters]
+    <double> [-SpeedInMetersPerSecond] <double> [[-As]
+    {hertz | kilohertz | megahertz}] [<CommonParameters>]
+Get-ResonantFrequencyByLengthAndSpeed [-LengthInMeters]
+    <double> [-Medium] {air | water | seawater | steel |
+    glass | lead | gold | copper | rubber | vacuum | helium
+    | co2 | methane} [[-As] {hertz | kilohertz | megahertz}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for frequency  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -LengthInMeters <double>  
+        Length in meters  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedInMetersPerSecond <double>  
+        Wave speed in m/s  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3574,18 +7393,74 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-SoundTravelDistanceByTime  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-SoundTravelDistanceByTime [-TimeInSeconds] <double>
+    [[-SpeedOfSoundInMetersPerSecond] <double>] [[-As]
+    {meters | kilometers | centimeters | millimeters | feet
+    | inches | miles | yards}] [<CommonParameters>]
+Get-SoundTravelDistanceByTime [-TimeInSeconds] <double>
+    [-Medium] {air | water | seawater | steel | glass | lead
+    | gold | copper | rubber | vacuum | helium | co2 |
+    methane} [[-As] {meters | kilometers | centimeters |
+    millimeters | feet | inches | miles | yards}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        The unit for the output distance  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Medium <string>  
+        The medium through which sound travels  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           ByMedium  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -SpeedOfSoundInMetersPerSecond <double>  
+        Speed of sound in m/s (default: 343)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           BySpeed  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -TimeInSeconds <double>  
+        The time in seconds  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3597,18 +7472,93 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-TerminalVelocityByMassGravityDensityAndArea  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-TerminalVelocityByMassGravityDensityAndArea
+    [-MassInKilograms] <double>
+    [[-GravityInMetersPerSecondSquared] <double>]
+    [-DensityInKilogramsPerCubicMeter] <double>
+    [-AreaInSquareMeters] <double> [[-DragCoefficient]
+    <double>] [[-As] {m/s | km/h | mph | ft/s}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AreaInSquareMeters <double>  
+        Cross-sectional area in m²  
+        Required?                    true  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for velocity  
+        Required?                    false  
+        Position?                    5  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DensityInKilogramsPerCubicMeter <double>  
+        Fluid density in kg/m³  
+        Required?                    true  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -DragCoefficient <double>  
+        Drag coefficient (default: 0.5)  
+        Required?                    false  
+        Position?                    4  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -MassInKilograms <double>  
+        Mass in kg  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3620,18 +7570,70 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-TimeOfFlightByInitialVelocityAndAngle  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-TimeOfFlightByInitialVelocityAndAngle
+    [-InitialVelocityInMetersPerSecond] <double>
+    [-AngleInDegrees] <double>
+    [[-GravityInMetersPerSecondSquared] <double>] [[-As]
+    {seconds | minutes | hours | milliseconds | days}]
+    [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -AngleInDegrees <double>  
+        Launch angle in degrees  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for time  
+        Required?                    false  
+        Position?                    3  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -GravityInMetersPerSecondSquared <double>  
+        Gravity in m/s² (default: 9.81)  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -InitialVelocityInMetersPerSecond <double>  
+        Initial velocity in m/s  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>
@@ -3643,18 +7645,56 @@ Convert-PhysicsUnit [-Value] <double> [-FromUnit] <string>
    Get-WaveSpeedByFrequencyAndWavelength  
 ``` 
 
-### SYNOPSIS 
-
 ### SYNTAX 
 ```PowerShell 
- 
+Get-WaveSpeedByFrequencyAndWavelength [-FrequencyInHertz]
+    <double> [-WavelengthInMeters] <double> [[-As] {m/s |
+    km/h | mph | ft/s}] [<CommonParameters>] 
 ``` 
-
-### DESCRIPTION 
 
 ### PARAMETERS 
 ```yaml 
  
+``` 
+```yaml 
+    -As <string>  
+        Output unit for speed  
+        Required?                    false  
+        Position?                    2  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -FrequencyInHertz <double>  
+        Frequency in Hz  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -WavelengthInMeters <double>  
+        Wavelength in meters  
+        Required?                    true  
+        Position?                    1  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
 ``` 
 
 <br/><hr/><br/>

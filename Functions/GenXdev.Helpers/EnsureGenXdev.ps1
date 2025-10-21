@@ -2,7 +2,7 @@
 Part of PowerShell module : GenXdev.Helpers
 Original cmdlet filename  : EnsureGenXdev.ps1
 Original author           : René Vaessen / GenXdev
-Version                   : 1.302.2025
+Version                   : 1.304.2025
 ################################################################################
 Copyright (c)  René Vaessen / GenXdev
 
@@ -166,7 +166,7 @@ function EnsureGenXdev {
             Microsoft.PowerShell.Core\Where-Object {
 
                 # exclude self and other specific cmdlets to prevent recursion
-                (@('EnsureGenXdev', 'EnsureComfyUIModel', 'Optimize-EnsureGenXdev', 'Optimize-EnsureComfyUIModel').IndexOf($_) -lt 0) -and
+                (@('EnsureGenXdev', 'EnsureComfyUIModel', 'EnsureGenXdev', 'Optimize-EnsureComfyUIModel').IndexOf($_) -lt 0) -and
                 ($_ -ne "EnsureNuGetAssembly") -and
                 ($_ -ne "Optimize-EnsureNuGetAssembly")
 
