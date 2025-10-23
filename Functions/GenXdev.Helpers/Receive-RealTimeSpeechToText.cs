@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Receive-RealTimeSpeechToText.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -31,87 +31,426 @@ using Whisper.net.Ggml;
 namespace GenXdev.Helpers
 {
 
+    /// <summary>
+    /// <para type="synopsis">
+    /// Converts real-time audio input to text using Whisper AI model.
+    /// </para>
+    ///
+    /// <para type="description">
+    /// This cmdlet captures audio from microphone or desktop and transcribes it to text in real-time
+    /// using the Whisper AI model. It supports various audio sources, silence detection, and multiple
+    /// configuration options for speech recognition.
+    /// </para>
+    ///
+    /// <para type="description">
+    /// PARAMETERS
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -ModelFileDirectoryPath &lt;String&gt;<br/>
+    /// Path to the directory containing Whisper model files.<br/>
+    /// - <b>Default</b>: GenXdev app data directory<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -UseDesktopAudioCapture &lt;SwitchParameter&gt;<br/>
+    /// Whether to use desktop audio capture instead of microphone.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -UseDesktopAndRecordingDevice &lt;SwitchParameter&gt;<br/>
+    /// Whether to use both desktop audio capture and recording device simultaneously.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -AudioDevice &lt;String&gt;<br/>
+    /// Specifies the audio device to use by name or GUID (supports wildcards).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -Passthru &lt;SwitchParameter&gt;<br/>
+    /// Returns objects instead of strings.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -WithTokenTimestamps &lt;SwitchParameter&gt;<br/>
+    /// Whether to include token timestamps.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -TokenTimestampsSumThreshold &lt;Single&gt;<br/>
+    /// Sum threshold for token timestamps, defaults to 0.5.<br/>
+    /// - <b>Default</b>: 0.5<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -SplitOnWord &lt;SwitchParameter&gt;<br/>
+    /// Whether to split on word boundaries.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -MaxTokensPerSegment &lt;Nullable`1&gt;<br/>
+    /// Maximum number of tokens per segment.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -IgnoreSilence &lt;SwitchParameter&gt;<br/>
+    /// Whether to ignore silence (will mess up timestamps).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -MaxDurationOfSilence &lt;Nullable`1&gt;<br/>
+    /// Maximum duration of silence before automatically stopping recording.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -SilenceThreshold &lt;Nullable`1&gt;<br/>
+    /// Silence detect threshold (0..32767 defaults to 30).<br/>
+    /// - <b>Default</b>: 30<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -LanguageIn &lt;String&gt;<br/>
+    /// Sets the input language to detect, defaults to 'en'.<br/>
+    /// - <b>Default</b>: "en"<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -CpuThreads &lt;Int32&gt;<br/>
+    /// Number of CPU threads to use for processing.<br/>
+    /// - <b>Default</b>: 0 (uses physical core count)<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -Temperature &lt;Nullable`1&gt;<br/>
+    /// Temperature for speech detection (0-1).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -TemperatureInc &lt;Nullable`1&gt;<br/>
+    /// Temperature increment (0-1).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -WithTranslate &lt;SwitchParameter&gt;<br/>
+    /// Whether to translate the output.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -Prompt &lt;String&gt;<br/>
+    /// Prompt to use for the model.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -SuppressRegex &lt;String&gt;<br/>
+    /// Regex to suppress tokens from the output.<br/>
+    /// - <b>Default</b>: null<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -WithProgress &lt;SwitchParameter&gt;<br/>
+    /// Whether to show progress.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -AudioContextSize &lt;Nullable`1&gt;<br/>
+    /// Size of the audio context.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -DontSuppressBlank &lt;SwitchParameter&gt;<br/>
+    /// Whether to NOT suppress blank lines.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -MaxDuration &lt;Nullable`1&gt;<br/>
+    /// Maximum duration of the audio.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -Offset &lt;Nullable`1&gt;<br/>
+    /// Offset for the audio.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -MaxLastTextTokens &lt;Nullable`1&gt;<br/>
+    /// Maximum number of last text tokens.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -SingleSegmentOnly &lt;SwitchParameter&gt;<br/>
+    /// Whether to use single segment only.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -PrintSpecialTokens &lt;SwitchParameter&gt;<br/>
+    /// Whether to print special tokens.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -MaxSegmentLength &lt;Nullable`1&gt;<br/>
+    /// Maximum segment length.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -MaxInitialTimestamp &lt;Nullable`1&gt;<br/>
+    /// Start timestamps at this moment.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -LengthPenalty &lt;Nullable`1&gt;<br/>
+    /// Length penalty (0-1).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -EntropyThreshold &lt;Nullable`1&gt;<br/>
+    /// Entropy threshold (0-1).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -LogProbThreshold &lt;Nullable`1&gt;<br/>
+    /// Log probability threshold (0-1).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -NoSpeechThreshold &lt;Nullable`1&gt;<br/>
+    /// No speech threshold (0-1).<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -NoContext &lt;SwitchParameter&gt;<br/>
+    /// Don't use context.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -WithBeamSearchSamplingStrategy &lt;SwitchParameter&gt;<br/>
+    /// Use beam search sampling strategy.<br/>
+    /// </para>
+    ///
+    /// <para type="description">
+    /// -ModelType &lt;GgmlType&gt;<br/>
+    /// Whisper model type to use, defaults to Small.<br/>
+    /// - <b>Default</b>: Small<br/>
+    /// </para>
+    ///
+    /// <example>
+    /// <para>Basic usage with microphone:</para>
+    /// <code>
+    /// Receive-RealTimeSpeechToText
+    /// </code>
+    /// </example>
+    ///
+    /// <example>
+    /// <para>Using desktop audio capture:</para>
+    /// <code>
+    /// Receive-RealTimeSpeechToText -UseDesktopAudioCapture
+    /// </code>
+    /// </example>
+    ///
+    /// <example>
+    /// <para>Using specific audio device:</para>
+    /// <code>
+    /// Receive-RealTimeSpeechToText -AudioDevice "Microphone*"
+    /// </code>
+    /// </example>
+    ///
+    /// <example>
+    /// <para>With silence detection:</para>
+    /// <code>
+    /// Receive-RealTimeSpeechToText -MaxDurationOfSilence "00:00:05"
+    /// </code>
+    /// </example>
+    /// </summary>
     [Cmdlet(VerbsCommunications.Receive, "RealTimeSpeechToText")]
     public class ReceiveRealTimeSpeechToText : PSGenXdevCmdlet
     {
         #region Cmdlet Parameters
+        /// <summary>
+        /// Specifies the path to the directory containing Whisper model files.
+        /// If not specified, defaults to the GenXdev app data directory.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Path to the model file")]
         public string ModelFileDirectoryPath { get; set; }
+        /// <summary>
+        /// Indicates whether to use desktop audio capture instead of microphone.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to use desktop audio capture instead of microphone")]
         public SwitchParameter UseDesktopAudioCapture { get; set; }
+        /// <summary>
+        /// Indicates whether to use both desktop audio capture and recording device simultaneously.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to use both desktop audio capture and recording device simultaneously")]
         public SwitchParameter UseDesktopAndRecordingDevice { get; set; }
+        /// <summary>
+        /// Specifies the audio device to use by name or GUID (supports wildcards).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Use both desktop and recording device")]
         public string AudioDevice { get; set; }
+        /// <summary>
+        /// Indicates whether to return objects instead of strings.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Returns objects instead of strings")]
         public SwitchParameter Passthru { get; set; }
+        /// <summary>
+        /// Indicates whether to include token timestamps.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to include token timestamps")]
         public SwitchParameter WithTokenTimestamps { get; set; }
+        /// <summary>
+        /// Specifies the sum threshold for token timestamps, defaults to 0.5.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Sum threshold for token timestamps, defaults to 0.5")]
         public float TokenTimestampsSumThreshold { get; set; } = 0.5f;
+        /// <summary>
+        /// Indicates whether to split on word boundaries.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to split on word boundaries")]
         public SwitchParameter SplitOnWord { get; set; }
+        /// <summary>
+        /// Specifies the maximum number of tokens per segment.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Maximum number of tokens per segment")]
         public int? MaxTokensPerSegment { get; set; }
+        /// <summary>
+        /// Indicates whether to ignore silence (will mess up timestamps).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to ignore silence (will mess up timestamps)")]
         public SwitchParameter IgnoreSilence { get; set; }
+        /// <summary>
+        /// Specifies the maximum duration of silence before automatically stopping recording.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Maximum duration of silence before automatically stopping recording")]
         public TimeSpan? MaxDurationOfSilence { get; set; }
+        /// <summary>
+        /// Specifies the silence detect threshold (0..32767 defaults to 30).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Silence detect threshold (0..32767 defaults to 30)")]
         [ValidateRange(0, 32767)]
         public int? SilenceThreshold { get; set; }
+        /// <summary>
+        /// Sets the input language to detect, defaults to 'en'.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Sets the input language to detect, defaults to 'en'")]
         public string LanguageIn { get; set; } = "en";
+        /// <summary>
+        /// Specifies the number of CPU threads to use for processing.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Sets the output language")]
         public int CpuThreads { get; set; } = 0;
+        /// <summary>
+        /// Specifies the temperature for speech detection (0-1).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Temperature for speech detection")]
         [ValidateRange(0, 1)]
         public float? Temperature { get; set; }
+        /// <summary>
+        /// Specifies the temperature increment (0-1).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Temperature increment")]
         [ValidateRange(0, 1)]
         public float? TemperatureInc { get; set; }
+        /// <summary>
+        /// Indicates whether to translate the output.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to translate the output")]
         public SwitchParameter WithTranslate { get; set; }
+        /// <summary>
+        /// Specifies the prompt to use for the model.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Prompt to use for the model")]
         public string Prompt { get; set; }
+        /// <summary>
+        /// Specifies the regex to suppress tokens from the output.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Regex to suppress tokens from the output")]
         public string SuppressRegex { get; set; } = null;
+        /// <summary>
+        /// Indicates whether to show progress.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to show progress")]
         public SwitchParameter WithProgress { get; set; }
+        /// <summary>
+        /// Specifies the size of the audio context.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Size of the audio context")]
         public int? AudioContextSize { get; set; }
+        /// <summary>
+        /// Indicates whether to NOT suppress blank lines.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to NOT suppress blank lines")]
         public SwitchParameter DontSuppressBlank { get; set; }
+        /// <summary>
+        /// Specifies the maximum duration of the audio.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Maximum duration of the audio")]
         public TimeSpan? MaxDuration { get; set; }
+        /// <summary>
+        /// Specifies the offset for the audio.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Offset for the audio")]
         public TimeSpan? Offset { get; set; }
+        /// <summary>
+        /// Specifies the maximum number of last text tokens.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Maximum number of last text tokens")]
         public int? MaxLastTextTokens { get; set; }
+        /// <summary>
+        /// Indicates whether to use single segment only.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to use single segment only")]
         public SwitchParameter SingleSegmentOnly { get; set; }
+        /// <summary>
+        /// Indicates whether to print special tokens.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whether to print special tokens")]
         public SwitchParameter PrintSpecialTokens { get; set; }
+        /// <summary>
+        /// Specifies the maximum segment length.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Maximum segment length")]
         public int? MaxSegmentLength { get; set; }
+        /// <summary>
+        /// Specifies the moment to start timestamps at.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Start timestamps at this moment")]
         public TimeSpan? MaxInitialTimestamp { get; set; }
+        /// <summary>
+        /// Specifies the length penalty (0-1).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Length penalty")]
         [ValidateRange(0, 1)]
         public float? LengthPenalty { get; set; }
+        /// <summary>
+        /// Specifies the entropy threshold (0-1).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Entropy threshold")]
         [ValidateRange(0, 1)]
         public float? EntropyThreshold { get; set; }
+        /// <summary>
+        /// Specifies the log probability threshold (0-1).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Log probability threshold")]
         [ValidateRange(0, 1)]
         public float? LogProbThreshold { get; set; }
+        /// <summary>
+        /// Specifies the no speech threshold (0-1).
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "No speech threshold")]
         [ValidateRange(0, 1)]
         public float? NoSpeechThreshold { get; set; }
+        /// <summary>
+        /// Indicates not to use context.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Don't use context")]
         public SwitchParameter NoContext { get; set; }
+        /// <summary>
+        /// Indicates to use beam search sampling strategy.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Use beam search sampling strategy")]
         public SwitchParameter WithBeamSearchSamplingStrategy { get; set; }
+        /// <summary>
+        /// Specifies the Whisper model type to use, defaults to Small.
+        /// </summary>
         [Parameter(Mandatory = false, HelpMessage = "Whisper model type to use, defaults to Small")]
         public GgmlType ModelType { get; set; } = GgmlType.Small;
         #endregion
@@ -144,9 +483,14 @@ namespace GenXdev.Helpers
         private int threshold;
         private MemoryStream wavBufferStream;
         private bool _isFallback = false;
+        /// <summary>
+        /// Initializes cmdlet parameters and sets up audio processing environment.
+        /// </summary>
         protected override void BeginProcessing()
         {
             base.BeginProcessing();
+            base.BeginProcessing();
+
             // Expand ModelFileDirectoryPath if provided
             if (!string.IsNullOrEmpty(ModelFileDirectoryPath))
             {
@@ -234,6 +578,9 @@ namespace GenXdev.Helpers
                 WriteVerbose($"ModelType: {ModelType}");
             _cts = new CancellationTokenSource();
         }
+        /// <summary>
+        /// Processes the audio input and performs real-time speech-to-text conversion.
+        /// </summary>
         protected override void ProcessRecord()
         {
             base.ProcessRecord();
@@ -266,6 +613,10 @@ namespace GenXdev.Helpers
                 ProcessSingleAudioInput(_primaryWaveIn);
             }
         }
+
+        /// <summary>
+        /// Sets up dual audio inputs combining desktop audio capture and microphone recording.
+        /// </summary>
         private void CreateDualAudioInputs()
         {
             WriteVerbose("Setting up dual audio inputs: desktop audio capture and recording device");
@@ -316,6 +667,10 @@ namespace GenXdev.Helpers
             }
             return new WaveInEvent();
         }
+        /// <summary>
+        /// Configures and starts recording from dual audio inputs (primary and secondary), sets up event handlers for audio data,
+        /// initializes silence detection variables, and begins the main processing loop for mixed audio streams.
+        /// </summary>
         private void ProcessDualAudioInputs()
         {
             _primaryWaveIn.WaveFormat = new WaveFormat(16000, 1);
@@ -381,6 +736,10 @@ namespace GenXdev.Helpers
                 WaitForProcessingCompletion();
             }
         }
+        /// <summary>
+        /// Continuously mixes audio buffers from primary and secondary queues, applies silence detection if enabled,
+        /// and enqueues mixed audio data for speech processing. Handles buffer synchronization and volume normalization.
+        /// </summary>
         private async Task MixAudioBuffers()
         {
             while (!_cts.IsCancellationRequested && !_isDisposed)
@@ -502,6 +861,13 @@ namespace GenXdev.Helpers
                 }
             }
         }
+        /// <summary>
+        /// Mixes two audio streams by adding their samples together, applies volume normalization based on RMS levels,
+        /// and clamps the result to 16-bit range to prevent clipping. Returns the mixed audio buffer.
+        /// </summary>
+        /// <param name="primaryBuffer">The primary audio buffer to mix.</param>
+        /// <param name="secondaryBuffer">The secondary audio buffer to mix.</param>
+        /// <returns>A byte array containing the mixed audio data.</returns>
         private byte[] MixAudioStreams(byte[] primaryBuffer, byte[] secondaryBuffer)
         {
             int length = System.Math.Min(primaryBuffer.Length, secondaryBuffer.Length);
@@ -565,6 +931,11 @@ namespace GenXdev.Helpers
             }
             return mixedBuffer;
         }
+        /// <summary>
+        /// Processes audio input from a single wave input device, sets up event handlers for data availability,
+        /// handles silence detection, and manages the recording lifecycle including fallback to desktop audio if needed.
+        /// </summary>
+        /// <param name="waveIn">The wave input device to process audio from.</param>
         private void ProcessSingleAudioInput(IWaveIn waveIn)
         {
             using (waveIn)
@@ -702,6 +1073,10 @@ namespace GenXdev.Helpers
                 }
             }
         }
+        /// <summary>
+        /// Runs the main processing loop that monitors for user input (Q to quit), enforces recording duration limits,
+        /// and processes queued messages, errors, verbose output, and transcription results in the main thread.
+        /// </summary>
         private void ProcessMainLoop()
         {
             Console.WriteLine("Recording started. Press Q to stop...");
@@ -754,6 +1129,10 @@ namespace GenXdev.Helpers
                 }
             }
         }
+        /// <summary>
+        /// Waits for audio processing and mixing tasks to complete with proper timeout handling,
+        /// processes any remaining queued results, errors, and verbose messages during cleanup.
+        /// </summary>
         private void WaitForProcessingCompletion()
         {
             // Wait for processing to complete with proper timeout and error handling
@@ -824,6 +1203,11 @@ namespace GenXdev.Helpers
                 timeout++;
             }
         }
+        /// <summary>
+        /// Creates an appropriate audio input device based on configuration: desktop audio capture via WASAPI loopback
+        /// or microphone input with optional device selection by name/GUID.
+        /// </summary>
+        /// <returns>An IWaveIn instance configured for the selected audio input.</returns>
         private IWaveIn CreateAudioInput()
         {
             if (UseDesktopAudioCapture.ToBool())
@@ -865,6 +1249,13 @@ namespace GenXdev.Helpers
                 return new WaveInEvent();
             }
         }
+        /// <summary>
+        /// Checks if a device name matches a given pattern using wildcard support (* and ?).
+        /// Performs case-insensitive regex matching after converting wildcards to regex patterns.
+        /// </summary>
+        /// <param name="deviceName">The device name to check.</param>
+        /// <param name="pattern">The pattern to match against, supporting wildcards.</param>
+        /// <returns>True if the device name matches the pattern, false otherwise.</returns>
         private bool IsDeviceMatch(string deviceName, string pattern)
         {
             if (string.IsNullOrWhiteSpace(deviceName) || string.IsNullOrWhiteSpace(pattern))
@@ -876,6 +1267,13 @@ namespace GenXdev.Helpers
             return System.Text.RegularExpressions.Regex.IsMatch(deviceName, regexPattern,
                 System.Text.RegularExpressions.RegexOptions.IgnoreCase);
         }
+        /// <summary>
+        /// Configures the Whisper processor builder with all specified parameters including language, threads,
+        /// temperature settings, token timestamps, translation, prompts, and various processing options.
+        /// Detects physical CPU cores for optimal threading and applies silence/speech detection thresholds.
+        /// </summary>
+        /// <param name="builder">The WhisperProcessorBuilder to configure.</param>
+        /// <returns>The configured WhisperProcessorBuilder instance.</returns>
         private WhisperProcessorBuilder ConfigureWhisperBuilder(WhisperProcessorBuilder builder)
         {
             int physicalCoreCount = 0;
@@ -940,6 +1338,11 @@ namespace GenXdev.Helpers
             if (WithBeamSearchSamplingStrategy.ToBool()) builder.WithBeamSearchSamplingStrategy();
             return builder;
         }
+        /// <summary>
+        /// Processes audio buffers from the queue, converts PCM data to WAV format, and feeds it to the Whisper processor
+        /// for speech-to-text transcription. Handles segmentation, cancellation, and error queuing for thread safety.
+        /// Accumulates audio data until sufficient for processing (3+ seconds) or when recording stops.
+        /// </summary>
         private async Task ProcessAudioBuffer()
         {
             using var processingStream = new MemoryStream();
@@ -1056,6 +1459,15 @@ namespace GenXdev.Helpers
             {
             }
         }
+        /// <summary>
+        /// Converts raw PCM audio data to WAV format by adding the appropriate WAV header with format information.
+        /// Creates a properly formatted WAV stream that Whisper can process for speech recognition.
+        /// </summary>
+        /// <param name="pcmData">The raw PCM audio data bytes.</param>
+        /// <param name="sampleRate">The sample rate in Hz (e.g., 16000).</param>
+        /// <param name="channels">The number of audio channels (e.g., 1 for mono).</param>
+        /// <param name="bitsPerSample">The bits per sample (e.g., 16).</param>
+        /// <returns>A MemoryStream containing the WAV-formatted audio data.</returns>
         private MemoryStream ConvertPcmToWav(byte[] pcmData, int sampleRate, int channels, int bitsPerSample)
         {
             var wavStream = new MemoryStream();
@@ -1082,6 +1494,9 @@ namespace GenXdev.Helpers
             wavStream.Write(pcmData, 0, pcmData.Length); // The actual audio data
             return wavStream;
         }
+        /// <summary>
+        /// Cleans up resources and disposes of audio components.
+        /// </summary>
         protected override void EndProcessing()
         {
             lock (_disposeLock)
@@ -1218,13 +1633,24 @@ namespace GenXdev.Helpers
             }
             base.EndProcessing();
         }
+        /// <summary>
+        /// Downloads a Whisper model file from the default source and saves it to the specified filename.
+        /// Displays progress information to the console during the download process.
+        /// </summary>
+        /// <param name="fileName">The filename to save the downloaded model to.</param>
+        /// <param name="ggmlType">The GGML model type to download.</param>
         private static async Task DownloadModel(string fileName, GgmlType ggmlType)
         {
             Console.WriteLine($"Downloading Model {fileName}");
-            using var modelStream = await WhisperGgmlDownloader.GetGgmlModelAsync(ggmlType);
+            using var modelStream = await WhisperGgmlDownloader.Default.GetGgmlModelAsync(ggmlType);
             using var fileWriter = File.OpenWrite(fileName);
             await modelStream.CopyToAsync(fileWriter);
         }
+        /// <summary>
+        /// Generates the standard filename for a Whisper GGML model based on the model type.
+        /// </summary>
+        /// <param name="modelType">The GGML model type.</param>
+        /// <returns>The formatted model filename (e.g., "ggml-base.bin").</returns>
         private static string GetModelFileName(GgmlType modelType)
         {
             return $"ggml-{modelType}.bin";

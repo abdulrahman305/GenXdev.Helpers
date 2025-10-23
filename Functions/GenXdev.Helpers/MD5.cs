@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : MD5.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -21,14 +21,22 @@
 
 
 
+using System;
+using System.IO;
 using System.Text;
 
 namespace GenXdev.Helpers
 {
     public static class MD5
     {
+        /// <summary>
+        /// Calculates the MD5 hash of the input string using ASCII encoding and returns it as a lowercase hexadecimal string.
+        /// </summary>
+        /// <param name="input">The input string to be hashed.</param>
+        /// <returns>A string representing the MD5 hash in lowercase hexadecimal format.</returns>
         public static string CalculateMD5Hash(string input)
         {
+
             // step 1, calculate MD5 hash from input
             byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
             byte[] hash = System.Security.Cryptography.MD5.HashData(inputBytes);
@@ -37,12 +45,19 @@ namespace GenXdev.Helpers
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hash.Length; i++)
             {
+
                 sb.Append(hash[i].ToString("X2"));
             }
             return sb.ToString().ToLower();
         }
+        /// <summary>
+        /// Calculates the MD5 hash of the input stream and returns it as a lowercase hexadecimal string.
+        /// </summary>
+        /// <param name="s">The input stream to be hashed.</param>
+        /// <returns>A string representing the MD5 hash in lowercase hexadecimal format.</returns>
         public static string CalculateMD5Hash(Stream s)
         {
+
             // step 1, calculate MD5 hash from input
             var md5 = System.Security.Cryptography.MD5.Create();
             byte[] hash = md5.ComputeHash(s);
@@ -51,6 +66,7 @@ namespace GenXdev.Helpers
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hash.Length; i++)
             {
+
                 sb.Append(hash[i].ToString("X2"));
             }
             return sb.ToString().ToLower();

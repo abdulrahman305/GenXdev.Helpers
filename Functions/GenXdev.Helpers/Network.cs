@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Network.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -22,20 +22,67 @@
 
 
 using System.Net;
+using System.Net.Http;
 
 namespace GenXdev.Helpers
 {
+    /// <summary>
+    /// <para type="synopsis">
+    /// Provides network utility methods for retrieving public IP addresses and hostnames.
+    /// </para>
+    ///
+    /// <para type="description">
+    /// This static class contains methods to obtain the public external IP address
+    /// by querying various online services. It includes fallback mechanisms to ensure
+    /// reliability in case some services are unavailable.
+    /// </para>
+    /// </summary>
     public static class Network
     {
         #region public ip lookup
 
         static object padLock = new object();
+
         // static string publicHostName = "localhost";
 
+        /// <summary>
+        /// <para type="synopsis">
+        /// Retrieves the public external IP address or hostname.
+        /// </para>
+        ///
+        /// <para type="description">
+        /// This method attempts to fetch the public IP address from multiple online
+        /// services in order of preference. If all services fail, it falls back to
+        /// the local machine's hostname or a default IP address.
+        /// </para>
+        ///
+        /// <para type="description">
+        /// PARAMETERS
+        /// </para>
+        ///
+        /// <para type="description">
+        /// -IPAddress &lt;string&gt;<br/>
+        /// Optional parameter for specifying an IP address (currently not used in
+        /// the implementation).<br/>
+        /// - <b>Position</b>: 0<br/>
+        /// - <b>Default</b>: null<br/>
+        /// </para>
+        ///
+        /// <example>
+        /// <para>Get the public IP address</para>
+        /// <para>This example retrieves the public external IP address.</para>
+        /// <code>
+        /// string ip = Network.GetPublicExternalHostname();
+        /// </code>
+        /// </example>
+        /// </summary>
+        /// <param name="IPAddress">Optional IP address parameter (currently unused).</param>
+        /// <returns>The public IP address as a string, or fallback value.</returns>
         public static string GetPublicExternalHostname(string IPAddress = null)
         {
             #region ipify
 
+            // Attempt to retrieve the public IP from the ipify service
             try
             {
                 string uri = "https://api.ipify.org";
@@ -55,6 +102,7 @@ namespace GenXdev.Helpers
 
             #region api.ipify.org
 
+            // Fallback: Attempt to retrieve the public IP from api.ipify.org
             try
             {
                 string uri = "https://api.ipify.org";
@@ -74,6 +122,7 @@ namespace GenXdev.Helpers
 
             #region ipinfo.io
 
+            // Second fallback: Attempt to retrieve the public IP from ipinfo.io
             try
             {
                 string uri = "http://ipinfo.io/ip";
@@ -93,6 +142,7 @@ namespace GenXdev.Helpers
 
             #region DynDns
 
+            // Third fallback: Attempt to retrieve the public IP from DynDns
             try
             {
                 string uri = "http://checkip.dyndns.org/";
@@ -112,6 +162,7 @@ namespace GenXdev.Helpers
 
             #region Local Machine Hostname
 
+            // Final fallback: Use the local machine's hostname
             try
             {
                 lock (padLock)

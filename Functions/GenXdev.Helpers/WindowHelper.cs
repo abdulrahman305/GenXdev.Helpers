@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : WindowHelper.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -36,12 +36,16 @@ namespace GenXdev.Helpers
         // http://pinvoke.net/default.aspx/gdi32/GetDeviceCaps.html
     }
 
+    /// <summary>
+    /// Static class providing desktop and monitor information utilities.
+    /// Includes scaling factor calculations and window positioning constants.
+    /// </summary>
     public static class DesktopInfo
     {
         // Place these at the top of WindowObj, near your other constants and P/Invokes
-        public  const int SWP_NOMOVE = 0x0002;
-        public  const int SWP_NOSIZE = 0x0001;
-        public  const int SWP_NOZORDER = 0x0004;
+        public const int SWP_NOMOVE = 0x0002;
+        public const int SWP_NOSIZE = 0x0001;
+        public const int SWP_NOZORDER = 0x0004;
         private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
         private static readonly IntPtr HWND_NOTOPMOST = new IntPtr(-2);
         [DllImport("gdi32.dll")]
@@ -56,6 +60,12 @@ namespace GenXdev.Helpers
             IntPtr lpInitData
         );
 
+        /// <summary>
+        /// Calculates the display scaling factor for a specific monitor.
+        /// The scaling factor represents how much the display is scaled (e.g., 1.25 for 125% scaling).
+        /// </summary>
+        /// <param name="monitor">The monitor index to get scaling for</param>
+        /// <returns>The scaling factor as a float (1.0 = 100% scaling)</returns>
         public static float getScalingFactor(int monitor)
         {
             Graphics g = Graphics.FromHwnd(IntPtr.Zero);
@@ -91,6 +101,10 @@ namespace GenXdev.Helpers
 
     public class WindowObj
     {
+        /// <summary>
+        /// Represents a Windows window with methods for manipulation and state management.
+        /// Provides functionality to control window position, size, visibility, and various window states.
+        /// </summary>
         private const int SWP_NOMOVE = 0x0002;
         private const int SWP_NOSIZE = 0x0001;
         private static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
@@ -107,11 +121,19 @@ namespace GenXdev.Helpers
             uint uFlags
         );
 
-        ///<summary>Windows handle to identify the current windows</summary>
+        /// <summary>
+        /// Windows handle to identify the current window. This is a unique identifier
+        /// assigned by the Windows operating system to each window instance.
+        /// </summary>
         public IntPtr Handle { get; private set; }
-        ///<summary>Name of the windows</summary>
+        /// <summary>
+        /// Name/title of the window as displayed in the title bar.
+        /// </summary>
         public string Title { get; private set; }
-        ///<summary>Get the children of a window</summary>
+        /// <summary>
+        /// Collection of child windows belonging to this window.
+        /// Child windows are windows that are contained within this window's client area.
+        /// </summary>
         public ICollection<WindowObj> Children { get; private set; }
 
         /// <summary>
@@ -149,19 +171,24 @@ namespace GenXdev.Helpers
         [DllImport("user32.dll")]
         private static extern uint GetWindowLong(IntPtr hWnd, int nIndex);
 
-        /// <summary>Creates a window object with a handle and a window title</summary>
-        /// <param name="handle"></param>
-        /// <param name="title"></param>
+        /// <summary>
+        /// Creates a window object with a handle and a window title.
+        /// Initializes the window properties and enumerates child windows.
+        /// </summary>
+        /// <param name="handle">The Windows handle (HWND) of the window</param>
+        /// <param name="title">The title/caption of the window</param>
         public WindowObj(IntPtr handle, string title)
         {
             Handle = handle;
             Title = title;
 
+            // Initialize string builder for window class name retrieval
             StringBuilder stringBuilder = new StringBuilder(256);
             GetClassName(handle, stringBuilder, stringBuilder.Capacity);
             WindowType = GetWindowClass(stringBuilder.ToString());
             WindowClassName = stringBuilder.ToString();
 
+            // Initialize children collection and enumerate child windows
             Children = new List<WindowObj>();
             ArrayList handles = new ArrayList();
             EnumedWindow childProc = GetWindowHandle;
@@ -169,14 +196,17 @@ namespace GenXdev.Helpers
             EnumChildWindows(handle, childProc, handles);
             foreach (IntPtr item in handles)
             {
+                // Get capacity for child window text
                 int capacityChild = GetWindowTextLength(handle) * 2;
 
                 StringBuilder stringBuilderChild = new StringBuilder(capacityChild);
                 GetWindowText(handle, stringBuilder, stringBuilderChild.Capacity);
 
+                // Get class name for child window
                 StringBuilder stringBuilderChild2 = new StringBuilder(256);
                 GetClassName(handle, stringBuilderChild2, stringBuilderChild2.Capacity);
 
+                // Create child window object
                 WindowObj win = new WindowObj(item, stringBuilder.ToString());
                 win.WindowClassName = stringBuilderChild2.ToString();
                 win.WindowType = GetWindowClass(stringBuilderChild2.ToString());
@@ -194,19 +224,29 @@ namespace GenXdev.Helpers
         private const int MonitorShutoff = 2;
 
 
+        /// <summary>
+        /// Sends a message to wake the monitor/display from sleep mode.
+        /// Uses Windows API to simulate monitor power on command.
+        /// </summary>
         public static void WakeMonitor()
         {
-            //Turn them on
+            // Send message to turn monitors on
             PostMessage((IntPtr)0xffff, WM_SYSCOMMAND, SC_MONITORPOWER, MonitorTurnOn);
             System.Threading.Thread.Sleep(150);
+
+            // Simulate mouse movement to ensure monitor stays awake
             mouse_event(MOUSEEVENTF_MOVE, 0, 1, 0, UIntPtr.Zero);
             System.Threading.Thread.Sleep(40);
             mouse_event(MOUSEEVENTF_MOVE, 0, -1, 0, UIntPtr.Zero);
         }
+
+        /// <summary>
+        /// Sends a message to put the monitor/display into sleep mode.
+        /// Uses Windows API to simulate monitor power off command.
+        /// </summary>
         public static void SleepMonitor()
         {
-
-            //Turn them off
+            // Send message to turn monitors off
             PostMessage((IntPtr)0xffff, WM_SYSCOMMAND, SC_MONITORPOWER, MonitorShutoff);
         }
         [DllImport("user32.dll")]
@@ -216,6 +256,13 @@ namespace GenXdev.Helpers
         public static extern IntPtr GetConsoleWindow();
 
 
+        /// <summary>
+        /// Callback method for enumerating child windows.
+        /// Adds each window handle to the provided collection.
+        /// </summary>
+        /// <param name="windowHandle">Handle of the enumerated window</param>
+        /// <param name="windowHandles">Collection to add the handle to</param>
+        /// <returns>Always returns true to continue enumeration</returns>
         public static bool GetWindowHandle(IntPtr windowHandle, ArrayList windowHandles)
         {
             windowHandles.Add(windowHandle);
@@ -234,41 +281,59 @@ namespace GenXdev.Helpers
 
         }
 
-        /// <summary>Open a new Process with the given path and return a window object if the process have a user interface, else return null</summary>
-        /// <param name="filePath">Path of the file to look for</param>
-        /// <param name="timeToWait">Time to wait until the proccess execute, *Only apply for process with a window interface*</param>
+        /// <summary>
+        /// Opens a new process with the given file path and returns a window object
+        /// if the process has a user interface, otherwise returns null.
+        /// </summary>
+        /// <param name="filePath">Path of the file to execute</param>
+        /// <param name="timeToWait">Time in seconds to wait for the process to start
+        /// (default -1 means wait for input idle)</param>
+        /// <returns>WindowObj if process has a main window, null otherwise</returns>
         public static WindowObj Open(string filePath, int timeToWait = -1)
         {
+            // Validate file exists
             if (!File.Exists(filePath))
                 throw new Exception(string.Format("The filePath {0} is not valid", filePath));
 
+            // Start the process
             Process newProcess = Process.Start(filePath);
 
+            // Wait for process to be ready for input
             if (timeToWait == -1)
                 newProcess.WaitForInputIdle();
             else
                 newProcess.WaitForInputIdle(timeToWait * 1000);
 
+            // Return window object if process has a main window
             if (newProcess != null && newProcess.MainWindowHandle != IntPtr.Zero)
                 return new WindowObj(newProcess.MainWindowHandle, newProcess.MainWindowTitle);
 
             return null;
         }
 
-        /// <summary>Look for the existence of a process with the given name an return the first occurrence of the process as a Window object</summary>
-        /// <param name="name">Name of the process</param>
-        /// <param name="attempts">Amount of tries that it will look for the window</param>
-        /// <param name="waitInterval">Amount ot time it will stop the thread while waiting for the windows in each attemp</param>
+        /// <summary>
+        /// Searches for the existence of a process with the given name and returns
+        /// the first occurrence as a WindowObj. Performs multiple attempts if needed.
+        /// </summary>
+        /// <param name="name">Exact name of the process to find</param>
+        /// <param name="attempts">Number of attempts to find the window (default 1)</param>
+        /// <param name="waitInterval">Milliseconds to wait between attempts (default 1000)</param>
+        /// <returns>WindowObj if found, null otherwise</returns>
         public static WindowObj GetWindow(string name, int attempts = 1, int waitInterval = 1000)
         {
+            // Get current processes
             IEnumerable<Process> currentProcesses = Process.GetProcesses();
             int counter = 0;
+
+            // Try multiple times if needed
             while (counter < attempts)
             {
+                // Search for process with matching main window title
                 foreach (Process p in currentProcesses)
                     if (p.MainWindowHandle != IntPtr.Zero && p.MainWindowTitle == name)
                         return new WindowObj(p.MainWindowHandle, p.MainWindowTitle);
 
+                // Wait and refresh process list
                 System.Threading.Thread.Sleep(waitInterval);
                 currentProcesses = Process.GetProcesses();
                 counter++;
@@ -276,123 +341,49 @@ namespace GenXdev.Helpers
             return null;
         }
 
+        /// <summary>
+        /// Gets the currently focused window.
+        /// Returns a WindowObj representing the window that currently has keyboard focus.
+        /// </summary>
+        /// <returns>WindowObj of the focused window, or null if none</returns>
         public static WindowObj GetFocusedWindow()
         {
+            // Get handle of foreground window
             var sb = new StringBuilder();
             var handle = GetForegroundWindow();
 
+            // Return window object with title
             return new WindowObj(handle, GetWindowTitle(handle));
         }
 
-        /// <summary>Look for the existence of processes with the given name an return all occurrences of the process as Windows objects, *case sensitive*</summary>
-        /// <param name="name">Name of the process</param>
-        /// <param name="attempts">Amount of tries that it will look for the window</param>
-        /// <param name="waitInterval">Amount ot time it will stop the thread while waiting for the windows in each attemp</param>
+        /// <summary>
+        /// Searches for processes with the given name and returns all occurrences
+        /// as WindowObj instances. Case-sensitive search by process name.
+        /// </summary>
+        /// <param name="name">Process name to search for</param>
+        /// <param name="attempts">Number of attempts to find windows (default 1)</param>
+        /// <param name="waitInterval">Milliseconds to wait between attempts (default 1000)</param>
+        /// <returns>Collection of WindowObj instances for matching processes</returns>
         public static IEnumerable<WindowObj> GetWindows(string name, int attempts = 1, int waitInterval = 1000)
         {
+            // Get current processes
             IEnumerable<Process> currentProcesses = Process.GetProcesses();
             ICollection<WindowObj> windows = new List<WindowObj>();
             int counter = 0;
+
+            // Try multiple times if needed
             while (counter < attempts)
             {
+                // Find processes with matching name and main window
                 foreach (Process p in currentProcesses)
                     if (p.MainWindowHandle != IntPtr.Zero && p.ProcessName == name)
                         windows.Add(new WindowObj(p.MainWindowHandle, p.MainWindowTitle));
 
+                // Stop if we found windows
                 if (windows.Count > 0)
                     break;
 
-                System.Threading.Thread.Sleep(waitInterval);
-                currentProcesses = Process.GetProcesses();
-                counter++;
-            }
-            return windows;
-        }
-
-        public static IEnumerable<WindowObj> GetMainWindow(Process p, int attempts = 1, int waitInterval = 1000)
-        {
-            IEnumerable<Process> currentProcesses = Process.GetProcesses();
-            ICollection<WindowObj> windows = new List<WindowObj>();
-            int counter = 0;
-            while (counter < attempts)
-            {
-                if (p.MainWindowHandle != IntPtr.Zero)
-                {
-                    try
-                    {
-                        windows.Add(new WindowObj(p.MainWindowHandle, p.MainWindowTitle));
-                    }
-                    catch
-                    {
-                        break;
-                    }
-                }
-
-                if (windows.Count > 0)
-                    break;
-
-                System.Threading.Thread.Sleep(waitInterval);
-                currentProcesses = Process.GetProcesses();
-                counter++;
-            }
-
-            return windows;
-        }
-
-        public static IEnumerable<WindowObj> GetMainWindow(IntPtr windowHandle, int attempts = 1, int waitInterval = 1000)
-        {
-            IEnumerable<Process> currentProcesses = Process.GetProcesses();
-            ICollection<WindowObj> windows = new List<WindowObj>();
-            if (windowHandle != IntPtr.Zero)
-            {
-                try
-                {
-                    windows.Add(new WindowObj(windowHandle, ""));
-                }
-                catch { }
-            }
-
-            return windows;
-        }
-        /// <summary>Look for the existense of a process in all processes an return the first ocurrence of a process that contains the given name as a Window object</summary>
-        /// <param name="name">Name of the process</param>
-        /// <param name="attempts">Amount of tries that it will look for the window</param>
-        /// <param name="waitInterval">Amount ot time it will stop the thread while waiting for the windows in each attemp</param>
-        public static WindowObj GetWindowWithPartialName(string name, int attempts = 1, int waitInterval = 1000)
-        {
-            IEnumerable<Process> currentProcesses = Process.GetProcesses();
-            int counter = 0;
-            while (counter < attempts)
-            {
-                foreach (Process p in currentProcesses)
-                    if (p.MainWindowHandle != IntPtr.Zero && p.MainWindowTitle.ToLower().Contains(name.ToLower()))
-                        return new WindowObj(p.MainWindowHandle, p.MainWindowTitle);
-
-                System.Threading.Thread.Sleep(waitInterval);
-                currentProcesses = Process.GetProcesses();
-                counter++;
-            }
-            return null;
-        }
-
-        /// <summary>Look for the existense of a process in all processes an return the processes that contains the given name as Windows objects</summary>
-        /// <param name="name">Name of the process</param>
-        /// <param name="attempts">Amount of tries that it will look for at least one window</param>
-        /// <param name="waitInterval">Amount ot time it will stop the thread while waiting for the windows in each attemp</param>
-        public static IEnumerable<WindowObj> GetWindowsWithPartialName(string name, int attempts = 1, int waitInterval = 1000)
-        {
-            IEnumerable<Process> currentProcesses = Process.GetProcesses();
-            ICollection<WindowObj> windows = new List<WindowObj>();
-            int counter = 0;
-            while (counter < attempts)
-            {
-                foreach (Process p in currentProcesses)
-                    if (p.MainWindowHandle != IntPtr.Zero && p.MainWindowTitle.ToLower().Contains(name.ToLower()))
-                        windows.Add(new WindowObj(p.MainWindowHandle, p.MainWindowTitle));
-
-                if (windows.Count > 0)
-                    break;
-
+                // Wait and refresh process list
                 System.Threading.Thread.Sleep(waitInterval);
                 currentProcesses = Process.GetProcesses();
                 counter++;
@@ -401,12 +392,154 @@ namespace GenXdev.Helpers
         }
 
         /// <summary>
-        /// Gets the active windows if possible.
+        /// Gets the main window of a specific process.
+        /// Searches for the main window handle of the given process.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="p">The process to get the main window for</param>
+        /// <param name="attempts">Number of attempts to find the window (default 1)</param>
+        /// <param name="waitInterval">Milliseconds to wait between attempts (default 1000)</param>
+        /// <returns>Collection containing the main window if found</returns>
+        public static IEnumerable<WindowObj> GetMainWindow(Process p, int attempts = 1, int waitInterval = 1000)
+        {
+            // Get current processes
+            IEnumerable<Process> currentProcesses = Process.GetProcesses();
+            ICollection<WindowObj> windows = new List<WindowObj>();
+            int counter = 0;
+
+            // Try multiple times if needed
+            while (counter < attempts)
+            {
+                // Check if process has a main window
+                if (p.MainWindowHandle != IntPtr.Zero)
+                {
+                    try
+                    {
+                        // Create window object for main window
+                        windows.Add(new WindowObj(p.MainWindowHandle, p.MainWindowTitle));
+                    }
+                    catch
+                    {
+                        // Break on error
+                        break;
+                    }
+                }
+
+                // Stop if we found windows
+                if (windows.Count > 0)
+                    break;
+
+                // Wait and refresh process list
+                System.Threading.Thread.Sleep(waitInterval);
+                currentProcesses = Process.GetProcesses();
+                counter++;
+            }
+
+            return windows;
+        }
+
+        /// <summary>
+        /// Gets the main window for a given window handle.
+        /// Creates a WindowObj for the specified handle.
+        /// </summary>
+        /// <param name="windowHandle">The window handle to create object for</param>
+        /// <param name="attempts">Number of attempts (not used in this overload)</param>
+        /// <param name="waitInterval">Wait interval (not used in this overload)</param>
+        /// <returns>Collection containing the window object</returns>
+        public static IEnumerable<WindowObj> GetMainWindow(IntPtr windowHandle, int attempts = 1, int waitInterval = 1000)
+        {
+            // Get current processes
+            IEnumerable<Process> currentProcesses = Process.GetProcesses();
+            ICollection<WindowObj> windows = new List<WindowObj>();
+
+            // Create window object if handle is valid
+            if (windowHandle != IntPtr.Zero)
+            {
+                try
+                {
+                    // Create window object with empty title (will be populated by constructor)
+                    windows.Add(new WindowObj(windowHandle, ""));
+                }
+                catch { }
+            }
+
+            return windows;
+        }
+        /// <summary>
+        /// Searches for a process whose window title contains the given name (partial match).
+        /// Returns the first matching window. Case-insensitive search.
+        /// </summary>
+        /// <param name="name">Partial name to search for in window titles</param>
+        /// <param name="attempts">Number of attempts to find the window (default 1)</param>
+        /// <param name="waitInterval">Milliseconds to wait between attempts (default 1000)</param>
+        /// <returns>WindowObj if found, null otherwise</returns>
+        public static WindowObj GetWindowWithPartialName(string name, int attempts = 1, int waitInterval = 1000)
+        {
+            // Get current processes
+            IEnumerable<Process> currentProcesses = Process.GetProcesses();
+            int counter = 0;
+
+            // Try multiple times if needed
+            while (counter < attempts)
+            {
+                // Search for process with partial title match
+                foreach (Process p in currentProcesses)
+                    if (p.MainWindowHandle != IntPtr.Zero && p.MainWindowTitle.ToLower().Contains(name.ToLower()))
+                        return new WindowObj(p.MainWindowHandle, p.MainWindowTitle);
+
+                // Wait and refresh process list
+                System.Threading.Thread.Sleep(waitInterval);
+                currentProcesses = Process.GetProcesses();
+                counter++;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Searches for processes whose window titles contain the given name (partial match).
+        /// Returns all matching windows. Case-insensitive search.
+        /// </summary>
+        /// <param name="name">Partial name to search for in window titles</param>
+        /// <param name="attempts">Number of attempts to find windows (default 1)</param>
+        /// <param name="waitInterval">Milliseconds to wait between attempts (default 1000)</param>
+        /// <returns>Collection of WindowObj instances for matching processes</returns>
+        public static IEnumerable<WindowObj> GetWindowsWithPartialName(string name, int attempts = 1, int waitInterval = 1000)
+        {
+            // Get current processes
+            IEnumerable<Process> currentProcesses = Process.GetProcesses();
+            ICollection<WindowObj> windows = new List<WindowObj>();
+            int counter = 0;
+
+            // Try multiple times if needed
+            while (counter < attempts)
+            {
+                // Find processes with partial title match
+                foreach (Process p in currentProcesses)
+                    if (p.MainWindowHandle != IntPtr.Zero && p.MainWindowTitle.ToLower().Contains(name.ToLower()))
+                        windows.Add(new WindowObj(p.MainWindowHandle, p.MainWindowTitle));
+
+                // Stop if we found windows
+                if (windows.Count > 0)
+                    break;
+
+                // Wait and refresh process list
+                System.Threading.Thread.Sleep(waitInterval);
+                currentProcesses = Process.GetProcesses();
+                counter++;
+            }
+            return windows;
+        }
+
+        /// <summary>
+        /// Gets the currently active window (the one with keyboard focus).
+        /// Searches through all processes to find the one matching the active window handle.
+        /// </summary>
+        /// <returns>WindowObj of the active window, or null if not found</returns>
         public static WindowObj GetActive()
         {
+            // Get handle of active window
             IntPtr handle = GetActiveWindow();
+
+            // Find matching process
             if (handle != IntPtr.Zero)
             {
                 foreach (Process p in Process.GetProcesses())
@@ -416,14 +549,24 @@ namespace GenXdev.Helpers
             return null;
         }
 
-        /// <summary>Focus the current window</summary>
+        /// <summary>
+        /// Brings focus to the current window by setting it as foreground.
+        /// Temporarily allows the process to set foreground window if needed.
+        /// </summary>
         public void Focus()
         {
+            // Allow this process to set foreground window
             AllowSetForegroundWindow(-1);
+
+            // Set this window as foreground and focus
             SetForegroundWindow(this.Handle);
             SetFocus(Handle);
         }
 
+        /// <summary>
+        /// Sets the current window as the foreground window with enhanced reliability.
+        /// Handles minimized/maximized states and ensures proper activation.
+        /// </summary>
         public void SetForeground()
         {
             // Temporarily set as topmost if not already
@@ -473,6 +616,11 @@ namespace GenXdev.Helpers
             return ShowWindowAsync(this.Handle, (int)ShowWindowCommands.ShowDefault);
         }
 
+        /// <summary>
+        /// Gets the title/caption text of a window given its handle.
+        /// </summary>
+        /// <param name="hWnd">The window handle to get the title for</param>
+        /// <returns>The window title as a string</returns>
         public static string GetWindowTitle(IntPtr hWnd)
         {
             var length = GetWindowTextLength(hWnd) + 1;
@@ -819,6 +967,10 @@ namespace GenXdev.Helpers
         }
 
         // Struct to save window position and state
+        /// <summary>
+        /// Serializable class that stores the complete state of a window,
+        /// including position, size, and various window states.
+        /// </summary>
         [Serializable]
         public class WindowState
         {
@@ -985,6 +1137,10 @@ namespace GenXdev.Helpers
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool GetLayeredWindowAttributes(IntPtr hwnd, ref uint crKey, ref byte bAlpha, ref uint dwFlags);
 
+        /// <summary>
+        /// Removes the window border and title bar by modifying window styles.
+        /// This creates a borderless window appearance.
+        /// </summary>
         public void RemoveBorder()
         {
             uint style = GetWindowLong(this.Handle, GWL_STYLE);
@@ -1316,6 +1472,11 @@ namespace GenXdev.Helpers
         }
 
         // Add helper method to detect Electron apps like VS Code
+        /// <summary>
+        /// Determines if the window belongs to an Electron-based application.
+        /// Electron apps have specific window class names and process names.
+        /// </summary>
+        /// <returns>True if the window is from an Electron app</returns>
         private bool IsElectronApp()
         {
             // Check window class name first
@@ -1347,6 +1508,10 @@ namespace GenXdev.Helpers
         }
 
         // Helper struct for docked state
+        /// <summary>
+        /// Structure that tracks which edges and corners of the screen
+        /// the window is docked to.
+        /// </summary>
         private struct DockedState
         {
             public bool Left;
@@ -1360,6 +1525,11 @@ namespace GenXdev.Helpers
         }
 
         // Helper method to calculate docked state
+        /// <summary>
+        /// Calculates the current docking state of the window based on its position
+        /// and size relative to the monitor's work area.
+        /// </summary>
+        /// <returns>A DockedState struct indicating which edges/corners are docked</returns>
         private DockedState GetDockedState()
         {
             var state = new DockedState();
@@ -1778,6 +1948,9 @@ namespace GenXdev.Helpers
             }
         }
 
+        /// <summary>
+        /// Sends the window to the background by positioning it at the bottom of the Z-order.
+        /// </summary>
         private void SetBackground()
         {
             // Send window to back using SetWindowPos with HWND_BOTTOM
@@ -1793,6 +1966,8 @@ namespace GenXdev.Helpers
         /// <summary>
         /// Gets the parent process of the specified process
         /// </summary>
+        /// <param name="process">The process to find the parent for</param>
+        /// <returns>The parent process, or null if not found</returns>
         private static Process GetParentProcess(Process process)
         {
             try
@@ -1809,6 +1984,8 @@ namespace GenXdev.Helpers
         /// <summary>
         /// Gets the parent process ID using WMI
         /// </summary>
+        /// <param name="processId">The process ID to find the parent for</param>
+        /// <returns>The parent process ID, or 0 if not found</returns>
         private static int GetParentProcessId(int processId)
         {
             try
@@ -1832,6 +2009,8 @@ namespace GenXdev.Helpers
         /// <summary>
         /// Determines if a process name suggests it's likely a terminal or host application
         /// </summary>
+        /// <param name="processName">The process name to check</param>
+        /// <returns>True if the process name indicates a terminal/host app</returns>
         private static bool IsLikelyHostProcess(string processName)
         {
             if (string.IsNullOrEmpty(processName))

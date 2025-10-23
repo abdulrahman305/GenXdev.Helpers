@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : HashHelpers.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -27,8 +27,14 @@ using System.Text;
 
 namespace GenXdev.Helpers
 {
+    /// <summary>
+    /// Provides static helper methods for computing various cryptographic hash functions
+    /// and related utility operations. This class includes methods for SHA256 and SHA512
+    /// hashing, byte array conversions, and hexadecimal string formatting.
+    /// </summary>
     public static class Hash
     {
+
         /// <summary>
         /// Converts a hexadecimal string representation to its corresponding byte array.
         /// </summary>
@@ -36,7 +42,7 @@ namespace GenXdev.Helpers
         /// <returns>Byte array representation of the hexadecimal string.</returns>
         public static byte[] HexStringToByteArray(string hex)
         {
-            // convert hex string to byte array by processing pairs of characters
+            // Process pairs of hexadecimal characters to convert to bytes
             return Enumerable.Range(0, hex.Length)
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
@@ -50,12 +56,14 @@ namespace GenXdev.Helpers
         /// <returns>Hexadecimal string representation of the byte array.</returns>
         public static string FormatBytesAsHexString(byte[] value)
         {
-            // build hex string with consistent lowercase formatting
+            // Build hex string with consistent lowercase formatting
             StringBuilder hex = new StringBuilder(value.Length * 2);
+
             foreach (byte x in value)
             {
                 hex.AppendFormat("{0:x2}", x);
             }
+
             return hex.ToString();
         }
 
@@ -67,13 +75,13 @@ namespace GenXdev.Helpers
         /// <returns>SHA256 hash as byte array.</returns>
         public static byte[] GetSha256BytesOfString(string value, Encoding encoding = null)
         {
-            // use UTF8 encoding if none specified
+            // Use UTF8 encoding if none specified
             if (encoding == null)
             {
                 encoding = new UTF8Encoding(false);
             }
 
-            // compute hash of encoded string bytes
+            // Compute hash of encoded string bytes
             return (SHA256.Create()).ComputeHash(encoding.GetBytes(value));
         }
 
@@ -84,7 +92,7 @@ namespace GenXdev.Helpers
         /// <returns>SHA256 hash as base64 string.</returns>
         public static string GetSha256Base64StringOfString(string value)
         {
-            // convert hash bytes to base64 for compact string representation
+            // Convert hash bytes to base64 for compact string representation
             return Convert.ToBase64String(GetSha256BytesOfString(value));
         }
 
@@ -95,9 +103,10 @@ namespace GenXdev.Helpers
         /// <returns>SHA256 hash as byte array.</returns>
         public static byte[] GetSha256Bytes(params byte[][] input)
         {
-            // concatenate all input arrays into a single stream for hashing
+            // Concatenate all input arrays into a single stream for hashing
             using (MemoryStream stream = new MemoryStream())
             {
+
                 foreach (var buffer in input)
                 {
                     stream.Write(buffer, 0, buffer.Length);
@@ -105,7 +114,7 @@ namespace GenXdev.Helpers
 
                 stream.Position = 0;
 
-                // prevent hashing empty data which would be meaningless
+                // Prevent hashing empty data which would be meaningless
                 if (stream.Length == 0)
                     throw new InvalidOperationException("Don't calc hashes of empty data");
 
@@ -123,13 +132,13 @@ namespace GenXdev.Helpers
         /// <returns>SHA256 hash as hexadecimal string.</returns>
         public static string GetSha256HexStringOfString(string value, Encoding encoding = null)
         {
-            // use UTF8 encoding if none specified
+            // Use UTF8 encoding if none specified
             if (encoding == null)
             {
                 encoding = new UTF8Encoding(false);
             }
 
-            // format hash bytes as hex string for human-readable output
+            // Format hash bytes as hex string for human-readable output
             return FormatBytesAsHexString(GetSha256BytesOfString(value, encoding));
         }
 
@@ -140,7 +149,7 @@ namespace GenXdev.Helpers
         /// <returns>SHA256 hash as hexadecimal string.</returns>
         public static string GetSha256HexStringOfBytes(byte[] value)
         {
-            // format hash bytes as hex string for consistent representation
+            // Format hash bytes as hex string for consistent representation
             return FormatBytesAsHexString(GetSha256Bytes(value));
         }
 
@@ -151,18 +160,25 @@ namespace GenXdev.Helpers
         /// <returns>SHA512 hash as hexadecimal string with leading zero.</returns>
         public static string GetSha512HexStringOfString(string Phrase)
         {
-            // create SHA512 hasher instance
+            // Create SHA512 hasher instance
             SHA512 HashTool = SHA512.Create();
-            Byte[] PhraseAsByte = System.Text.Encoding.UTF8.GetBytes(Phrase); //getBytes(string.Concat(Phrase, "test");
+
+            // Get bytes of the input phrase
+            Byte[] PhraseAsByte = System.Text.Encoding.UTF8.GetBytes(Phrase);
+
+            // Compute hash
             Byte[] EncryptedBytes = HashTool.ComputeHash(PhraseAsByte);
+
+            // Clear hasher for security
             HashTool.Clear();
 
-            // build hex string with consistent formatting
+            // Build hex string with consistent formatting
             StringBuilder hex = new StringBuilder(EncryptedBytes.Length * 2);
+
             foreach (byte b in EncryptedBytes)
                 hex.AppendFormat("{0:x2}", b);
 
-            // return with leading zero for consistency with other implementations
+            // Return with leading zero for consistency with other implementations
             return "0" + Convert.ToString(hex);
         }
 
@@ -173,20 +189,29 @@ namespace GenXdev.Helpers
         /// <returns>SHA512 hash as base64 string.</returns>
         public static string GetSha512Base64StringOfString(string Phrase)
         {
-            // create SHA512 hasher instance
+            // Create SHA512 hasher instance
             SHA512 HashTool = SHA512.Create();
-            Byte[] PhraseAsByte = System.Text.Encoding.UTF8.GetBytes(Phrase); //getBytes(string.Concat(Phrase, "test");
+
+            // Get bytes of the input phrase
+            Byte[] PhraseAsByte = System.Text.Encoding.UTF8.GetBytes(Phrase);
+
+            // Compute hash
             Byte[] EncryptedBytes = HashTool.ComputeHash(PhraseAsByte);
+
+            // Clear hasher for security
             HashTool.Clear();
 
-            // build hex string first, then convert to BigInteger for base64 encoding
+            // Build hex string first, then convert to BigInteger for base64 encoding
             StringBuilder hex = new StringBuilder(EncryptedBytes.Length * 2);
+
             foreach (byte b in EncryptedBytes)
                 hex.AppendFormat("{0:x2}", b);
+
             var stringToParse = "0" + Convert.ToString(hex);
+
             var result = new BigInteger(stringToParse, 16);
 
-            // convert to base64 for compact string representation
+            // Convert to base64 for compact string representation
             return Convert.ToBase64String(result.ToByteArray());
         }
     }

@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : FileSystem.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -26,6 +26,26 @@ using System.Text.RegularExpressions;
 
 namespace GenXdev.Helpers
 {
+    /// <summary>
+    /// <para type="synopsis">
+    /// Provides static utility methods for advanced file system operations in Windows environments.
+    /// </para>
+    ///
+    /// <para type="description">
+    /// The FileSystem class contains helper methods for file and directory manipulation,
+    /// including forced operations on locked files, disk space queries, and temporary file management.
+    /// These methods are designed to handle common file system challenges in PowerShell cmdlets.
+    /// </para>
+    ///
+    /// <para type="description">
+    /// Key features include:
+    /// - Wildcard pattern matching for filenames
+    /// - Forced file and directory operations with fallback strategies
+    /// - Disk free space retrieval using Windows API
+    /// - Temporary file and directory management
+    /// - Recursive empty directory cleanup
+    /// </para>
+    /// </summary>
     public static class FileSystem
     {
         /// <summary>
@@ -66,20 +86,27 @@ namespace GenXdev.Helpers
         /// <returns>True if the filename matches the pattern.</returns>
         public static bool FileNameFitsMask(string filename, string filemask)
         {
+
             // extract just the filename part for pattern matching
             filename = Path.GetFileName(filename);
+
             try
             {
+
                 // convert wildcard pattern to regex (escape dots, convert * and ?)
                 Regex mask = new Regex(filemask.Replace(".", "[.]").Replace("*", ".*").Replace("?", "."));
 
                 return mask.IsMatch(filename);
+
             }
             catch
             {
+
                 // invalid pattern syntax returns no match
                 return false;
+
             }
+
         }
 
         /// <summary>
@@ -91,14 +118,19 @@ namespace GenXdev.Helpers
         /// <returns>True if the move operation succeeded.</returns>
         public static bool ForciblyMoveFile(ref string sourceFilePath, string targetFilePath, bool deleteDirIfEmpty)
         {
+
             // attempt the move and update the reference if successful
             if (ForciblyMoveFile(sourceFilePath, targetFilePath, deleteDirIfEmpty))
             {
+
                 sourceFilePath = targetFilePath;
+
                 return true;
+
             }
 
             return false;
+
         }
 
         /// <summary>
@@ -110,42 +142,58 @@ namespace GenXdev.Helpers
         /// <returns>True if the move operation succeeded.</returns>
         public static bool ForciblyMoveFile(string sourceFilePath, string targetFilePath, bool deleteDirIfEmpty)
         {
+
             // prepare target location (create directories, remove conflicts)
             ForciblyPrepareTargetFilePath(targetFilePath);
 
             try
             {
+
                 try
                 {
+
                     // attempt simple move first
                     File.Move(sourceFilePath, targetFilePath);
+
                     return true;
+
                 }
                 catch
                 {
+
                     // file may be locked, try taking ownership (commented out)
                     // TakeOwnership(sourceFilePath);
+
                 }
 
                 // prepare target again and retry move
                 ForciblyPrepareTargetFilePath(targetFilePath);
+
                 File.Move(sourceFilePath, targetFilePath);
 
                 return true;
+
             }
             catch
             {
+
                 // all move attempts failed
                 return false;
+
             }
             finally
             {
+
                 // clean up empty source directory if requested
                 if (deleteDirIfEmpty)
                 {
+
                     DeleteDirectoryIfEmpty(sourceFilePath);
+
                 }
+
             }
+
         }
 
         /// <summary>
@@ -155,18 +203,24 @@ namespace GenXdev.Helpers
         /// <param name="deleteIfExists">Whether to delete existing files at the target path.</param>
         public static void ForciblyPrepareTargetFilePath(string targetFilePath, bool deleteIfExists = true)
         {
+
             // ensure target directory exists
             ForciblyPrepareTargetDirectory(Path.GetDirectoryName(targetFilePath));
 
             // remove existing file if requested
             if (deleteIfExists && File.Exists(targetFilePath))
             {
+
                 try
                 {
+
                     ForciblyDeleteFile(targetFilePath, false);
+
                 }
                 catch { }
+
             }
+
         }
 
         /// <summary>
@@ -175,24 +229,35 @@ namespace GenXdev.Helpers
         /// <param name="targetDirectory">The directory path to create.</param>
         public static void ForciblyPrepareTargetDirectory(string targetDirectory)
         {
+
             // skip if directory path is empty
             if (String.IsNullOrWhiteSpace(targetDirectory))
+
                 return;
 
             if (!Directory.Exists(targetDirectory))
             {
+
                 try
                 {
+
                     // attempt to create the directory
                     Directory.CreateDirectory(targetDirectory);
+
                 }
+
                 catch { }
+
             }
+
             else
             {
+
                 // directory exists, may need ownership (commented out)
                 // TakeOwnership(targetDirectory);
+
             }
+
         }
 
         /// <summary>
@@ -202,10 +267,13 @@ namespace GenXdev.Helpers
         /// <returns>Path to a newly prepared temporary file.</returns>
         public static string GetTempFileName(string directory = null)
         {
+
             // use system temp directory if none specified
             if (String.IsNullOrWhiteSpace(directory))
             {
+
                 directory = Path.GetTempPath();
+
             }
 
             // create unique filename with random component
@@ -215,6 +283,7 @@ namespace GenXdev.Helpers
             ForciblyPrepareTargetFilePath(result);
 
             return result;
+
         }
 
         /// <summary>
@@ -225,31 +294,47 @@ namespace GenXdev.Helpers
         /// <returns>FileStream for the temporary file.</returns>
         public static FileStream GetTempFileStream(FileOptions fileOptions = FileOptions.None, string directory = null)
         {
+
             // get unique temp file path
             var filePath = GetTempFileName(directory);
+
             var fileInfo = new FileInfo(filePath);
 
             // create file stream with specified options
             var stream =
+
                 new FileStream(
+
                     filePath,
+
                     FileMode.Create,
+
                     FileAccess.Write,
+
                     FileShare.None,
+
                     4096,
+
                     fileOptions
+
                 );
 
             // optimize temporary files for memory caching
             if ((fileOptions & (FileOptions.DeleteOnClose | FileOptions.RandomAccess)) == (FileOptions.DeleteOnClose | FileOptions.RandomAccess))
             {
+
                 // Set the Attribute property of this file to Temporary.
+
                 // Although this is not completely necessary, the .NET Framework is able
+
                 // to optimize the use of Temporary files by keeping them cached in memory.
+
                 fileInfo.Attributes = FileAttributes.Temporary;
+
             }
 
             return stream;
+
         }
 
         /// <summary>
@@ -275,19 +360,24 @@ namespace GenXdev.Helpers
         /// <returns>True if the free space was successfully retrieved.</returns>
         public static bool DriveFreeBytes(string folderName, out ulong freespace)
         {
+
             // initialize output
             freespace = 0;
 
             // validate input
             if (string.IsNullOrEmpty(folderName))
             {
+
                 throw new ArgumentNullException("folderName");
+
             }
 
             // ensure path ends with backslash for API
             if (!folderName.EndsWith("\\"))
             {
+
                 folderName += '\\';
+
             }
 
             // call Windows API to get disk space info
@@ -295,13 +385,20 @@ namespace GenXdev.Helpers
 
             if (GetDiskFreeSpaceEx(folderName, out free, out dummy1, out dummy2))
             {
+
                 freespace = free;
+
                 return true;
+
             }
+
             else
             {
+
                 return false;
+
             }
+
         }
 
         /// <summary>
@@ -310,30 +407,45 @@ namespace GenXdev.Helpers
         /// <param name="rootDirectory">The root directory to clean up.</param>
         public static void ForciblyDeleteAllEmptySubDirectories(string rootDirectory)
         {
+
             try
             {
+
                 // process each subdirectory if root exists
                 if (Directory.Exists(rootDirectory))
+
                     foreach (var directory in Directory.GetDirectories(rootDirectory, "*", SearchOption.TopDirectoryOnly))
                     {
+
                         // recursively clean subdirectories first
                         ForciblyDeleteAllEmptySubDirectories(directory);
 
                         try
                         {
+
                             // attempt to delete if empty
                             Directory.Delete(directory, false);
+
                         }
+
                         catch
                         {
+
                             // directory not empty, skip
+
                         }
+
                     }
+
             }
+
             catch
             {
+
                 // ignore errors during cleanup
+
             }
+
         }
 
         /// <summary>
@@ -344,108 +456,155 @@ namespace GenXdev.Helpers
         /// <returns>True if the file was successfully deleted.</returns>
         public static bool ForciblyDeleteFile(string filepath, bool DeleteDirIfEmpty)
         {
+
             // file already gone
             if (!File.Exists(filepath))
+
                 return true;
 
             try
             {
+
                 try
                 {
+
                     // attempt simple delete first
                     File.Delete(filepath);
 
                     return true;
+
                 }
+
                 catch
                 {
+
                     // file may be locked, try taking ownership (commented out)
                     // // TakeOwnership(filepath);
+
                 }
 
                 try
                 {
+
                     // retry simple delete after ownership attempt
                     File.Delete(filepath);
 
                     return true;
+
                 }
+
                 catch
                 {
+
                     // ownership didn't help
+
                 }
 
                 try
                 {
+
                     // try recycle bin deletion as fallback
                     Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(
+
                         filepath,
+
                         0,
+
                         Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin,
+
                         Microsoft.VisualBasic.FileIO.UICancelOption.ThrowException
+
                         );
 
                     // check if deletion succeeded
                     if (!File.Exists(filepath))
+
                         return true;
+
                 }
+
                 catch
                 {
+
                     // recycle bin not available
+
                 }
 
                 try
                 {
+
                     // last resort: move to temp location and schedule for reboot deletion
                     if (filepath.ToLowerInvariant().EndsWith(".deleted_-"))
                     {
+
                         // clean up previously failed deletion attempts
                         var parts = filepath.Split('.').ToList<string>();
 
                         parts.RemoveAt(parts.Count - 1);
+
                         parts.RemoveAt(parts.Count - 1);
 
                         filepath = string.Join(".", parts.ToArray<string>());
+
                     }
 
                     // create unique destination name for failed deletion
                     var destination = filepath + "." +
+
                         Guid.NewGuid().ToString().Replace("-", "").ToLowerInvariant() +
+
                         ".deleted_-";
 
                     // move file and schedule reboot deletion
                     if (ForciblyMoveFile(filepath, destination, false))
                     {
+
                         NativeMethods.MoveFileEx(destination, null, MoveFileFlags.DelayUntilReboot);
+
                     }
 
                     // check if file is gone
                     if (!File.Exists(filepath))
+
                         return true;
+
                 }
+
                 catch
                 {
+
                     // all deletion methods failed
+
                 }
 
                 // return success status based on file existence
                 return !File.Exists(filepath);
+
             }
+
             catch
             {
+
                 // unexpected error, check if file still exists
                 return !File.Exists(filepath);
+
             }
+
             finally
             {
+
                 // clean up empty parent directory if requested
                 if (DeleteDirIfEmpty)
                 {
+
                     var dir = Path.GetDirectoryName(filepath);
 
                     ForciblyDeleteDirIfEmpty(dir);
+
                 }
+
             }
+
         }
 
         /// <summary>
@@ -454,11 +613,13 @@ namespace GenXdev.Helpers
         /// <param name="dir">The directory path to clean up.</param>
         public static void ForciblyDeleteDirIfEmpty(string dir)
         {
+
             // first clean up any empty subdirectories
             ForciblyDeleteAllEmptySubDirectories(dir);
 
             // then try to delete the directory itself
             DeleteDirectoryIfEmpty(dir);
+
         }
 
         /// <summary>
@@ -467,21 +628,30 @@ namespace GenXdev.Helpers
         /// <param name="path">The directory path to delete.</param>
         public static void DeleteDirectoryIfEmpty(string path)
         {
+
             try
             {
+
                 // if path is a file, get its directory
                 if (File.Exists(path))
                 {
+
                     path = Path.GetDirectoryName(path);
+
                 }
 
                 // delete directory if it exists (will fail if not empty)
                 if (Directory.Exists(path))
                 {
+
                     Directory.Delete(path);
+
                 }
+
             }
+
             catch { }
+
         }
 
         /// <summary>
@@ -491,26 +661,35 @@ namespace GenXdev.Helpers
         /// <returns>True if the file is in use (locked by another process).</returns>
         public static bool FileIsInUse(string fullPath)
         {
+
             // file doesn't exist, so not in use
             if (!File.Exists(fullPath))
+
                 return false;
 
             // directories are not "in use" in this context
             if (Directory.Exists(fullPath))
+
                 return false;
 
             try
             {
+
                 // attempt exclusive access - if successful, file is not in use
                 (new FileStream(fullPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)).Close();
 
                 return false;
+
             }
+
             catch
             {
+
                 // failed to get exclusive access, file is in use
                 return true;
+
             }
+
         }
 
         /// <summary>
@@ -521,12 +700,16 @@ namespace GenXdev.Helpers
         /// <returns>True if the filename matches any pattern.</returns>
         public static bool FileNameFitsMasks(string filename, string[] filemasks)
         {
+
             // check each mask until one matches
             foreach (var mask in filemasks)
+
                 if (FileNameFitsMask(filename, mask))
+
                     return true;
 
             return false;
+
         }
 
         /// <summary>
@@ -536,33 +719,47 @@ namespace GenXdev.Helpers
         /// <returns>True if the directory was successfully deleted.</returns>
         public static bool ForciblyDeleteDirectory(string path)
         {
+
             // directory already gone
             if (!Directory.Exists(path))
+
                 return true;
 
             try
             {
+
                 try
                 {
+
                     // attempt recursive delete first
                     Directory.Delete(path, true);
+
                 }
+
                 catch
                 {
+
                     // directory may be protected, try taking ownership (commented out)
+
                     // TakeOwnership(path);
+
                 }
 
                 // retry recursive delete after ownership attempt
                 Directory.Delete(path, true);
 
                 return true;
+
             }
+
             catch
             {
+
                 // all deletion attempts failed
                 return false;
+
             }
+
         }
     }
 }

@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : ImageSearchResult.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -29,6 +29,10 @@ using System.Globalization;
 
 namespace GenXdev.Helpers
 {
+    /// <summary>
+    /// Represents the result of an image search operation, containing metadata, descriptions, and analysis data for an image.
+    /// This class encapsulates all information extracted from image processing, including object detection, scene analysis, and metadata.
+    /// </summary>
     public partial class ImageSearchResult
     {
         [JsonProperty("description", NullValueHandling = NullValueHandling.Ignore)]

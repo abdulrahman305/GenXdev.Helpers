@@ -55,6 +55,7 @@ Update-Module
 | [ConvertTo-HashTable](#convertto-hashtable) | &nbsp; | Converts a PSCustomObject to a HashTable recursively. |
 | [EnsureGenXdev](#ensuregenxdev) | &nbsp; | &nbsp; |
 | [EnsureNuGetAssembly](#ensurenugetassembly) | &nbsp; | Downloads and loads .NET assemblies from NuGet packages based on package key or ID. |
+| [Get-AudioDeviceNames](#get-audiodevicenames) | &nbsp; | Retrieves the names of available audio devices for microphone or desktop audio capture. |
 | [Get-DefaultWebLanguage](#get-defaultweblanguage) | &nbsp; | Gets the default web language key based on the system's current language settings. |
 | [Get-GenXDevCmdlet](#get-genxdevcmdlet) | gcmds | Retrieves and lists all GenXdev cmdlets and their details. |
 | [Get-ImageGeolocation](#get-imagegeolocation) | &nbsp; | Extracts geolocation data from an image file. |
@@ -65,12 +66,14 @@ Update-Module
 | [Initialize-SearchPaths](#initialize-searchpaths) | &nbsp; | Initializes and configures system search paths for package management. |
 | [Invoke-OnEachGenXdevModule](#invoke-oneachgenxdevmodule) | foreach-genxdev-module-do | Executes a script block on each GenXdev module in the workspace. |
 | [Out-Serial](#out-serial) | &nbsp; | Sends a string to a serial port |
-| [Receive-RealTimeSpeechToText](#receive-realtimespeechtotext) | &nbsp; | &nbsp; |
+| [Receive-RealTimeSpeechToText](#receive-realtimespeechtotext) | &nbsp; | Converts real-time audio input to text using Whisper AI model. |
+| [Remove-JSONComments](#remove-jsoncomments) | &nbsp; | Removes comments from JSON content. |
 | [resetdefaultmonitor](#resetdefaultmonitor) | &nbsp; | &nbsp; |
 | [SecondScreen](#secondscreen) | &nbsp; | Sets default second-monitor configuration. |
 | [Show-GenXDevCmdlet](#show-genxdevcmdlet) | cmds | Displays GenXdev PowerShell modules with their cmdlets and aliases. |
 | [Show-Verb](#show-verb) | showverbs | Shows a short alphabetical list of all PowerShell verbs. |
 | [SideBySide](#sidebyside) | &nbsp; | Sets default side-by-side configuration. |
+| [Test-UnattendedMode](#test-unattendedmode) | &nbsp; | Detects if PowerShell is running in unattended/automated mode |
 
 ### GenXdev.Helpers.Physics
 | Command | Aliases | Description |
@@ -1248,6 +1251,55 @@ ConvertTo-HashTable [-InputObject] <Object[]>
 <br/><hr/><br/>
  
 
+##	Get-AudioDeviceNames 
+```PowerShell 
+
+   Get-AudioDeviceNames  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Get-AudioDeviceNames [-UseDesktopAudioCapture] [-Passthru]
+    [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -Passthru  
+        Returns detailed device objects instead of just names  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -UseDesktopAudioCapture  
+        Whether to list desktop audio capture devices instead of microphone devices  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
 ##	Get-DefaultWebLanguage 
 ```PowerShell 
 
@@ -2182,6 +2234,92 @@ Receive-RealTimeSpeechToText [-ModelFileDirectoryPath
 ```yaml 
     -WithTranslate  
         Whether to translate the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
+##	Remove-JSONComments 
+```PowerShell 
+
+   Remove-JSONComments  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Remove-JSONComments [-Json] <string[]> [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -Json <string[]>  
+        JSON content to process as string array  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
+##	Test-UnattendedMode 
+```PowerShell 
+
+   Test-UnattendedMode  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Test-UnattendedMode [[-CallersInvocation] <InvocationInfo>]
+    [-Detailed] [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -CallersInvocation <InvocationInfo>  
+        Caller's invocation info for pipeline and automation detection  
+        Required?                    false  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Detailed  
+        Return detailed analysis object instead of simple boolean  
         Required?                    false  
         Position?                    Named  
         Accept pipeline input?       false  
@@ -4982,6 +5120,55 @@ ConvertTo-HashTable [-InputObject] <Object[]>
 <br/><hr/><br/>
  
 
+##	Get-AudioDeviceNames 
+```PowerShell 
+
+   Get-AudioDeviceNames  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Get-AudioDeviceNames [-UseDesktopAudioCapture] [-Passthru]
+    [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -Passthru  
+        Returns detailed device objects instead of just names  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -UseDesktopAudioCapture  
+        Whether to list desktop audio capture devices instead of microphone devices  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
 ##	Get-DefaultWebLanguage 
 ```PowerShell 
 
@@ -5916,6 +6103,92 @@ Receive-RealTimeSpeechToText [-ModelFileDirectoryPath
 ```yaml 
     -WithTranslate  
         Whether to translate the output  
+        Required?                    false  
+        Position?                    Named  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
+##	Remove-JSONComments 
+```PowerShell 
+
+   Remove-JSONComments  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Remove-JSONComments [-Json] <string[]> [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -Json <string[]>  
+        JSON content to process as string array  
+        Required?                    true  
+        Position?                    0  
+        Accept pipeline input?       true (ByValue)  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    <CommonParameters>  
+        This cmdlet supports the common parameters: Verbose, Debug,  
+        ErrorAction, ErrorVariable, WarningAction, WarningVariable,  
+        OutBuffer, PipelineVariable, and OutVariable. For more information, see  
+        about_CommonParameters     (https://go.microsoft.com/fwlink/?LinkID=113216).   
+``` 
+
+<br/><hr/><br/>
+ 
+
+##	Test-UnattendedMode 
+```PowerShell 
+
+   Test-UnattendedMode  
+``` 
+
+### SYNTAX 
+```PowerShell 
+Test-UnattendedMode [[-CallersInvocation] <InvocationInfo>]
+    [-Detailed] [<CommonParameters>] 
+``` 
+
+### PARAMETERS 
+```yaml 
+ 
+``` 
+```yaml 
+    -CallersInvocation <InvocationInfo>  
+        Caller's invocation info for pipeline and automation detection  
+        Required?                    false  
+        Position?                    0  
+        Accept pipeline input?       false  
+        Parameter set name           (All)  
+        Aliases                      None  
+        Dynamic?                     false  
+        Accept wildcard characters?  false  
+``` 
+```yaml 
+    -Detailed  
+        Return detailed analysis object instead of simple boolean  
         Required?                    false  
         Position?                    Named  
         Accept pipeline input?       false  

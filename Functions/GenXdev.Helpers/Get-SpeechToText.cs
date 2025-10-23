@@ -2,7 +2,7 @@
 // Part of PowerShell module : GenXdev.Helpers
 // Original cmdlet filename  : Get-SpeechToText.cs
 // Original author           : René Vaessen / GenXdev
-// Version                   : 1.308.2025
+// Version                   : 2.1.2025
 // ################################################################################
 // Copyright (c)  René Vaessen / GenXdev
 //
@@ -1289,7 +1289,7 @@ namespace GenXdev.Helpers
             Console.WriteLine($"Downloading Model {fileName}");
 
             using var modelStream =
-                await WhisperGgmlDownloader.GetGgmlModelAsync(ggmlType);
+                await WhisperGgmlDownloader.Default.GetGgmlModelAsync(ggmlType);
 
             using var fileWriter = File.OpenWrite(fileName);
 
